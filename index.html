@@ -1,0 +1,798 @@
+<title>Alsisar Impact — Impact Monitoring Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --plane:#f6f7f4; --surface:#fcfdfb; --ink:#141810; --ink2:#565b50; --muted:#8a897f;
+    --grid:#e3e2da; --baseline:#c4c3b8; --border:rgba(15,20,10,.10);
+    --accent:#21634b; --accent-ink:#fff; --accent-soft:rgba(33,99,75,.09);
+    --apricot:#b95f2c; --apricot-soft:rgba(185,95,44,.10);
+    --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#4a3aa7; --s8:#e34948;
+    --seq1:#cde2fb; --seq2:#9ec5f4; --seq3:#6da7ec; --seq4:#3987e5; --seq5:#256abf; --seq6:#184f95;
+    --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b; --good-text:#006300;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:where(:not([data-theme="light"])){
+      --plane:#0d0f0d; --surface:#171a17; --ink:#f2f4ee; --ink2:#b9beb0; --muted:#8a897f;
+      --grid:#2b2e2a; --baseline:#3a3d38; --border:rgba(255,255,255,.10);
+      --accent:#4fa583; --accent-ink:#0c110e; --accent-soft:rgba(79,165,131,.14);
+      --apricot:#d78a55; --apricot-soft:rgba(215,138,85,.14);
+      --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
+      --good-text:#0ca30c;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --plane:#0d0f0d; --surface:#171a17; --ink:#f2f4ee; --ink2:#b9beb0; --muted:#8a897f;
+    --grid:#2b2e2a; --baseline:#3a3d38; --border:rgba(255,255,255,.10);
+    --accent:#4fa583; --accent-ink:#0c110e; --accent-soft:rgba(79,165,131,.14);
+    --apricot:#d78a55; --apricot-soft:rgba(215,138,85,.14);
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
+    --good-text:#0ca30c;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--plane);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+  button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+  a{color:var(--accent)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+  /* ---------- masthead ---------- */
+  header.mast{border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:40}
+  .mast-inner{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:14px 0 0}
+  .brand{display:flex;align-items:center;gap:11px;padding-bottom:14px}
+  .brand-mark{width:34px;height:34px;border-radius:8px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;flex:none}
+  .brand-mark svg{display:block}
+  .brand h1{font-size:15px;font-weight:650;margin:0;line-height:1.2}
+  .brand .sub{font-size:11px;color:var(--ink2);letter-spacing:.04em}
+  .tabs{display:flex;gap:2px;margin-left:auto;align-self:stretch}
+  .tab{padding:10px 14px 12px;font-size:13px;font-weight:550;color:var(--ink2);border-bottom:2px solid transparent;display:flex;flex-direction:column;align-items:flex-start;gap:1px}
+  .tab .t-eyebrow{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .tab:hover{color:var(--ink)}
+  .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+  .tab[aria-selected="true"] .t-eyebrow{color:var(--accent)}
+
+  /* ---------- filter row ---------- */
+  .filterbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 0}
+  .filterbar .wrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .f-label{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-right:2px}
+  .chip{border:1px solid var(--border);border-radius:999px;padding:5px 13px;font-size:12.5px;font-weight:520;color:var(--ink2);background:var(--surface);transition:background .12s}
+  .chip:hover{background:var(--accent-soft);color:var(--ink)}
+  .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+  .chip .n{opacity:.65;font-weight:400;margin-left:4px}
+  .f-sep{width:1px;align-self:stretch;background:var(--border);margin:0 4px}
+
+  /* ---------- layout ---------- */
+  main{padding:26px 0 10px}
+  section.layer{display:none}
+  section.layer.active{display:block}
+  .layer-head{margin:2px 0 18px;max-width:760px}
+  .eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--apricot);font-weight:650;margin:0 0 4px}
+  .layer-head h2{font-size:21px;font-weight:650;margin:0 0 6px;letter-spacing:-.01em;text-wrap:balance}
+  .layer-head p{color:var(--ink2);margin:0;font-size:13.5px}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+  .card{grid-column:span 12;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px 14px;min-width:0}
+  .c6{grid-column:span 6}.c4{grid-column:span 4}.c3{grid-column:span 3}.c8{grid-column:span 8}
+  @media(max-width:900px){.c6,.c8{grid-column:span 12}.c4{grid-column:span 6}.c3{grid-column:span 6}}
+  @media(max-width:560px){.c4,.c3{grid-column:span 12}}
+  .card-head{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+  .card-head h3{font-size:13.5px;font-weight:640;margin:0}
+  .card-head .hint{font-size:11.5px;color:var(--muted)}
+  .tbl-btn{margin-left:auto;font-size:11px;color:var(--muted);border:1px solid var(--border);border-radius:5px;padding:2px 8px;flex:none}
+  .tbl-btn:hover{color:var(--ink);background:var(--accent-soft)}
+  .card.show-table .viz{display:none}
+  .card .tblwrap{display:none;overflow-x:auto;margin-top:6px}
+  .card.show-table .tblwrap{display:block}
+  table.dt{border-collapse:collapse;width:100%;font-size:12.5px}
+  table.dt th{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);text-align:left;font-weight:600;padding:6px 12px 6px 0;border-bottom:1px solid var(--grid)}
+  table.dt td{padding:6px 12px 6px 0;border-bottom:1px solid var(--grid);color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap}
+  table.dt td:first-child{color:var(--ink)}
+
+  /* ---------- stat tiles ---------- */
+  .tile .t-label{font-size:12px;color:var(--ink2);margin-bottom:5px;display:flex;align-items:center;gap:6px}
+  .tile .t-value{font-size:27px;font-weight:640;letter-spacing:-.015em;line-height:1.1}
+  .tile .t-value .unit{font-size:14px;font-weight:520;color:var(--ink2);margin-left:2px}
+  .tile .t-note{font-size:11.5px;color:var(--muted);margin-top:4px}
+  .hero-num{font-size:52px;font-weight:680;letter-spacing:-.02em;line-height:1}
+  .delta-up{color:var(--good-text);font-size:12.5px;font-weight:600}
+
+  /* ---------- pills / badges ---------- */
+  .pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px;letter-spacing:.02em}
+  .pill svg{flex:none}
+  .pill.ok{background:color-mix(in srgb,var(--good) 12%,transparent);color:var(--good-text)}
+  .pill.warn{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--ink)}
+  .pill.serious{background:color-mix(in srgb,var(--serious) 15%,transparent);color:var(--ink)}
+  .pill.info{background:var(--accent-soft);color:var(--accent)}
+  .gi-seal{display:inline-flex;align-items:center;gap:5px;background:var(--apricot-soft);color:var(--apricot);font-size:11px;font-weight:650;border-radius:999px;padding:2.5px 10px}
+  .tag{display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.03em;color:var(--ink2);border:1px solid var(--border);border-radius:5px;padding:1.5px 7px;margin:2px 3px 2px 0;background:var(--plane)}
+  .est{border-bottom:1px dotted var(--muted);cursor:help}
+  .src{font-size:10.5px;color:var(--muted)}
+
+  /* ---------- geo cards ---------- */
+  .geo-card h4{margin:0;font-size:14.5px;font-weight:650;display:flex;align-items:center;gap:8px}
+  .geo-card .g-type{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .kv{display:grid;grid-template-columns:1fr auto;gap:3px 14px;margin:10px 0 0;font-size:12.5px}
+  .kv dt{color:var(--ink2);margin:0}
+  .kv dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+  .hazards{display:flex;flex-wrap:wrap;gap:5px;margin-top:11px}
+
+  /* ---------- charts ---------- */
+  .viz{margin-top:4px}
+  .viz svg{display:block;width:100%;height:auto}
+  .legend{display:flex;flex-wrap:wrap;gap:5px 16px;font-size:12px;color:var(--ink2);margin:2px 0 8px}
+  .legend .li{display:inline-flex;align-items:center;gap:6px}
+  .legend .sw{width:9px;height:9px;border-radius:3px;flex:none}
+  .legend .lk{width:14px;height:2.5px;border-radius:2px;flex:none}
+  .axis-t{font-size:10.5px;fill:var(--muted)}
+  .dlabel{font-size:11px;font-weight:600;fill:var(--ink)}
+  .dlabel2{font-size:10.5px;fill:var(--ink2)}
+  .bar-hit{fill:transparent;cursor:default}
+  .meter{height:8px;border-radius:4px;background:var(--seq1);overflow:hidden;margin-top:6px}
+  :root[data-theme="dark"] .meter, :root:where(:not([data-theme="light"])) .meter{background:color-mix(in srgb,var(--seq6) 40%,var(--surface))}
+  .meter i{display:block;height:100%;background:var(--seq5);border-radius:4px}
+
+  /* ---------- map ---------- */
+  .mapbox{position:relative}
+  .map-node{cursor:pointer}
+  .map-node circle.core{transition:r .15s}
+  .map-node:hover circle.halo{opacity:.28}
+  .map-label{font-size:11px;font-weight:600;fill:var(--ink)}
+  .map-sub{font-size:9.5px;fill:var(--muted)}
+  .flow{fill:none;stroke:var(--accent);stroke-width:1.2;opacity:.30}
+  .ridge{fill:none;stroke:var(--grid);stroke-width:1}
+
+  /* ---------- commodity cards ---------- */
+  .comm-head{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .comm-head h4{margin:0;font-size:14.5px;font-weight:650}
+  .comm-meta{font-size:12px;color:var(--ink2);margin:6px 0 2px}
+  .vc{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:10px;font-size:11px;color:var(--ink2)}
+  .vc .step{border:1px solid var(--border);background:var(--plane);border-radius:5px;padding:2px 8px;font-weight:550}
+  .vc .arr{color:var(--muted)}
+  .fs-row{display:flex;align-items:baseline;justify-content:space-between;margin-top:12px;font-size:12px;color:var(--ink2)}
+  .fs-row b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+  /* ---------- venture ---------- */
+  .v-chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+  .v-head{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+  .v-head h3{margin:0 0 3px;font-size:17px;font-weight:660}
+  .v-head .v-desc{color:var(--ink2);font-size:13px;max-width:640px;margin:0}
+  .sdg{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:650;border-radius:5px;padding:2px 7px;background:var(--accent-soft);color:var(--accent);margin:2px 3px 0 0}
+
+  /* ---------- tooltip / footer ---------- */
+  #tip{position:fixed;z-index:99;pointer-events:none;background:var(--ink);color:var(--plane);font-size:12px;line-height:1.45;padding:7px 10px;border-radius:7px;max-width:260px;opacity:0;transition:opacity .1s;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+  #tip b{font-weight:650}
+  footer{border-top:1px solid var(--border);margin-top:34px;padding:22px 0 40px;color:var(--ink2);font-size:12.5px}
+  footer h4{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+  footer ul{margin:0;padding-left:18px}
+  footer li{margin-bottom:3px}
+  .foot-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:28px}
+  @media(max-width:760px){.foot-grid{grid-template-columns:1fr}}
+  .legend-note{display:flex;gap:8px;align-items:baseline;margin-top:14px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
+  @media (prefers-reduced-motion: reduce){*{transition:none !important}}
+</style>
+
+<header class="mast">
+  <div class="wrap mast-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 20 20"><path d="M2 16 L7 6 L10.2 12 L12.5 8 L18 16 Z" fill="currentColor"/><circle cx="14.5" cy="4.5" r="1.8" fill="currentColor" opacity=".7"/></svg>
+      </span>
+      <div>
+        <h1>Alsisar Impact</h1>
+        <div class="sub">Impact Monitoring Tool · Himalayan Belt &amp; Northeast India</div>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Dashboard layers">
+      <button class="tab" role="tab" id="tab1" aria-selected="true" data-layer="l1"><span class="t-eyebrow">Layer 1</span>Regional Overview</button>
+      <button class="tab" role="tab" id="tab2" aria-selected="false" data-layer="l2"><span class="t-eyebrow">Layer 2</span>Traceability &amp; Commodity</button>
+      <button class="tab" role="tab" id="tab3" aria-selected="false" data-layer="l3"><span class="t-eyebrow">Layer 3</span>Portfolio Intelligence</button>
+    </nav>
+  </div>
+</header>
+
+<div class="filterbar">
+  <div class="wrap">
+    <span class="f-label">Geography</span>
+    <span id="geoChips" style="display:flex;gap:8px;flex-wrap:wrap"></span>
+    <span class="f-sep" id="provSep" hidden></span>
+    <span class="f-label" id="provLabel" hidden>Provenance</span>
+    <span id="provChips" style="display:none;gap:8px;flex-wrap:wrap"></span>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- ================= LAYER 1 ================= -->
+  <section class="layer active" id="l1" role="tabpanel" aria-labelledby="tab1">
+    <div class="layer-head">
+      <p class="eyebrow">Layer 1 · Regional Overview</p>
+      <h2>The operating context</h2>
+      <p>Public datasets across the geographies where portfolio ventures operate — demographics, workforce, climate, forest cover and hazard exposure. The geography filter above scopes every layer of the platform.</p>
+    </div>
+    <div class="grid" id="l1-tiles"></div>
+    <div class="grid" id="l1-geocards" style="margin-top:14px"></div>
+    <div class="grid" style="margin-top:14px">
+      <div class="card c6" id="ch-rain"></div>
+      <div class="card c6" id="ch-ndvi"></div>
+      <div class="card c6" id="ch-forest"></div>
+      <div class="card c6" id="ch-agri"></div>
+    </div>
+  </section>
+
+  <!-- ================= LAYER 2 ================= -->
+  <section class="layer" id="l2" role="tabpanel" aria-labelledby="tab2">
+    <div class="layer-head">
+      <p class="eyebrow">Layer 2 · Traceability &amp; Commodity Intelligence</p>
+      <h2>Where the product comes from — and can it be verified?</h2>
+      <p>Sourcing clusters, provenance evidence and commodity intelligence in one view. Use the provenance filters above to screen commodities by the evidence they carry.</p>
+    </div>
+    <div class="grid">
+      <div class="card c8">
+        <div class="card-head"><h3>Sourcing map — clusters &amp; flows</h3><span class="hint">click a cluster to filter</span></div>
+        <div class="viz mapbox" id="map"></div>
+      </div>
+      <div class="card c4" id="cluster-compare"></div>
+    </div>
+    <div class="grid" style="margin-top:14px" id="commodity-cards"></div>
+    <div class="grid" style="margin-top:14px">
+      <div class="card c6" id="ch-global"></div>
+      <div class="card c6" id="ch-farmershare"></div>
+    </div>
+  </section>
+
+  <!-- ================= LAYER 3 ================= -->
+  <section class="layer" id="l3" role="tabpanel" aria-labelledby="tab3">
+    <div class="layer-head">
+      <p class="eyebrow">Layer 3 · Portfolio Intelligence</p>
+      <h2>What is the venture doing differently?</h2>
+      <p>Venture-level overlay: sourcing, procurement, prices paid against local benchmarks, premiums and livelihood outcomes across the portfolio.</p>
+    </div>
+    <div class="grid" id="l3-overview"></div>
+    <div class="v-chips" id="ventureChips" style="margin-top:18px"></div>
+    <div id="ventureDetail"></div>
+  </section>
+
+  <footer>
+    <div class="foot-grid">
+      <div>
+        <h4>Data &amp; sources</h4>
+        <ul>
+          <li>Organisation profile, programmes &amp; portfolio — <a href="https://www.alsisarimpact.org/" target="_blank" rel="noopener">alsisarimpact.org</a> and <a href="https://www.linkedin.com/company/alsisarimpact/" target="_blank" rel="noopener">ALSiSAR IMPACT on LinkedIn</a></li>
+          <li>Demographics &amp; literacy — Census of India 2011 · Forest cover — India State of Forest Report (ISFR 2021)</li>
+          <li>Rainfall — IMD station normals (indicative) · GI records — <a href="https://ipindia.gov.in/gi.htm" target="_blank" rel="noopener">Geographical Indications Registry, Govt. of India</a></li>
+          <li>Raktsey Karpo apricot GI (Ladakh's first, Dec 2022); Dalle Khursani GI (Sikkim, 2021, extended to Darjeeling &amp; Kalimpong); Sikkim Large Cardamom GI</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Reading this dashboard</h4>
+        <div class="legend-note">
+          <span style="color:var(--muted);flex:none">◌</span>
+          <span>Figures marked with a dotted underline are <b>illustrative placeholders</b> — they show how the metric will read once venture MIS &amp; procurement records are connected, and are not published figures. All other numbers come from the sources listed.</span>
+        </div>
+        <p style="margin:12px 0 0">Alsisar Impact Social Ventures Foundation · 1709, World Trade Centre-1, Cuffe Parade, Mumbai 400005 · <a href="mailto:anuj@alsisarimpact.org">anuj@alsisarimpact.org</a></p>
+      </div>
+    </div>
+  </footer>
+</main>
+
+<div id="tip" role="status"></div>
+
+<script>
+/* ============================== DATA ============================== */
+const EST_TIP = "Illustrative placeholder — pending integration of venture MIS / procurement records";
+const MONTHS = ["J","F","M","A","M","J","J","A","S","O","N","D"];
+
+const GEOS = {
+  ladakh:{ name:"Ladakh", type:"Union Territory", color:"var(--s1)", slot:1,
+    pop:"274,289", popN:0.274, area:"59,146", lit:74.2, litEst:true, agri:38, agriEst:true,
+    forest:2.0, forestEst:true, rainTotal:102, rainEst:false,
+    rain:[12,9,11,7,7,4,15,20,12,7,4,8],
+    ndvi:[.06,.06,.08,.11,.16,.22,.27,.28,.22,.14,.09,.07],
+    hazards:[["Snow cover Nov–Apr","info"],["Cold-desert water stress","serious"],["Landslide / flash-flood risk: moderate","warn"]],
+    note:"High-altitude cold desert; agro-pastoral livelihoods, seasonal out-migration to Leh town." },
+  sikkim:{ name:"Sikkim", type:"State", color:"var(--s2)", slot:2,
+    pop:"610,577", popN:0.611, area:"7,096", lit:81.4, litEst:false, agri:49, agriEst:true,
+    forest:47.1, forestEst:false, rainTotal:2680, rainEst:true,
+    rain:[25,60,130,250,450,600,640,560,440,180,40,15],
+    ndvi:[.42,.44,.50,.58,.66,.72,.75,.74,.70,.62,.52,.45],
+    hazards:[["Landslide risk: high (monsoon)","serious"],["Glacial-lake outburst exposure","warn"],["India's first fully organic state (2016)","ok"]],
+    note:"Eastern Himalaya biodiversity hotspot; fully organic farming state since 2016." },
+  nagaland:{ name:"Nagaland", type:"State", color:"var(--s3)", slot:3,
+    pop:"1,978,502", popN:1.979, area:"16,579", lit:79.6, litEst:false, agri:61, agriEst:true,
+    forest:73.9, forestEst:false, rainTotal:1800, rainEst:true,
+    rain:[15,25,60,120,180,300,340,320,250,120,30,10],
+    ndvi:[.48,.50,.55,.62,.68,.72,.74,.73,.70,.64,.56,.50],
+    hazards:[["Forest-fire season Feb–Apr","warn"],["Jhum-fallow land-use transition","info"]],
+    note:"Indigenous community land tenure; shifting (jhum) cultivation transitioning to settled agroforestry." },
+  mizoram:{ name:"Mizoram", type:"State", color:"var(--s4)", slot:4,
+    pop:"1,097,206", popN:1.097, area:"21,081", lit:91.3, litEst:false, agri:55, agriEst:true,
+    forest:84.5, forestEst:false, rainTotal:2350, rainEst:true,
+    rain:[12,25,80,160,280,420,440,420,320,180,60,15],
+    ndvi:[.52,.54,.58,.64,.70,.74,.76,.75,.72,.66,.58,.54],
+    hazards:[["Highest forest cover in India (84.5%)","ok"],["Forest-fire season Mar–Apr","warn"],["Landslide risk: moderate","warn"]],
+    note:"Highest literacy among portfolio geographies; bamboo-dominant landscapes, horticulture growth." }
+};
+
+const PROV_TAGS = ["Environmental","Biodiversity","Social","Traceability","Commodity","GI Status"];
+
+const COMMODITIES = [
+  { id:"apricot", name:"Apricot — Raktsey Karpo", short:"Apricot", geo:"ladakh", gi:{has:true,label:"GI · Ladakh's first (2022)"},
+    clusters:"Leh, Nubra &amp; Sham valley orchards", ventures:["siachen","basket"],
+    meta:"White-kernel variety exclusive to Ladakh; TSS of 37.9°Brix recorded by DIHAR — the highest reported in fresh apricot worldwide.",
+    tags:["Environmental","Biodiversity","Traceability","Commodity","GI Status"],
+    farmerShare:62, chain:["Orchard","Village SHG drying","Grading","Venture processing","Retail / D2C"],
+    evidence:"GI Registry · DIHAR study · farm-gate purchase records ◌" },
+  { id:"seabuck", name:"Sea buckthorn", short:"Seabuckthorn", geo:"ladakh", gi:{has:false,label:"No GI — wild-harvest protocol"},
+    clusters:"Nubra &amp; Changthang river belts", ventures:["nima","basket"],
+    meta:"Wild-harvested berry of the cold desert; harvest collectives led by women. India's crop is small globally but the highest-altitude source.",
+    tags:["Environmental","Biodiversity","Social","Traceability"],
+    farmerShare:58, chain:["Wild harvest","Collective pooling","Pulping","Venture processing","Retail"],
+    evidence:"Harvest-collective registers ◌ · altitude provenance" },
+  { id:"cardamom", name:"Large cardamom", short:"Cardamom", geo:"sikkim", gi:{has:true,label:"GI · Sikkim Large Cardamom"},
+    clusters:"North &amp; East Sikkim agroforests", ventures:[],
+    meta:"Sikkim grows the large majority of India's crop under alder-shade agroforestry; India is the world's second producer after Nepal.",
+    tags:["Environmental","Biodiversity","Commodity","GI Status"],
+    farmerShare:55, chain:["Agroforest plot","Traditional bhatti curing","Auction / FPO","Wholesale"],
+    evidence:"GI Registry · Spices Board auction data" },
+  { id:"dalle", name:"Dalle Khursani (cherry pepper)", short:"Dalle", geo:"sikkim", gi:{has:true,label:"GI · 2021, ext. Darjeeling–Kalimpong"},
+    clusters:"Sikkim valley smallholdings", ventures:["agapi"],
+    meta:"Fiery endemic chilli central to Sikkimese food identity; grown on organic-certified smallholdings.",
+    tags:["Environmental","Social","Commodity","GI Status"],
+    farmerShare:60, chain:["Smallholding","Women's collective","Pickling / paste","Retail / D2C"],
+    evidence:"GI Registry · Sikkim organic certification" },
+  { id:"botanicals", name:"Himalayan tisane botanicals", short:"Tisane herbs", geo:"ladakh", gi:{has:false,label:"No GI — community protocol"},
+    clusters:"Ladakh high pastures · Sikkim mid-hills", ventures:["nima","agapi"],
+    meta:"Rose, seabuckthorn leaf, chamomile, nettle and endemic herbs blended into tisanes; harvest calendars follow traditional knowledge.",
+    tags:["Biodiversity","Social","Traceability"],
+    farmerShare:64, chain:["High-pasture harvest","Drying","Blending","Venture packing","D2C"],
+    evidence:"Collector registers ◌ · species lists" },
+  { id:"ginger", name:"Ginger &amp; wild botanicals", short:"Ginger", geo:"mizoram", gi:{has:false,label:"No GI"},
+    clusters:"Aizawl &amp; Kolasib horticulture belts", ventures:["soda"],
+    meta:"Mizoram's low-chemical horticulture supplies ginger and botanicals for all-natural beverages.",
+    tags:["Environmental","Social","Commodity"],
+    farmerShare:52, chain:["Hill farm","Village aggregation","Washing / grading","Brewing","Retail"],
+    evidence:"Purchase records ◌" }
+];
+
+const VENTURES = {
+  agapi:{ name:"Agapi", geo:"sikkim", sector:"Natural personal care", est:false,
+    desc:"Sikkim-grown natural beauty brand preserving indigenous knowledge — majority owned and led by local women, positioning to be the biggest natural beauty brand from Sikkim.",
+    tiles:[
+      {l:"Rural women engaged", v:"300+", note:"≈1,500 family members reached", est:false, src:"Alsisar Impact / LinkedIn"},
+      {l:"5-year livelihood target", v:"3,000", note:"women across Sikkim", est:false, src:"Founder statement"},
+      {l:"Botanicals procured (yr)", v:"18", u:"t", note:"across 4 sourcing clusters", est:true},
+      {l:"Avg premium vs local benchmark", v:"+24%", note:"farm-gate, weighted", est:true}
+    ],
+    price:{unit:"₹/kg", rows:[["Tisane botanicals",210,165],["Dalle Khursani",95,78],["Herbal oils base",260,215]]},
+    uplift:[100,111,122,134,145], sdg:["SDG 5","SDG 8","SDG 12","SDG 15"],
+    impact:["300+ women with recurring seasonal income","Indigenous formulations documented & retained locally","Organic-state sourcing — zero synthetic inputs"] },
+  nima:{ name:"Nima Goos Goos", geo:"ladakh", sector:"Indigenous food & tisanes", est:false,
+    desc:"Ladakhi tisane brand led by founders Rigzen and Padma Angmo — natural herbs and crops of the Himalayan region, wild-harvested by women's collectives.",
+    tiles:[
+      {l:"Harvest collective members", v:"120", note:"across Nubra & Leh", est:true},
+      {l:"Dried botanicals procured (yr)", v:"6", u:"t", note:"12 species", est:true},
+      {l:"Avg premium vs local benchmark", v:"+30%", note:"wild-harvest rate card", est:true},
+      {l:"Women in leadership", v:"100%", note:"founder & collective leads", est:false, src:"LinkedIn"}
+    ],
+    price:{unit:"₹/kg", rows:[["Seabuckthorn leaf",95,70],["Rose petals",340,270],["Nettle & herbs",180,140]]},
+    uplift:[100,113,124,136,148], sdg:["SDG 5","SDG 8","SDG 13","SDG 15"],
+    impact:["Wild-harvest calendars follow traditional ecological knowledge","Women-led collectives hold pricing power","Climate-resilient income beside agro-pastoralism"] },
+  siachen:{ name:"Siachen Naturals", geo:"ladakh", sector:"Himalayan natural foods", est:false,
+    desc:"Products from the lofty Indian Himalayas — collaborates with village self-help groups to bring Ladakhi apricot and natural foods to national markets.",
+    tiles:[
+      {l:"SHG women engaged", v:"250", note:"Nubra valley clusters", est:true},
+      {l:"Apricot procured (yr)", v:"40", u:"t", note:"incl. GI Raktsey Karpo", est:true},
+      {l:"Avg premium vs mandi", v:"+22%", note:"dried apricot", est:true},
+      {l:"Sourcing traceable to village", v:"100%", note:"cluster-level records", est:true}
+    ],
+    price:{unit:"₹/kg", rows:[["Dried apricot (GI)",450,360],["Apricot kernel oil",1250,1050],["Seabuckthorn pulp",95,70]]},
+    uplift:[100,110,119,130,139], sdg:["SDG 1","SDG 5","SDG 8","SDG 12"],
+    impact:["SHG partnership model across Nubra","GI-tagged Raktsey Karpo in national retail","Solar drying reduces post-harvest loss"] },
+  basket:{ name:"Ladakh Basket", geo:"ladakh", sector:"Natural produce & foods", est:false,
+    desc:"Leh-based natural produce brand taking apricot, sea buckthorn and cold-desert foods from Ladakhi farms to Indian consumers.",
+    tiles:[
+      {l:"Farm households engaged", v:"180", note:"Leh & Sham valley", est:true},
+      {l:"Produce procured (yr)", v:"55", u:"t", note:"apricot, seabuckthorn, barley", est:true},
+      {l:"Avg premium vs mandi", v:"+20%", note:"weighted across SKUs", est:true},
+      {l:"Direct farm-gate purchase", v:"100%", note:"no intermediary aggregators", est:true}
+    ],
+    price:{unit:"₹/kg", rows:[["Dried apricot",430,360],["Seabuckthorn juice base",110,85],["Roasted barley (tsampa)",90,70]]},
+    uplift:[100,109,117,126,134], sdg:["SDG 1","SDG 8","SDG 12"],
+    impact:["Farm-gate procurement across 20+ villages","Revives barley & traditional foods demand","Apricot blossom agro-tourism linkages"] },
+  soda:{ name:"Local All Natural Soda", geo:"mizoram", sector:"Natural beverages", est:false,
+    desc:"Mizoram-based all-natural soda startup brewing with local ginger and botanicals — indigenous-owned and building demand for hill horticulture.",
+    tiles:[
+      {l:"Grower households", v:"90", note:"Aizawl & Kolasib belts", est:true},
+      {l:"Ginger & botanicals (yr)", v:"25", u:"t", note:"low-chemical horticulture", est:true},
+      {l:"Avg premium vs local trade", v:"+18%", note:"washed, graded", est:true},
+      {l:"Indigenous ownership", v:"100%", note:"founder & team", est:false, src:"LinkedIn"}
+    ],
+    price:{unit:"₹/kg", rows:[["Fresh ginger",38,30],["Wild lemon & botanicals",65,52]]},
+    uplift:[100,108,115,124,131], sdg:["SDG 8","SDG 12"],
+    impact:["Steady demand signal for hill horticulture","Natural-ingredient supply chain, zero synthetics","Local youth employment in processing"] },
+  nagaed:{ name:"NagaEd", geo:"nagaland", sector:"Education technology", est:false,
+    desc:"Nagaland's first digital education company — contextual e-learning for Northeast schools and colleges, indigenous-owned and led.",
+    tiles:[
+      {l:"Learners reached", v:"12,000", note:"Nagaland & Northeast", est:true},
+      {l:"Partner institutions", v:"85", note:"schools & colleges", est:true},
+      {l:"Contextual courses live", v:"40+", note:"local language & curriculum", est:true},
+      {l:"Indigenous ownership", v:"100%", note:"founder & team", est:false, src:"LinkedIn"}
+    ],
+    price:null,
+    uplift:[100,118,136,158,176], sdg:["SDG 4","SDG 8","SDG 10"],
+    impact:["Digital access in remote hill districts","Curriculum grounded in Naga context & languages","Local employment in content & tech"] },
+};
+
+/* ============================== STATE ============================== */
+const state = { layer:"l1", geo:"all", prov:new Set(), venture:"agapi", cluster:null };
+
+/* ============================== HELPERS ============================== */
+const $ = s => document.querySelector(s);
+const activeGeos = () => state.geo==="all" ? Object.keys(GEOS) : [state.geo];
+const estMark = (label) => `<span class="est" data-tip="${EST_TIP}">${label}</span>`;
+const fmt = n => n.toLocaleString("en-IN");
+
+function tableHTML(cols, rows){
+  return `<table class="dt"><thead><tr>${cols.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>${
+    rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+function card(id, title, hint, vizHTML, tblCols, tblRows){
+  const el = $(id);
+  el.innerHTML = `<div class="card-head"><h3>${title}</h3>${hint?`<span class="hint">${hint}</span>`:""}<button class="tbl-btn" data-toggle>⊞ table</button></div>
+    <div class="viz">${vizHTML}</div><div class="tblwrap">${tableHTML(tblCols, tblRows)}</div>`;
+  el.querySelector("[data-toggle]").onclick = () => {
+    el.classList.toggle("show-table");
+    el.querySelector("[data-toggle]").textContent = el.classList.contains("show-table") ? "◫ chart" : "⊞ table";
+  };
+}
+function topBar(x, y, w, h, r=4){
+  if(h <= r) return `M${x},${y+h} v${-h+1} q0,-1 1,-1 h${w-2} q1,0 1,1 v${h-1} Z`;
+  return `M${x},${y+h} V${y+r} Q${x},${y} ${x+r},${y} H${x+w-r} Q${x+w},${y} ${x+w},${y+r} V${y+h} Z`;
+}
+function niceMax(v){ const p = Math.pow(10, Math.floor(Math.log10(v||1))); const n = v/p;
+  return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=3?3:n<=4?4:n<=5?5:n<=8?8:10)*p; }
+
+/* --- bar chart (one series, direct labels) --- */
+function barChartSVG({data, w=520, h=200, unit="", color="var(--s1)", fmtV=v=>v}){
+  const padL=8, padR=8, padT=22, padB=24, plotW=w-padL-padR, plotH=h-padT-padB;
+  const max = niceMax(Math.max(...data.map(d=>d.v)));
+  const band = plotW/data.length, bw = Math.min(24, band*.55);
+  let s = `<svg viewBox="0 0 ${w} ${h}" role="img">`;
+  for(let i=1;i<=3;i++){ const gy = padT + plotH - plotH*i/3;
+    s += `<line x1="${padL}" y1="${gy}" x2="${w-padR}" y2="${gy}" stroke="var(--grid)" stroke-width="1"/>`; }
+  s += `<line x1="${padL}" y1="${padT+plotH}" x2="${w-padR}" y2="${padT+plotH}" stroke="var(--baseline)" stroke-width="1"/>`;
+  data.forEach((d,i)=>{
+    const bh = plotH * d.v/max, x = padL + band*i + (band-bw)/2, y = padT + plotH - bh;
+    s += `<path d="${topBar(x,y,bw,bh)}" fill="${d.color||color}"/>`;
+    s += `<text class="dlabel" x="${x+bw/2}" y="${y-6}" text-anchor="middle">${fmtV(d.v)}${unit}</text>`;
+    s += `<text class="axis-t" x="${x+bw/2}" y="${h-7}" text-anchor="middle">${d.l}</text>`;
+    s += `<rect class="bar-hit" x="${padL+band*i}" y="${padT}" width="${band}" height="${plotH}" data-tip="<b>${d.tip||d.l}</b><br>${fmtV(d.v)}${unit}"/>`;
+  });
+  return s + `</svg>`;
+}
+
+/* --- multi-series line chart --- */
+function lineChartSVG({series, labels, w=520, h=210, fmtV=v=>v, unit="", endLabels=true}){
+  const padL=30, padR=endLabels?76:16, padT=14, padB=22, plotW=w-padL-padR, plotH=h-padT-padB;
+  const max = niceMax(Math.max(...series.flatMap(s=>s.values)));
+  const X = i => padL + plotW*i/(labels.length-1);
+  const Y = v => padT + plotH - plotH*v/max;
+  let s = `<svg viewBox="0 0 ${w} ${h}" role="img">`;
+  for(let i=0;i<=4;i++){ const gy = padT + plotH - plotH*i/4;
+    s += `<line x1="${padL}" y1="${gy}" x2="${w-padR}" y2="${gy}" stroke="${i===0?'var(--baseline)':'var(--grid)'}" stroke-width="1"/>`;
+    s += `<text class="axis-t" x="${padL-5}" y="${gy+3.5}" text-anchor="end" style="font-variant-numeric:tabular-nums">${fmtV(max*i/4)}</text>`; }
+  labels.forEach((m,i)=>{ if(labels.length<=13 || i%2===0)
+    s += `<text class="axis-t" x="${X(i)}" y="${h-5}" text-anchor="middle">${m}</text>`; });
+  series.forEach(sr=>{
+    const pts = sr.values.map((v,i)=>`${X(i)},${Y(v)}`).join(" ");
+    s += `<polyline points="${pts}" fill="none" stroke="${sr.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+    const lx = X(sr.values.length-1), ly = Y(sr.values[sr.values.length-1]);
+    s += `<circle cx="${lx}" cy="${ly}" r="4.5" fill="${sr.color}" stroke="var(--surface)" stroke-width="2"/>`;
+    if(endLabels) s += `<text class="dlabel2" x="${lx+8}" y="${ly+3.5}">${sr.name}</text>`;
+  });
+  labels.forEach((m,i)=>{
+    const tip = `<b>${m}</b><br>` + series.map(sr=>`${sr.name}: ${fmtV(sr.values[i])}${unit}`).join("<br>");
+    s += `<rect class="bar-hit" x="${X(i)-plotW/(labels.length-1)/2}" y="${padT}" width="${plotW/(labels.length-1)}" height="${plotH}" data-tip="${tip.replace(/"/g,'&quot;')}"/>`;
+  });
+  return s + `</svg>`;
+}
+function legendHTML(series, line=false){
+  return `<div class="legend">${series.map(s=>`<span class="li"><span class="${line?'lk':'sw'}" style="background:${s.color}"></span>${s.name}</span>`).join("")}</div>`;
+}
+
+/* --- grouped bar (paid vs benchmark) --- */
+function groupedBarSVG({rows, w=520, h=210, unit=""}){
+  const padL=8, padR=8, padT=24, padB=24, plotW=w-padL-padR, plotH=h-padT-padB;
+  const max = niceMax(Math.max(...rows.flatMap(r=>[r[1],r[2]])));
+  const band = plotW/rows.length, bw = Math.min(20, band*.22);
+  let s = `<svg viewBox="0 0 ${w} ${h}" role="img">`;
+  for(let i=1;i<=3;i++){ const gy = padT+plotH-plotH*i/3;
+    s += `<line x1="${padL}" y1="${gy}" x2="${w-padR}" y2="${gy}" stroke="var(--grid)" stroke-width="1"/>`; }
+  s += `<line x1="${padL}" y1="${padT+plotH}" x2="${w-padR}" y2="${padT+plotH}" stroke="var(--baseline)" stroke-width="1"/>`;
+  rows.forEach((r,i)=>{
+    const cx = padL + band*i + band/2;
+    const h1 = plotH*r[1]/max, h2 = plotH*r[2]/max;
+    const x1 = cx-bw-1, x2 = cx+1;
+    s += `<path d="${topBar(x1, padT+plotH-h1, bw, h1)}" fill="var(--s1)"/>`;
+    s += `<path d="${topBar(x2, padT+plotH-h2, bw, h2)}" fill="var(--s2)"/>`;
+    s += `<text class="dlabel" x="${x1+bw/2}" y="${padT+plotH-h1-6}" text-anchor="middle">${r[1]}</text>`;
+    s += `<text class="dlabel2" x="${x2+bw/2}" y="${padT+plotH-h2-6}" text-anchor="middle">${r[2]}</text>`;
+    s += `<text class="axis-t" x="${cx}" y="${h-7}" text-anchor="middle">${r[0].length>16?r[0].slice(0,15)+"…":r[0]}</text>`;
+    s += `<rect class="bar-hit" x="${padL+band*i}" y="${padT}" width="${band}" height="${plotH}" data-tip="<b>${r[0]}</b><br>Paid: ${r[1]} ${unit}<br>Benchmark: ${r[2]} ${unit}<br>Premium: +${Math.round((r[1]/r[2]-1)*100)}%"/>`;
+  });
+  return s + `</svg>`;
+}
+
+/* ============================== TOOLTIP ============================== */
+const tip = $("#tip");
+document.addEventListener("mouseover", e=>{
+  const t = e.target.closest("[data-tip]");
+  if(!t) { tip.style.opacity=0; return; }
+  tip.innerHTML = t.dataset.tip; tip.style.opacity=1;
+});
+document.addEventListener("mousemove", e=>{
+  if(tip.style.opacity==="1"){
+    const vw = window.innerWidth;
+    tip.style.left = Math.min(e.clientX+14, vw-280)+"px";
+    tip.style.top = (e.clientY+16)+"px";
+  }
+});
+document.addEventListener("mouseout", e=>{ if(e.target.closest("[data-tip]")) tip.style.opacity=0; });
+
+/* ============================== FILTER BAR ============================== */
+function renderGeoChips(){
+  const opts = [["all","All geographies"], ...Object.entries(GEOS).map(([k,g])=>[k,g.name])];
+  $("#geoChips").innerHTML = opts.map(([k,l])=>
+    `<button class="chip" aria-pressed="${state.geo===k}" data-geo="${k}">${l}</button>`).join("");
+  $("#geoChips").querySelectorAll("[data-geo]").forEach(b=> b.onclick = ()=>{
+    state.geo = b.dataset.geo; state.cluster=null;
+    const vs = Object.entries(VENTURES).filter(([,v])=>state.geo==="all"||v.geo===state.geo);
+    if(vs.length && !vs.some(([k])=>k===state.venture)) state.venture = vs[0][0];
+    renderAll();
+  });
+}
+function renderProvChips(){
+  const el = $("#provChips");
+  const show = state.layer==="l2";
+  el.style.display = show ? "flex" : "none";
+  $("#provLabel").hidden = !show; $("#provSep").hidden = !show;
+  if(!show) return;
+  el.innerHTML = PROV_TAGS.map(t=>{
+    const n = COMMODITIES.filter(c=>c.tags.includes(t)).length;
+    return `<button class="chip" aria-pressed="${state.prov.has(t)}" data-prov="${t}">${t}<span class="n">${n}</span></button>`;
+  }).join("");
+  el.querySelectorAll("[data-prov]").forEach(b=> b.onclick = ()=>{
+    const t=b.dataset.prov; state.prov.has(t) ? state.prov.delete(t) : state.prov.add(t);
+    renderL2();renderProvChips();
+  });
+}
+
+/* ============================== LAYER 1 ============================== */
+function renderL1(){
+  const gs = activeGeos().map(k=>GEOS[k]);
+  const pop = gs.reduce((a,g)=>a+g.popN,0);
+  const forest = gs.reduce((a,g)=>a+g.forest,0)/gs.length;
+  const ventures = Object.values(VENTURES).filter(v=>state.geo==="all"||v.geo===state.geo).length;
+  $("#l1-tiles").innerHTML = `
+    <div class="card c3 tile"><div class="t-label">Population covered</div>
+      <div class="t-value">${pop.toFixed(2)}<span class="unit">M</span></div>
+      <div class="t-note">Census 2011 · ${gs.length} ${gs.length>1?"geographies":"geography"}</div></div>
+    <div class="card c3 tile"><div class="t-label">Forest cover${gs.length>1?" (avg)":""}</div>
+      <div class="t-value">${forest.toFixed(1)}<span class="unit">%</span></div>
+      <div class="t-note">ISFR 2021 · % of geographic area</div></div>
+    <div class="card c3 tile"><div class="t-label">Annual rainfall${gs.length>1?" (range)":""}</div>
+      <div class="t-value">${gs.length>1
+        ? `${fmt(Math.min(...gs.map(g=>g.rainTotal)))}–${fmt(Math.max(...gs.map(g=>g.rainTotal)))}`
+        : fmt(gs[0].rainTotal)}<span class="unit">mm</span></div>
+      <div class="t-note">IMD normals, ${estMark("indicative")}</div></div>
+    <div class="card c3 tile"><div class="t-label">Portfolio ventures here</div>
+      <div class="t-value">${ventures}</div>
+      <div class="t-note">of 36+ ventures supported to date</div></div>`;
+
+  $("#l1-geocards").innerHTML = gs.map(g=>`
+    <div class="card ${gs.length===1?'c6':'c3'} geo-card">
+      <h4><span style="width:9px;height:9px;border-radius:3px;background:${g.color};display:inline-block"></span>${g.name}</h4>
+      <div class="g-type">${g.type}</div>
+      <dl class="kv">
+        <dt>Population</dt><dd>${g.pop}</dd>
+        <dt>Area (km²)</dt><dd>${g.area}</dd>
+        <dt>Literacy</dt><dd>${g.litEst?estMark(g.lit+"%"):g.lit+"%"}</dd>
+        <dt>Workforce in agriculture</dt><dd>${estMark("~"+g.agri+"%")}</dd>
+        <dt>Forest cover</dt><dd>${g.forestEst?estMark("~"+g.forest+"%"):g.forest+"%"}</dd>
+      </dl>
+      <div class="hazards">${g.hazards.map(([h,lv])=>`<span class="pill ${lv}">${lv==="ok"?"✓ ":lv==="serious"?"▲ ":lv==="warn"?"◆ ":"○ "}${h}</span>`).join("")}</div>
+      <p style="font-size:12px;color:var(--ink2);margin:10px 0 0">${g.note}</p>
+    </div>`).join("");
+
+  const rainSeries = gs.map(g=>({name:g.name, color:g.color, values:g.rain}));
+  card("#ch-rain","Monthly rainfall","mm · IMD normals (indicative)",
+    (gs.length>1?legendHTML(rainSeries,true):"") + lineChartSVG({series:rainSeries, labels:MONTHS, fmtV:v=>Math.round(v), unit:" mm", endLabels:gs.length===1}),
+    ["Month",...gs.map(g=>g.name+" (mm)")], MONTHS.map((m,i)=>[m,...gs.map(g=>g.rain[i])]));
+
+  const ndviSeries = gs.map(g=>({name:g.name, color:g.color, values:g.ndvi}));
+  card("#ch-ndvi",`Vegetation index (NDVI)`, `${estMark("illustrative")} · seasonal profile`,
+    (gs.length>1?legendHTML(ndviSeries,true):"") + lineChartSVG({series:ndviSeries, labels:MONTHS, fmtV:v=>v.toFixed(2), endLabels:gs.length===1}),
+    ["Month",...gs.map(g=>g.name)], MONTHS.map((m,i)=>[m,...gs.map(g=>g.ndvi[i].toFixed(2))]));
+
+  const fData = Object.values(GEOS).map(g=>({l:g.name, v:g.forest, color: activeGeos().includes(Object.keys(GEOS).find(k=>GEOS[k]===g)) ? g.color : "var(--grid)", tip:g.name+" · ISFR 2021"+(g.forestEst?" (indicative)":"")}));
+  card("#ch-forest","Forest cover by geography","% of geographic area · ISFR 2021",
+    barChartSVG({data:fData, unit:"%", fmtV:v=>v.toFixed(1)}),
+    ["Geography","Forest cover (%)"], Object.values(GEOS).map(g=>[g.name, g.forest.toFixed(1)]));
+
+  const aData = Object.values(GEOS).map((g)=>({l:g.name, v:g.agri, color: activeGeos().includes(Object.keys(GEOS).find(k=>GEOS[k]===g)) ? g.color : "var(--grid)", tip:g.name+" · workforce share in agriculture (indicative)"}));
+  card("#ch-agri",`Workforce in agriculture & allied`, `${estMark("indicative")} · % of workers`,
+    barChartSVG({data:aData, unit:"%", fmtV:v=>v}),
+    ["Geography","Workforce in agri (%)"], Object.values(GEOS).map(g=>[g.name, "~"+g.agri]));
+}
+
+/* ============================== LAYER 2 ============================== */
+const MAP_NODES = [
+  {id:"ladakh", x:140, y:78,  r:26, label:"Ladakh", sub:"apricot · sea buckthorn · botanicals"},
+  {id:"nepal",  x:330, y:172, r:13, label:"Nepal", sub:"partner geography", partner:true},
+  {id:"sikkim", x:428, y:158, r:22, label:"Sikkim", sub:"cardamom · dalle · botanicals"},
+  {id:"bhutan", x:492, y:150, r:12, label:"Bhutan", sub:"partner geography", partner:true},
+  {id:"nagaland",x:583, y:196, r:17, label:"Nagaland", sub:"education & agroforestry"},
+  {id:"mizoram",x:562, y:268, r:18, label:"Mizoram", sub:"ginger · botanicals"},
+];
+function renderMap(){
+  const hq = {x:205, y:330};
+  const dim = id => state.geo!=="all" && id!==state.geo;
+  let s = `<svg viewBox="0 0 720 400" role="img" aria-label="Schematic sourcing map of the Himalayan belt">
+    <path class="ridge" d="M40,120 C140,60 240,110 340,88 C440,66 540,110 680,70"/>
+    <path class="ridge" d="M60,170 C160,120 260,160 360,138 C460,116 560,160 690,120"/>
+    <path class="ridge" d="M80,220 C180,175 280,210 380,190 C480,170 580,215 700,175"/>
+    <text class="map-sub" x="706" y="390" text-anchor="end">Schematic — positions approximate, not to scale</text>`;
+  MAP_NODES.filter(n=>!n.partner).forEach(n=>{
+    const mx = (n.x+hq.x)/2 - 40, my = Math.max(n.y,hq.y) + 55;
+    s += `<path class="flow" style="opacity:${dim(n.id)?0.08:0.3}" d="M${n.x},${n.y+n.r} Q${mx},${my} ${hq.x},${hq.y-8}"/>`;
+  });
+  MAP_NODES.forEach(n=>{
+    const o = dim(n.id) ? .35 : 1;
+    s += `<g class="map-node" data-geo-node="${n.id}" opacity="${o}" ${n.partner?"":`data-tip="<b>${n.label}</b><br>${n.sub}"`}>
+      ${n.partner
+        ? `<circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="none" stroke="var(--accent)" stroke-width="1.4" opacity=".55"/>`
+        : `<circle class="halo" cx="${n.x}" cy="${n.y}" r="${n.r}" fill="var(--accent)" opacity=".16"/>
+           <circle class="core" cx="${n.x}" cy="${n.y}" r="6" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/>`}
+      <text class="map-label" x="${n.x}" y="${n.y-n.r-8}" text-anchor="middle">${n.label}</text>
+      <text class="map-sub" x="${n.x}" y="${n.y-n.r+5}" text-anchor="middle" dy="12"></text>
+    </g>`;
+  });
+  s += `<g data-tip="<b>Market / HQ</b><br>Alsisar Impact — Mumbai · national retail & D2C">
+      <rect x="${hq.x-6}" y="${hq.y-6}" width="12" height="12" rx="3" fill="var(--apricot)" stroke="var(--surface)" stroke-width="2"/>
+      <text class="map-label" x="${hq.x}" y="${hq.y+24}" text-anchor="middle">Mumbai HQ · markets</text></g></svg>`;
+  $("#map").innerHTML = s;
+  $("#map").querySelectorAll("[data-geo-node]").forEach(g=> g.addEventListener("click", ()=>{
+    const id = g.dataset.geoNode;
+    if(!GEOS[id]) return;
+    state.geo = state.geo===id ? "all" : id; renderAll();
+  }));
+}
+function renderL2(){
+  renderMap();
+  const inGeo = c => state.geo==="all" || c.geo===state.geo;
+  const inProv = c => [...state.prov].every(t=>c.tags.includes(t));
+  const list = COMMODITIES.filter(c=>inGeo(c)&&inProv(c));
+
+  /* cluster comparison */
+  const compare = $("#cluster-compare");
+  compare.innerHTML = `<div class="card-head"><h3>National cluster share</h3><button class="tbl-btn" data-toggle>⊞ table</button></div>
+    <p style="font-size:12px;color:var(--ink2);margin:0 0 8px">Portfolio clusters vs national production ${estMark("indicative")}</p>
+    <div class="viz">
+      ${[["Sikkim — share of India's large cardamom",85],["Ladakh — share of India's dried apricot",70],["Ladakh — share of India's sea buckthorn",90],["Mizoram — bamboo-area share (NE India)",30]]
+        .map(([l,v])=>`<div class="fs-row"><span>${l}</span><b>~${v}%</b></div><div class="meter" data-tip="<b>${l}</b><br>~${v}% (indicative)"><i style="width:${v}%"></i></div>`).join("")}
+    </div>
+    <div class="tblwrap">${tableHTML(["Cluster","Share"],[["Sikkim / large cardamom","~85%"],["Ladakh / dried apricot","~70%"],["Ladakh / sea buckthorn","~90%"],["Mizoram / bamboo (NE)","~30%"]])}</div>`;
+  compare.querySelector("[data-toggle]").onclick = ()=>{ compare.classList.toggle("show-table");
+    compare.querySelector("[data-toggle]").textContent = compare.classList.contains("show-table")?"◫ chart":"⊞ table"; };
+
+  /* commodity cards */
+  $("#commodity-cards").innerHTML = list.length ? list.map(c=>{
+    const vnames = c.ventures.map(v=>VENTURES[v].name).join(", ") || "cluster intelligence only";
+    return `<div class="card c6">
+      <div class="comm-head">
+        <h4>${c.name}</h4>
+        ${c.gi.has?`<span class="gi-seal" data-tip="<b>Geographical Indication</b><br>Registered — GI Registry, Govt. of India">◉ ${c.gi.label}</span>`:`<span class="tag">${c.gi.label}</span>`}
+      </div>
+      <div class="comm-meta"><b style="color:var(--ink)">${GEOS[c.geo].name}</b> · ${c.clusters} · Ventures: ${vnames}</div>
+      <p style="font-size:12.5px;color:var(--ink2);margin:6px 0 0">${c.meta}</p>
+      <div style="margin-top:9px">${c.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+      <div class="vc">${c.chain.map((st,i)=>`<span class="step">${st}</span>${i<c.chain.length-1?'<span class="arr">→</span>':""}`).join("")}</div>
+      <div class="fs-row"><span>Farmer share of final value ${estMark("indicative")}</span><b>${c.farmerShare}%</b></div>
+      <div class="meter" data-tip="<b>Farmer share</b><br>${c.farmerShare}% of final consumer value (indicative)"><i style="width:${c.farmerShare}%"></i></div>
+      <p class="src" style="margin:9px 0 0">Evidence: ${c.evidence}</p>
+    </div>`;
+  }).join("") : `<div class="card" style="color:var(--ink2)">No commodity in the current geography matches every selected provenance filter. Clear a filter to widen the view.</div>`;
+
+  /* global production */
+  card("#ch-global","Large cardamom — world production share","% of global output "+estMark("indicative"),
+    barChartSVG({data:[{l:"Nepal",v:50},{l:"India",v:35,tip:"India — Sikkim grows ~85% of national crop"},{l:"Bhutan",v:15}], unit:"%", color:"var(--s1)", fmtV:v=>v}),
+    ["Origin","Share of global output"],[["Nepal","~50%"],["India (Sikkim-led)","~35%"],["Bhutan","~15%"]]);
+
+  /* farmer share comparison */
+  card("#ch-farmershare","Farmer share — portfolio channel vs conventional trade","% of final value "+estMark("indicative"),
+    legendHTML([{name:"Portfolio channel",color:"var(--s1)"},{name:"Conventional trade",color:"var(--s2)"}]) +
+    groupedBarSVG({rows:(list.length?list:COMMODITIES).map(c=>[c.short, c.farmerShare, Math.max(20,c.farmerShare-26)]), unit:"%"}),
+    ["Commodity","Portfolio channel","Conventional trade"], (list.length?list:COMMODITIES).map(c=>[c.short, c.farmerShare+"%", Math.max(20,c.farmerShare-26)+"%"]));
+}
+
+/* ============================== LAYER 3 ============================== */
+function renderL3(){
+  const vs = Object.entries(VENTURES).filter(([,v])=>state.geo==="all"||v.geo===state.geo);
+  $("#l3-overview").innerHTML = `
+    <div class="card c4 tile">
+      <div class="t-label">Ventures supported to date</div>
+      <div class="hero-num">36<span style="color:var(--accent)">+</span></div>
+      <div class="t-note">across 6 sectors · a decade of impact investing<br><span class="src">Source: alsisarimpact.org/impact</span></div>
+    </div>
+    <div class="card c4 tile">
+      <div class="t-label">Combined portfolio valuation</div>
+      <div class="t-value">$10<span class="unit">M+</span></div>
+      <div class="t-note">flagship ventures, majority indigenous-women owned &amp; led<br><span class="src">Source: LinkedIn</span></div>
+    </div>
+    <div class="card c4 tile">
+      <div class="t-label">Women & farmers engaged (view)</div>
+      <div class="t-value">${fmt(vs.reduce((a,[,v])=>{const t=v.tiles[0]; return a + (parseInt(String(t.v).replace(/[^0-9]/g,""))||0);},0))}</div>
+      <div class="t-note">${estMark("first-tile sum across ventures in view — partly illustrative")}</div>
+    </div>`;
+
+  $("#ventureChips").innerHTML = vs.map(([k,v])=>
+    `<button class="chip" aria-pressed="${state.venture===k}" data-v="${k}">${v.name}<span class="n">${GEOS[v.geo].name}</span></button>`).join("")
+    || `<span style="color:var(--ink2)">No ventures in this geography.</span>`;
+  $("#ventureChips").querySelectorAll("[data-v]").forEach(b=> b.onclick=()=>{ state.venture=b.dataset.v; renderL3(); });
+
+  const v = VENTURES[state.venture];
+  if(!v || (state.geo!=="all" && v.geo!==state.geo)){ $("#ventureDetail").innerHTML=""; return; }
+  const years = ["FY21","FY22","FY23","FY24","FY25"];
+  $("#ventureDetail").innerHTML = `
+    <div class="card" style="margin-bottom:14px">
+      <div class="v-head">
+        <div style="flex:1;min-width:260px">
+          <h3>${v.name}</h3>
+          <p class="v-desc">${v.desc}</p>
+          <div style="margin-top:8px">${v.sdg.map(s=>`<span class="sdg">${s}</span>`).join("")}</div>
+        </div>
+        <div style="min-width:200px">
+          <div class="src" style="margin-bottom:4px">GEOGRAPHY</div>
+          <div style="font-weight:640">${GEOS[v.geo].name} <span style="font-weight:400;color:var(--ink2)">· ${v.sector}</span></div>
+          <div class="src" style="margin:10px 0 4px">WHAT'S DIFFERENT</div>
+          ${v.impact.map(i=>`<div style="font-size:12.5px;color:var(--ink2);margin-bottom:3px">— ${i}</div>`).join("")}
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      ${v.tiles.map(t=>`<div class="card c3 tile">
+        <div class="t-label">${t.l}</div>
+        <div class="t-value">${t.est?estMark(t.v):t.v}${t.u?`<span class="unit">${t.u}</span>`:""}</div>
+        <div class="t-note">${t.note}${t.src?` · <span class="src">${t.src}</span>`:""}</div>
+      </div>`).join("")}
+    </div>
+    <div class="grid" style="margin-top:14px">
+      ${v.price?`<div class="card c6" id="ch-price"></div>`:""}
+      <div class="card ${v.price?"c6":"c6"}" id="ch-uplift"></div>
+    </div>`;
+
+  if(v.price){
+    card("#ch-price", `Price paid vs local benchmark`, `${v.price.unit} · ${estMark("illustrative")}`,
+      legendHTML([{name:"Price paid by "+v.name,color:"var(--s1)"},{name:"Local benchmark",color:"var(--s2)"}]) +
+      groupedBarSVG({rows:v.price.rows, unit:v.price.unit}),
+      ["Commodity","Paid ("+v.price.unit+")","Benchmark ("+v.price.unit+")","Premium"],
+      v.price.rows.map(r=>[r[0],r[1],r[2],"+"+Math.round((r[1]/r[2]-1)*100)+"%"]));
+  }
+  const upl = [{name:v.name, color:"var(--s1)", values:v.uplift},{name:"Benchmark", color:"var(--s2)", values:[100,104,107,110,113]}];
+  card("#ch-uplift", v.price?`Producer income — indexed`:`Reach — indexed growth`, `Index, FY21 = 100 · ${estMark("illustrative")}`,
+    legendHTML(upl,true)+lineChartSVG({series:upl, labels:years, fmtV:v2=>Math.round(v2), endLabels:true}),
+    ["Year",v.name,"Benchmark"], years.map((y,i)=>[y, v.uplift[i], [100,104,107,110,113][i]]));
+}
+
+/* ============================== TABS / RENDER ============================== */
+document.querySelectorAll(".tab").forEach(t=> t.onclick = ()=>{
+  state.layer = t.dataset.layer;
+  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected", x===t ? "true":"false"));
+  document.querySelectorAll("section.layer").forEach(s=>s.classList.toggle("active", s.id===state.layer));
+  renderProvChips();
+});
+function renderAll(){ renderGeoChips(); renderProvChips(); renderL1(); renderL2(); renderL3(); }
+renderAll();
+</script>
