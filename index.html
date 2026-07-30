@@ -187,6 +187,14 @@
   .pm-note{font-size:10.5px;color:var(--muted);margin-top:4px}
   @media(max-width:760px){.pmap-wrap{flex-direction:column}.pmap-panel{width:auto}}
 
+  /* ---------- geographic story map ---------- */
+  .gm-state{fill:var(--plane);stroke:var(--baseline);stroke-width:1;stroke-linejoin:round;cursor:pointer;transition:fill .15s}
+  .gm-state:hover{fill:var(--accent-soft)}
+  .gm-state.sel{fill:var(--accent-soft);cursor:default}
+  .gm-bubble{fill:var(--apricot);fill-opacity:.78;stroke:var(--surface);stroke-width:2;cursor:pointer;transition:fill-opacity .15s}
+  .gm-bubble:hover{fill-opacity:1}
+  .gm-val{font-size:11.5px;font-weight:650;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:3px;pointer-events:none}
+
   /* ---------- himalayan coverage ---------- */
   .cov-wrap{display:flex;gap:26px;flex-wrap:wrap;margin:6px 0 4px}
   .cov-stat{width:255px;flex:none}
@@ -265,6 +273,7 @@
     </div>
     <p class="eyebrow" style="margin:28px 0 10px">Part B · Geographic overview</p>
     <div class="grid" id="l1b-tiles"></div>
+    <div class="card" id="geomap" style="margin-top:14px"></div>
     <div class="grid" id="l1b-geocards" style="margin-top:14px"></div>
     <div class="grid" style="margin-top:14px">
       <div class="card c6" id="ch-forest"></div>
@@ -776,6 +785,89 @@ function renderCoverage(){
     renderAll();
   });
 }
+let gmapVB = null;
+function renderGeoMap(){
+  const el = $("#geomap"), G = REGION_GEO;
+  const IND = {
+    rain:{label:"Rainfall", get:g=>g.rainTotal, fmt:g=>"~"+fmt(g.rainTotal)+" mm", unit:"annual, IMD normals (indicative)"},
+    forest:{label:"Forest %", get:g=>g.forest, fmt:g=>(g.forestEst?"~":"")+g.forest+"%", unit:"ISFR 2021"},
+    area:{label:"Area", get:g=>parseInt(g.area.replace(/,/g,"")), fmt:g=>g.area+" km²", unit:"geographic area"}
+  };
+  if(!state.geoInd) state.geoInd = "rain";
+  const ind = IND[state.geoInd];
+  const zr = state.geo!=="all" ? PORTFOLIO.find(r=>r.key===state.geo) : null;
+  const target = zr ? fitBox(G.states[zr.shape].bb, zr.shape==="sikkim"?0.7:0.22) : [0,0,G.w,G.h];
+  const vmax = Math.max(...PORTFOLIO.map(r=>ind.get(GEOS[r.key])));
+  const R = v => 8 + 18*Math.sqrt(v/vmax);
+  let inner = "";
+  PORTFOLIO.forEach(r=>{
+    const g = GEOS[r.key], dim = zr && zr!==r;
+    const haz = g.hazards.map(h=>h[0]).join("<br>");
+    inner += `<path class="gm-state ${zr===r?'sel':''}" data-ggeo="${r.key}" d="${G.states[r.shape].d}" opacity="${dim?0.25:1}" data-tip="<b>${g.name}</b> · ${g.type}<br>Area ${g.area} km² · Forest ${(g.forestEst?'~':'')+g.forest}%<br>Rainfall ~${fmt(g.rainTotal)} mm/yr<br><br>${haz}"/>`;
+  });
+  if(!zr) PORTFOLIO.forEach(r=>{
+    inner += `<text class="pm-label" x="${r.lbl[0]}" y="${r.lbl[1]}" text-anchor="middle">${GEOS[r.key].name}</text>`;
+  });
+  PORTFOLIO.forEach(r=>{
+    const g = GEOS[r.key], bb = G.states[r.shape].bb, dim = zr && zr!==r;
+    if(dim) return;
+    const cx = bb[0]+bb[2]/2, cy = bb[1]+bb[3]/2, rad = zr? R(ind.get(g))*0.7 : R(ind.get(g));
+    const haz = g.hazards.map(h=>h[0]).join("<br>");
+    inner += `<circle class="gm-bubble" data-ggeo="${r.key}" cx="${cx}" cy="${cy}" r="${rad}" data-tip="<b>${g.name}</b><br>${ind.label}: ${ind.fmt(g)}<br>Area ${g.area} km² · Forest ${(g.forestEst?'~':'')+g.forest}%<br><br>${haz}"/>`;
+    if(zr) inner += `<text class="gm-val" x="${cx}" y="${cy+rad+14}" text-anchor="middle">${ind.fmt(g)}</text>`;
+  });
+  let panel;
+  if(!zr){
+    const sorted = [...PORTFOLIO].sort((a,b)=>ind.get(GEOS[b.key])-ind.get(GEOS[a.key]));
+    panel = `<div class="p-head">${ind.label} by region · ${ind.unit}</div>` + sorted.map(r=>{
+      const g = GEOS[r.key];
+      return `<button class="pmap-row" data-ggeo="${r.key}"><span style="width:9px;height:9px;border-radius:50%;background:var(--apricot);flex:none"></span><b>${g.name}</b><span class="cnt">${ind.fmt(g)}</span></button>`;
+    }).join("") + `<div class="pm-note">bubble size ∝ ${ind.label.toLowerCase()} · click a region to zoom &amp; filter the platform</div>`;
+  } else {
+    const g = GEOS[state.geo];
+    panel = `<button class="pmap-back" data-gback>← All regions</button>
+      <div class="p-head">${g.name} · ${g.type}</div>
+      <dl class="kv" style="margin:0 0 4px">
+        <dt>Area (km²)</dt><dd>${g.area}</dd>
+        <dt>Forest cover</dt><dd>${g.forestEst?"~":""}${g.forest}%</dd>
+        <dt>Rainfall (annual)</dt><dd>~${fmt(g.rainTotal)} mm</dd>
+      </dl>
+      <div class="hazards">${g.hazards.map(([h,lv])=>`<span class="pill ${lv}">${lv==="ok"?"✓ ":lv==="serious"?"▲ ":lv==="warn"?"◆ ":"○ "}${h}</span>`).join("")}</div>
+      <div class="pm-note">${g.note}</div>`;
+  }
+  const switcher = Object.entries(IND).map(([k,d])=>
+    `<button class="tbl-btn" style="${state.geoInd===k?"color:var(--accent);border-color:var(--accent);":""}margin-left:6px" data-gind="${k}" aria-pressed="${state.geoInd===k}">${d.label}</button>`).join("");
+  el.innerHTML = `<div class="card-head"><h3>Geographic map — operating regions</h3><span class="hint">hover for details · click a region to zoom</span><span style="margin-left:auto;display:flex;flex-wrap:wrap">${switcher}<button class="tbl-btn" style="margin-left:6px" data-toggle>⊞ table</button></span></div>
+    <div class="viz pmap-wrap"><div class="pmap-svg"><svg id="gmap-canvas" viewBox="${(gmapVB||target).join(" ")}" role="img" aria-label="Geographic map of operating regions">${inner}</svg></div>
+    <div class="pmap-panel">${panel}</div></div>
+    <div class="tblwrap">${tableHTML(["Region","Area km²","Forest cover","Rainfall (mm/yr)","Key hazards"],
+      PORTFOLIO.map(r=>{const g=GEOS[r.key];return [g.name, g.area, (g.forestEst?"~":"")+g.forest+"%", "~"+fmt(g.rainTotal), g.hazards.map(h=>h[0]).join(" · ")];}))}</div>`;
+  el.querySelector("[data-toggle]").onclick = () => {
+    el.classList.toggle("show-table");
+    el.querySelector("[data-toggle]").textContent = el.classList.contains("show-table") ? "◫ chart" : "⊞ table";
+  };
+  el.querySelectorAll("[data-gind]").forEach(b=> b.onclick = ()=>{ state.geoInd = b.dataset.gind; renderGeoMap(); });
+  el.querySelectorAll("[data-ggeo]").forEach(t=> t.addEventListener("click", ()=>{
+    state.geo = state.geo===t.dataset.ggeo ? "all" : t.dataset.ggeo;
+    const vs = Object.entries(VENTURES).filter(([,v])=>state.geo==="all"||v.geo===state.geo);
+    if(vs.length && !vs.some(([k])=>k===state.venture)) state.venture = vs[0][0];
+    renderAll();
+  }));
+  const back = el.querySelector("[data-gback]");
+  if(back) back.onclick = ()=>{ state.geo="all"; renderAll(); };
+  const svg = el.querySelector("#gmap-canvas");
+  const from = gmapVB || target;
+  if(from.join()!==target.join() && !matchMedia("(prefers-reduced-motion: reduce)").matches){
+    const t0 = performance.now(), DUR = 340;
+    const step = now => {
+      const t = Math.min(1,(now-t0)/DUR), e = t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
+      svg.setAttribute("viewBox", from.map((f,i)=>f+(target[i]-f)*e).join(" "));
+      if(t<1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  } else svg.setAttribute("viewBox", target.join(" "));
+  gmapVB = target;
+}
 let pmapVB = null;
 function renderPortfolioMap(){
   const el = $("#pmap3"), G = REGION_GEO;
@@ -913,6 +1005,8 @@ function renderL1(){
         ? `${fmt(Math.min(...gs.map(g=>g.rainTotal)))}–${fmt(Math.max(...gs.map(g=>g.rainTotal)))}`
         : fmt(gs[0].rainTotal)}<span class="unit">mm</span></div>
       <div class="t-note">IMD normals, ${estMark("indicative")}</div></div>`;
+
+  renderGeoMap();
 
   $("#l1b-geocards").innerHTML = Object.entries(GEOS).map(([k,g])=>`
     <div class="card c3 geo-card${hl(k)}">
