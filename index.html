@@ -196,6 +196,10 @@
   .gm-bubble:hover{fill-opacity:1}
   .gm-val{font-size:11.5px;font-weight:650;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:3px;pointer-events:none}
 
+  .leaflet-container{font:12.5px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+  .leaflet-container svg{width:auto !important;height:auto !important}
+  .leaflet-popup-content{font-size:12.5px;line-height:1.5}
+
   /* ---------- himalayan coverage ---------- */
   .cov-wrap{display:flex;gap:26px;flex-wrap:wrap;margin:6px 0 4px}
   .cov-stat{width:255px;flex:none}
@@ -327,6 +331,7 @@
           <li>Rainfall — IMD station normals (indicative) · GI records — <a href="https://ipindia.gov.in/gi.htm" target="_blank" rel="noopener">Geographical Indications Registry, Govt. of India</a></li>
           <li>Raktsey Karpo apricot GI (Ladakh's first, Dec 2022); Dalle Khursani GI (Sikkim, 2021, extended to Darjeeling &amp; Kalimpong); Sikkim Large Cardamom GI</li>
           <li>Indian Himalayan Region — 12 Himalayan states &amp; UTs (NITI Aayog IHR classification); Alsisar Impact active in 8</li>
+          <li>Satellite view — Leaflet (open-source) with free Esri World Imagery &amp; OpenStreetMap tiles, attribution on-map; tiles load when the dashboard runs locally or on own hosting (blocked inside the embedded artifact preview)</li>
           <li>Portfolio footprint — Alsisar Impact portfolio deck (8 regions); state silhouettes derived from Census-2011 district GeoJSON (<a href="https://github.com/udit-001/india-maps-data" target="_blank" rel="noopener">udit-001/india-maps-data</a>), simplified for display; startup HQ towns compiled from public profiles &amp; press (≈ marked approximate)</li>
         </ul>
       </div>
@@ -787,6 +792,103 @@ function renderCoverage(){
     renderAll();
   });
 }
+const GEO_LL = {jk:[33.9,75.0], ladakh:[34.35,77.6], uk:[30.1,79.3], sikkim:[27.5,88.5], assam:[26.2,92.9], nagaland:[26.1,94.4], manipur:[24.7,93.9], mizoram:[23.3,92.8]};
+const TOWN_LL = {"Srinagar":[34.08,74.80],"Leh":[34.16,77.58],"Nubra Valley":[34.75,77.54],"Gangtok":[27.34,88.61],"Dehradun":[30.32,78.03],"Almora":[29.60,79.66],"Ukhrul":[25.05,94.36],"Aizawl":[23.73,92.72],"Tezpur":[26.63,92.79],"Dimapur":[25.90,93.73]};
+let leafP = null;
+function ensureLeaflet(){
+  if(window.L) return Promise.resolve();
+  if(leafP) return leafP;
+  leafP = new Promise((res,rej)=>{
+    const css = document.createElement("link"); css.rel="stylesheet";
+    css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"; document.head.appendChild(css);
+    const s = document.createElement("script"); s.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+    s.onload = ()=>res(); s.onerror = ()=>{ leafP=null; rej(new Error("blocked")); };
+    document.head.appendChild(s);
+    setTimeout(()=>{ if(!window.L){ leafP=null; rej(new Error("timeout")); } }, 9000);
+  });
+  return leafP;
+}
+function initLeafMapView(ind){
+  if(window.__leafMap){ try{ window.__leafMap.remove(); }catch(e){} window.__leafMap = null; }
+  const mapEl = document.getElementById("leafmap");
+  if(!mapEl || !window.L) return;
+  const m = L.map("leafmap", {zoomSnap:0.5, worldCopyJump:true});
+  window.__leafMap = m;
+  const sat = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {maxZoom:18, attribution:"Imagery © Esri, Maxar, Earthstar Geographics"});
+  const ref = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", {maxZoom:18});
+  const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19, attribution:"© OpenStreetMap contributors"});
+  sat.addTo(m); ref.addTo(m);
+  const vmax = Math.max(...PORTFOLIO.map(r=>ind.get(GEOS[r.key])));
+  const regions = L.layerGroup();
+  PORTFOLIO.forEach(r=>{
+    const g = GEOS[r.key], c = GEO_LL[r.key];
+    const rad = 10 + 22*Math.sqrt(ind.get(g)/vmax);
+    L.circleMarker(c, {radius:rad, color:"#ffffff", weight:2, fillColor:"#c96f3a", fillOpacity:.8})
+      .bindPopup(`<b>${g.name}</b> · ${g.type}<br>${ind.label}: ${ind.fmt(g)}<br>Area ${g.area} km² · Forest ${(g.forestEst?"~":"")+g.forest}%<br>Rainfall ~${fmt(g.rainTotal)} mm/yr<br><br>${g.hazards.map(h=>h[0]).join("<br>")}`)
+      .addTo(regions);
+  });
+  regions.addTo(m);
+  const startups = L.layerGroup();
+  const seen = {};
+  PORTFOLIO.forEach(r=> r.ventures.forEach(v=>{
+    const c = TOWN_LL[v.town]; if(!c) return;
+    const n = seen[v.town] = (seen[v.town]||0)+1;
+    const pos = [c[0] + (n-1)*0.045, c[1] + (n-1)*0.02];
+    L.circleMarker(pos, {radius:6, color:"#ffffff", weight:2, fillColor:"#21634b", fillOpacity:.95})
+      .bindPopup(`<b>${v.n}</b><br>${v.town}${v.approx?" (approx.)":""} · ${GEOS[r.key].name}`)
+      .addTo(startups);
+  }));
+  L.control.layers({"Satellite (Esri)":sat, "Streets (OSM)":osm}, {"Region indicators":regions, "Startup locations":startups}, {collapsed:false}).addTo(m);
+  if(state.geo!=="all") m.setView(GEO_LL[state.geo], 7.5);
+  else m.fitBounds(Object.values(GEO_LL), {padding:[40,40]});
+}
+function renderGeoMapSat(el, ind, IND){
+  let panel;
+  if(state.geo==="all"){
+    const sorted = [...PORTFOLIO].sort((a,b)=>ind.get(GEOS[b.key])-ind.get(GEOS[a.key]));
+    panel = `<div class="p-head">${ind.label} by region · ${ind.unit}</div>` + sorted.map(r=>{
+      const g = GEOS[r.key];
+      return `<button class="pmap-row" data-ggeo="${r.key}"><span style="width:9px;height:9px;border-radius:50%;background:var(--apricot);flex:none"></span><b>${g.name}</b><span class="cnt">${ind.fmt(g)}</span></button>`;
+    }).join("") + `<div class="pm-note">free satellite imagery (Esri) · toggle layers on the map · click a region to fly &amp; filter</div>`;
+  } else {
+    const g = GEOS[state.geo];
+    panel = `<button class="pmap-back" data-gback>← All regions</button>
+      <div class="p-head">${g.name} · ${g.type}</div>
+      <dl class="kv" style="margin:0 0 4px">
+        <dt>Area (km²)</dt><dd>${g.area}</dd>
+        <dt>Forest cover</dt><dd>${g.forestEst?"~":""}${g.forest}%</dd>
+        <dt>Rainfall (annual)</dt><dd>~${fmt(g.rainTotal)} mm</dd>
+      </dl>
+      <div class="hazards">${g.hazards.map(([h,lv])=>`<span class="pill ${lv}">${lv==="ok"?"✓ ":lv==="serious"?"▲ ":lv==="warn"?"◆ ":"○ "}${h}</span>`).join("")}</div>
+      <div class="pm-note">${g.note}</div>`;
+  }
+  const switcher = Object.entries(IND).map(([k,d])=>
+    `<button class="tbl-btn" style="${state.geoInd===k?"color:var(--accent);border-color:var(--accent);":""}margin-left:6px" data-gind="${k}">${d.label}</button>`).join("");
+  el.innerHTML = `<div class="card-head"><h3>Geographic map — operating regions</h3><span class="hint">satellite view · free Esri imagery</span><span style="margin-left:auto;display:flex;flex-wrap:wrap">${switcher}<button class="tbl-btn" style="margin-left:6px;color:var(--accent);border-color:var(--accent)" data-gsat>🛰 Satellite</button><button class="tbl-btn" style="margin-left:6px" data-toggle>⊞ table</button></span></div>
+    <div class="viz pmap-wrap"><div class="pmap-svg"><div id="leafmap" style="height:600px;border-radius:8px;overflow:hidden;background:var(--plane)"></div></div>
+    <div class="pmap-panel">${panel}</div></div>
+    <div class="tblwrap">${tableHTML(["Region","Area km²","Forest cover","Rainfall (mm/yr)","Key hazards"],
+      PORTFOLIO.map(r=>{const g=GEOS[r.key];return [g.name, g.area, (g.forestEst?"~":"")+g.forest+"%", "~"+fmt(g.rainTotal), g.hazards.map(h=>h[0]).join(" · ")];}))}</div>`;
+  el.querySelector("[data-toggle]").onclick = () => {
+    el.classList.toggle("show-table");
+    el.querySelector("[data-toggle]").textContent = el.classList.contains("show-table") ? "◫ chart" : "⊞ table";
+  };
+  el.querySelector("[data-gsat]").onclick = ()=>{ state.satMode = false; renderGeoMap(); };
+  el.querySelector("[data-gsat]").onclick = ()=>{ state.satMode = true; renderGeoMap(); };
+  el.querySelectorAll("[data-gind]").forEach(b=> b.onclick = ()=>{ state.geoInd = b.dataset.gind; renderGeoMap(); });
+  el.querySelectorAll("[data-ggeo]").forEach(t=> t.addEventListener("click", ()=>{
+    state.geo = state.geo===t.dataset.ggeo ? "all" : t.dataset.ggeo;
+    const vs = Object.entries(VENTURES).filter(([,v])=>state.geo==="all"||v.geo===state.geo);
+    if(vs.length && !vs.some(([k])=>k===state.venture)) state.venture = vs[0][0];
+    renderAll();
+  }));
+  const back = el.querySelector("[data-gback]");
+  if(back) back.onclick = ()=>{ state.geo="all"; renderAll(); };
+  ensureLeaflet().then(()=>initLeafMapView(ind)).catch(()=>{
+    const lm = document.getElementById("leafmap");
+    if(lm) lm.innerHTML = `<div style="display:grid;place-items:center;height:100%;padding:30px;text-align:center;color:var(--ink2);font-size:13px">Satellite tiles can't load in this embedded view (external requests are blocked).<br><br>Open the dashboard locally or on your own hosting (e.g. GitHub Pages) for the full satellite map — or switch back to the schematic view.</div>`;
+  });
+}
 let gmapVB = null;
 function renderGeoMap(){
   const el = $("#geomap"), G = INDIA_GEO;
@@ -797,6 +899,7 @@ function renderGeoMap(){
   };
   if(!state.geoInd) state.geoInd = "rain";
   const ind = IND[state.geoInd];
+  if(state.satMode){ renderGeoMapSat(el, ind, IND); return; }
   const zr = state.geo!=="all" ? PORTFOLIO.find(r=>r.key===state.geo) : null;
   const target = zr ? fitBox(G.states[zr.shape].bb, zr.shape==="sikkim"?0.7:0.25, G) : [0,0,G.w,G.h];
   const vmax = Math.max(...PORTFOLIO.map(r=>ind.get(GEOS[r.key])));
@@ -846,7 +949,7 @@ function renderGeoMap(){
   }
   const switcher = Object.entries(IND).map(([k,d])=>
     `<button class="tbl-btn" style="${state.geoInd===k?"color:var(--accent);border-color:var(--accent);":""}margin-left:6px" data-gind="${k}" aria-pressed="${state.geoInd===k}">${d.label}</button>`).join("");
-  el.innerHTML = `<div class="card-head"><h3>Geographic map — operating regions</h3><span class="hint">hover for details · click a region to zoom</span><span style="margin-left:auto;display:flex;flex-wrap:wrap">${switcher}<button class="tbl-btn" style="margin-left:6px" data-toggle>⊞ table</button></span></div>
+  el.innerHTML = `<div class="card-head"><h3>Geographic map — operating regions</h3><span class="hint">hover for details · click a region to zoom</span><span style="margin-left:auto;display:flex;flex-wrap:wrap">${switcher}<button class="tbl-btn" style="margin-left:6px" data-gsat>🛰 Satellite</button><button class="tbl-btn" style="margin-left:6px" data-toggle>⊞ table</button></span></div>
     <div class="viz pmap-wrap"><div class="pmap-svg"><svg id="gmap-canvas" viewBox="${(gmapVB||target).join(" ")}" role="img" aria-label="Geographic map of operating regions">${inner}</svg></div>
     <div class="pmap-panel">${panel}</div></div>
     <div class="tblwrap">${tableHTML(["Region","Area km²","Forest cover","Rainfall (mm/yr)","Key hazards"],
