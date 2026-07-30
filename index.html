@@ -340,7 +340,35 @@ const GEOS = {
     rain:[12,25,80,160,280,420,440,420,320,180,60,15],
     ndvi:[.52,.54,.58,.64,.70,.74,.76,.75,.72,.66,.58,.54],
     hazards:[["Highest forest cover in India (84.5%)","ok"],["Forest-fire season Mar–Apr","warn"],["Landslide risk: moderate","warn"]],
-    note:"Highest literacy among portfolio geographies; bamboo-dominant landscapes, horticulture growth." }
+    note:"Highest literacy among portfolio geographies; bamboo-dominant landscapes, horticulture growth." },
+  jk:{ name:"Jammu & Kashmir", type:"Union Territory", color:"var(--s5)", slot:5,
+    pop:"12,267,013", popN:12.267, area:"42,241", lit:67.2, litEst:true, agri:50, agriEst:true,
+    forest:39.2, forestEst:true, rainTotal:710, rainEst:true,
+    rain:[48,68,121,85,68,36,58,76,38,29,20,36],
+    ndvi:[.25,.28,.35,.45,.55,.62,.65,.63,.55,.45,.35,.28],
+    hazards:[["Snow cover Dec–Mar (valley & highlands)","info"],["Seismic zone IV–V","warn"],["Jhelum flood exposure (2014-type events)","serious"]],
+    note:"Saffron, horticulture and handicraft economy; Srinagar is the centre of a fast-growing startup ecosystem." },
+  uk:{ name:"Uttarakhand", type:"State", color:"var(--s6)", slot:6,
+    pop:"10,086,292", popN:10.086, area:"53,483", lit:78.8, litEst:false, agri:50, agriEst:true,
+    forest:45.4, forestEst:false, rainTotal:1500, rainEst:true,
+    rain:[40,50,45,30,55,180,420,400,190,40,12,20],
+    ndvi:[.40,.42,.46,.52,.58,.64,.70,.71,.66,.58,.48,.42],
+    hazards:[["Landslide & flash-flood risk: high","serious"],["Kedarnath-type flood history (2013, 2021)","warn"],["Documented out-migration — ~1,700 'ghost villages'","serious"]],
+    note:"Kumaon & Garhwal hills; documented farm abandonment and out-migration — the exodus the portfolio model works against." },
+  manipur:{ name:"Manipur", type:"State", color:"var(--s7)", slot:7,
+    pop:"2,855,794", popN:2.856, area:"22,327", lit:76.9, litEst:false, agri:52, agriEst:true,
+    forest:74.3, forestEst:false, rainTotal:1470, rainEst:true,
+    rain:[15,30,70,140,200,270,250,230,180,110,40,15],
+    ndvi:[.50,.52,.56,.62,.68,.72,.74,.73,.70,.64,.56,.51],
+    hazards:[["Imphal valley seasonal floods","warn"],["Jhum-fallow land-use transition","info"],["Ukhrul hills — indigenous horticulture belt","ok"]],
+    note:"Hill districts like Ukhrul are emerging startup hubs built on indigenous produce ('Made in Ukhrul')." },
+  assam:{ name:"Assam", type:"State", color:"var(--s8)", slot:8,
+    pop:"31,205,576", popN:31.206, area:"78,438", lit:72.2, litEst:false, agri:53, agriEst:true,
+    forest:36.1, forestEst:false, rainTotal:2300, rainEst:true,
+    rain:[15,25,70,180,330,420,410,360,260,120,25,10],
+    ndvi:[.45,.47,.52,.60,.66,.70,.72,.71,.68,.62,.52,.47],
+    hazards:[["Annual Brahmaputra floods & bank erosion","serious"],["Riverine transport corridors","info"],["Tea & citrus GI heritage","ok"]],
+    note:"Brahmaputra valley gateway to the Northeast; annual floods shape livelihoods, logistics and cropping." }
 };
 
 const REGION_GEO = {"w": 960.0, "h": 694.3, "states": {"ladakh": {"d": "M195.7 191.9L194.0 187.3L196.6 183.2L199.4 183.2L199.9 178.0L204.7 179.9L202.2 174.5L204.6 169.9L200.8 164.5L195.0 164.8L188.8 156.0L180.3 154.2L168.2 145.5L163.4 146.1L165.5 139.1L170.0 137.5L171.4 126.3L164.9 121.7L164.8 115.0L160.3 114.5L159.0 108.1L147.3 110.8L140.7 107.5L137.5 116.2L123.7 118.5L116.7 124.8L114.0 121.2L115.6 116.9L110.7 112.4L90.0 110.4L83.4 105.9L73.1 105.1L83.3 101.1L84.1 94.9L80.4 90.4L70.4 93.6L64.7 88.3L51.7 84.1L49.1 85.4L47.8 78.9L51.7 74.2L51.2 71.2L35.8 69.4L30.3 66.4L24.7 62.3L25.5 56.7L22.8 54.8L16.3 56.5L12.2 54.6L6.6 57.1L2.9 55.3L0.0 51.6L2.7 48.2L0.0 46.0L2.6 37.4L6.7 38.0L14.4 31.7L14.2 29.1L18.8 28.4L23.8 21.4L22.6 17.3L37.2 15.3L45.0 17.8L56.0 17.0L47.4 7.6L55.1 8.4L62.3 12.5L66.9 8.0L70.7 8.8L77.6 4.0L83.7 5.9L84.0 1.5L89.0 0.0L90.8 3.0L94.4 2.5L97.7 7.9L115.0 1.2L120.3 12.2L126.1 14.5L132.3 23.1L144.9 27.7L152.2 33.5L156.2 32.9L164.8 41.5L168.1 41.0L174.5 47.2L171.3 51.6L175.0 56.6L197.3 62.4L202.5 70.9L195.8 70.9L200.6 74.1L212.2 73.5L212.6 71.3L222.8 74.4L221.6 67.5L229.1 70.6L231.7 64.6L233.9 65.7L234.7 62.2L240.8 59.3L244.8 60.3L250.7 56.0L262.8 54.4L269.8 56.9L273.2 50.4L279.9 49.6L281.7 54.2L294.5 58.5L300.0 59.4L305.2 56.9L309.7 64.1L317.2 67.5L318.7 73.8L308.1 108.4L296.1 112.4L296.9 118.9L285.2 119.4L288.3 130.0L285.1 131.7L281.8 140.4L271.4 137.8L260.6 142.3L266.9 151.3L265.3 154.7L268.1 155.6L268.8 158.8L260.9 158.3L264.0 171.8L283.0 175.2L280.5 185.4L278.0 186.5L290.0 199.0L282.7 208.5L277.5 205.8L270.0 211.1L269.1 215.3L263.6 217.4L257.3 212.8L254.9 200.9L236.9 211.3L236.4 206.6L240.1 204.5L239.4 198.2L224.2 204.5L211.9 187.9L201.9 193.5L199.3 192.4L197.9 195.2L193.9 192.8ZM204.7 179.9L199.9 178.1L199.4 183.2L196.6 183.2L194.0 187.3L195.7 191.9L193.1 193.3L189.1 191.1L188.8 188.1L181.5 187.0L175.2 179.7L176.3 175.7L172.0 175.1L167.5 167.1L156.5 159.4L151.0 161.9L152.7 152.8L142.7 141.3L136.0 142.6L136.2 140.4L130.1 135.9L129.2 130.6L123.6 131.5L116.4 125.2L123.7 118.5L137.5 116.2L140.7 107.5L147.3 110.8L159.0 108.1L160.3 114.5L164.8 115.0L164.9 121.7L171.4 126.3L170.0 137.5L165.5 139.1L163.4 146.1L168.2 145.5L180.3 154.2L188.8 156.0L195.0 164.8L200.8 164.5L204.9 170.6L202.2 174.5Z", "bb": [0.0, 0.0, 318.7, 217.4]}, "jammu-and-kashmir": {"d": "M84.4 109.1L65.8 130.0L50.3 125.0L59.2 109.7L65.7 111.4L73.1 105.1ZM113.7 124.4L98.5 119.9L91.4 126.8L86.9 124.5L86.1 133.1L78.0 121.7L84.6 107.3L110.7 112.4L115.6 116.9ZM82.7 131.0L88.9 135.1L77.4 145.3L55.8 137.9L59.6 129.3L76.3 121.2L82.4 123.2ZM99.3 120.7L116.4 123.4L121.3 130.5L91.6 135.9L86.9 124.5ZM114.7 131.3L125.3 132.1L117.1 142.9L122.6 159.5L116.5 170.4L102.1 151.2L110.2 143.1L105.2 133.3ZM150.9 186.1L146.8 179.1L133.8 180.8L120.3 169.2L122.3 154.2L117.1 142.8L127.9 130.3L136.0 142.6L142.7 141.3L152.4 152.3L151.0 161.9L160.3 161.2L173.7 176.1L158.6 178.5ZM101.4 133.8L107.2 137.3L96.8 140.4L87.9 133.1ZM90.5 135.7L97.4 140.2L82.1 155.8L76.5 146.6L80.3 138.6ZM107.3 137.6L108.8 145.6L89.2 150.8L97.3 139.8ZM44.7 137.1L75.9 143.8L83.5 164.5L74.6 160.4L66.9 168.2L60.7 159.2L49.1 160.2L39.1 134.6ZM94.8 149.5L103.0 150.1L95.7 158.4L83.2 155.3ZM104.7 152.0L108.1 160.0L104.3 164.4L81.1 161.6L83.0 155.4L95.7 158.4ZM77.3 161.0L85.7 164.3L88.4 176.0L81.3 178.5L85.8 180.6L83.5 187.1L73.7 189.2L60.0 176.1L68.6 162.1ZM107.0 161.1L116.4 169.7L115.5 183.9L101.7 175.8L101.6 164.4ZM91.1 164.6L102.0 164.1L104.4 184.0L99.0 192.0L90.2 184.3L84.8 189.6L82.8 184.8L85.8 180.6L81.3 178.5L88.4 176.0L84.7 165.8ZM120.3 169.2L133.8 180.8L147.6 179.5L150.9 186.1L139.9 192.9L119.4 188.9L114.7 180.6ZM73.7 189.2L90.2 184.3L107.7 197.8L89.3 211.1L88.9 194.3L81.1 198.8ZM110.3 212.2L112.6 203.5L129.3 192.7L138.8 198.7L136.8 207.7L122.8 220.1ZM105.9 178.8L127.7 190.4L129.1 196.5L108.8 203.9L100.0 190.4ZM102.7 199.6L114.9 205.3L110.3 213.4L95.9 211.0ZM73.1 105.1L65.7 111.4L59.2 109.7L50.1 123.7L60.5 131.0L55.8 138.2L39.1 134.6L37.5 114.8L45.8 115.1L49.8 105.1L61.3 100.9L63.9 90.9L79.4 90.0L84.1 94.8L83.3 101.1ZM49.1 160.2L66.4 162.1L66.7 170.7L60.1 177.1L73.2 185.7L78.4 197.0L44.8 183.0L43.6 154.2Z", "bb": [37.5, 90.0, 136.2, 130.1]}, "sikkim": {"d": "M652.1 445.1L650.4 444.5L649.3 443.1L649.0 440.5L647.9 439.8L646.9 438.4L645.7 438.2L643.9 438.8L642.2 437.8L640.9 435.7L637.0 434.0L637.2 432.8L638.2 431.9L638.6 430.7L638.4 430.1L638.7 428.6L639.6 428.1L639.8 426.7L640.4 426.1L639.4 424.7L640.7 423.9L640.4 423.2L637.9 421.9L638.1 421.5L637.2 420.2L638.0 419.4L637.6 418.8L638.3 418.1L640.7 419.1L640.8 418.2L642.1 417.8L642.6 419.1L643.2 418.4L645.0 418.0L645.4 417.4L645.9 417.7L646.8 416.9L649.1 417.3L649.3 416.5L651.5 415.7L652.6 414.0L653.7 414.9L654.6 414.9L654.9 412.7L657.7 412.0L657.4 410.6L658.3 410.9L659.8 413.1L663.3 413.0L665.6 415.4L666.5 415.8L666.9 416.8L666.6 419.7L667.5 419.8L667.9 420.3L668.7 423.1L668.4 424.3L667.3 424.9L667.6 425.7L667.3 427.2L667.7 428.3L667.4 429.5L666.6 430.0L667.0 431.7L666.2 432.8L665.7 432.7L665.3 433.7L665.4 434.7L664.6 435.5L664.7 436.0L663.6 436.4L664.1 437.9L664.8 438.1L664.1 440.8L664.3 441.7L664.9 441.8L664.7 442.3L665.4 442.9L665.3 443.3L662.1 443.0L660.7 444.0L658.0 444.6L656.4 444.0L654.9 444.3L653.6 443.9ZM637.0 434.0L640.9 435.7L642.2 437.8L643.9 438.8L643.2 439.4L643.6 443.8L645.8 443.4L646.1 444.0L646.7 443.6L647.0 444.1L646.9 445.1L645.8 445.4L645.5 446.5L644.5 447.2L645.1 448.1L644.9 448.6L643.6 449.4L644.7 450.4L644.7 451.8L645.9 453.4L644.6 454.5L643.8 456.4L641.8 456.9L641.2 456.3L639.8 456.3L638.6 457.3L636.3 456.2L635.4 453.8L635.6 453.1L634.0 452.2L632.9 452.6L633.6 450.9L633.7 449.3L635.2 447.0L634.1 445.3L634.3 443.7L635.4 442.5L635.1 441.3L634.2 440.4L634.2 439.6L634.8 438.9L634.8 437.7L635.6 436.4L635.8 435.3ZM643.9 438.8L645.7 438.2L646.9 438.4L647.9 439.8L649.0 440.5L649.3 443.1L650.4 444.5L652.1 445.1L652.1 447.1L650.7 447.9L650.3 450.2L652.3 451.5L652.2 453.0L652.7 453.8L654.1 454.3L654.0 455.6L652.6 456.7L651.8 456.8L651.1 458.2L649.8 459.1L650.0 458.7L646.9 458.0L646.3 457.3L645.6 457.5L645.3 456.6L643.9 456.5L643.8 456.3L644.6 454.5L645.9 453.4L644.7 451.8L644.7 450.4L643.6 449.4L644.9 448.6L645.1 448.1L644.5 447.2L645.5 446.5L645.8 445.4L646.9 445.1L647.0 444.1L646.7 443.6L646.1 444.0L645.8 443.4L643.6 443.8L643.2 439.4ZM652.1 445.1L653.6 443.9L654.9 444.3L656.4 444.0L658.0 444.6L660.7 444.0L662.1 443.0L664.8 443.3L666.6 444.9L667.6 444.6L668.5 446.6L669.8 447.2L669.9 447.6L669.3 449.8L668.3 450.4L666.4 450.3L665.2 451.0L664.7 453.8L663.7 454.2L663.5 455.4L662.6 456.1L661.9 456.0L661.2 454.7L660.5 454.3L659.0 455.0L656.8 453.7L654.1 454.3L652.7 453.8L652.2 453.0L652.3 451.5L650.3 450.2L650.7 447.9L652.1 447.1Z", "bb": [632.9, 410.6, 37.0, 48.5]}, "uttarakhand": {"d": "M281.1 275.4L275.2 280.9L275.7 291.5L259.6 284.5L258.2 290.9L247.6 293.2L245.6 300.5L241.9 296.5L240.5 303.2L234.9 296.6L223.9 296.2L227.0 291.6L224.4 282.4L217.6 281.0L215.9 276.1L238.7 265.7L243.4 269.7L256.7 269.7L259.8 274.3L264.8 273.8L259.6 265.8L267.4 257.9ZM275.7 291.5L275.2 280.9L281.3 275.3L289.0 281.9L299.8 280.1L309.5 288.5L304.5 292.2L307.1 297.2L304.4 311.0L297.2 311.8L297.7 323.7L284.3 323.6L279.7 328.0L273.7 325.7L267.6 314.5L271.4 311.1L269.0 307.2L278.7 296.4ZM216.6 277.5L217.6 281.0L224.2 282.1L227.0 291.6L221.1 301.5L233.3 305.3L229.0 308.9L235.8 313.4L233.1 316.2L236.2 319.8L231.2 326.4L222.0 313.6L206.2 306.3L216.5 300.5L211.4 290.5ZM224.1 296.4L234.9 296.6L240.5 303.2L241.9 296.5L245.6 300.5L247.6 293.2L258.2 290.9L259.6 284.5L265.9 287.7L257.3 302.8L261.2 312.7L251.5 313.7L247.6 322.3L234.0 318.4L235.0 311.1L229.0 308.9L233.3 305.3L221.1 301.5ZM265.8 287.6L276.6 291.7L278.7 296.4L269.0 307.2L271.4 311.1L260.3 316.4L257.3 302.8ZM304.8 310.1L307.1 297.2L304.5 292.2L312.4 287.6L315.5 290.6L314.0 297.9L330.2 303.1L348.1 315.1L342.4 314.5L335.7 324.5L322.0 334.1L322.0 343.2L315.3 350.2L305.3 344.9L298.0 335.1L304.8 335.5L305.9 329.9L311.8 329.1L308.1 323.8L310.1 314.3ZM283.7 325.6L297.7 323.7L297.2 311.8L306.4 310.3L310.1 314.3L308.1 323.8L311.8 329.1L305.9 329.9L304.8 335.5L298.2 334.7L300.9 337.9L295.5 338.4ZM221.9 313.6L237.3 334.0L224.4 343.9L220.8 343.0L221.7 338.1L215.4 339.1L212.0 330.8ZM267.6 314.6L273.9 326.4L267.3 330.8L269.2 339.2L261.2 350.7L248.8 344.9L231.8 326.3L237.2 318.5L247.6 322.3L251.5 313.7ZM273.9 325.8L284.3 325.8L285.2 330.5L293.4 332.7L295.5 338.4L303.1 339.1L308.5 346.7L298.4 351.1L289.9 345.1L284.2 347.8L278.2 342.5L268.9 345.6L266.0 343.8L269.4 337.6L267.2 331.0ZM261.4 350.5L264.8 343.7L273.4 346.6L278.2 342.5L284.2 347.8L291.0 345.5L294.5 350.8L299.5 350.7L301.2 354.6L296.9 355.1L304.2 368.1L300.3 371.6L291.1 367.0L281.5 368.2L275.8 359.6L258.3 354.6ZM308.5 346.6L318.4 356.7L308.3 373.4L296.9 355.1L301.2 354.6L298.5 352.3L300.7 348.4ZM258.3 354.6L275.8 359.6L281.5 368.2L291.1 367.0L300.3 371.6L305.9 366.3L307.9 380.5L303.5 383.3L300.8 378.1L297.5 379.8L297.9 375.7L281.9 376.7L279.7 371.2L271.5 370.0L270.7 365.3L260.6 364.9L253.2 356.7Z", "bb": [206.2, 257.9, 141.9, 125.4]}, "manipur": {"d": "M893.0 576.5L884.7 571.0L884.9 564.8L883.1 563.2L884.4 557.5L907.7 548.9L903.3 565.3L899.9 567.4L895.0 577.9ZM896.7 527.4L893.1 537.7L886.4 546.1L877.5 545.3L877.1 536.9L867.8 531.0L878.1 526.9L882.0 530.2L885.5 528.9L886.6 531.5L894.7 529.5L897.2 525.9ZM873.0 538.7L875.8 541.0L868.3 547.0L870.1 553.0L867.7 563.6L853.4 562.1L847.1 569.8L843.9 563.6L847.5 555.9L846.7 553.3L855.3 539.2L857.2 543.0L861.5 545.0L869.7 532.9L874.3 535.6ZM874.3 555.8L875.0 570.2L872.3 575.8L872.4 572.6L869.4 569.7L872.5 569.4L872.2 566.1L868.2 566.3L871.4 556.2L873.0 554.8L873.9 557.4ZM872.3 575.8L875.8 573.5L879.6 578.8L878.3 580.0L876.3 576.9L872.5 590.9ZM868.2 566.3L872.2 566.1L873.0 568.0L869.4 569.7L872.8 574.4L871.0 580.4L872.1 586.6L871.0 583.3L868.1 582.6L869.5 580.2L865.3 581.6ZM872.0 590.4L876.3 576.9L883.7 582.4L886.3 588.7L885.7 593.8L887.9 594.7L883.5 607.5L878.3 603.3L869.8 603.3L867.0 599.7ZM872.0 590.4L868.7 593.7L867.1 600.1L862.3 599.5L857.4 602.6L852.2 595.9L856.8 583.2L851.1 581.6L852.6 573.9L855.1 575.2L866.8 571.6L865.3 581.6L869.5 580.2L868.1 582.6L871.0 583.3ZM875.2 567.0L873.4 558.3L876.7 558.0L875.7 555.7L878.2 556.1L878.7 551.7L879.9 559.6L883.1 557.8L879.7 566.9L880.9 568.3L878.1 570.1ZM844.0 563.5L846.2 565.5L844.0 575.4L839.7 572.5L841.2 562.8ZM884.4 557.5L883.1 563.2L885.8 571.3L882.1 571.0L882.8 566.5L879.8 568.2L883.1 557.8L879.9 559.6L878.7 551.7L875.6 558.8L874.0 558.7L874.8 555.6L873.9 557.4L873.0 554.8L871.4 556.2L867.1 571.3L865.7 570.4L870.1 553.0L868.3 547.0L875.8 541.0L873.0 538.7L874.4 536.0L877.1 536.9L877.5 545.3L886.4 546.1L882.4 550.9ZM874.0 574.5L873.7 567.9L875.3 566.9L878.1 570.1L882.8 566.5L881.2 572.5L882.7 575.2ZM884.7 571.0L892.9 574.9L894.2 577.8L887.9 594.7L885.7 593.8L886.3 588.7L883.7 582.4L878.2 578.0L879.0 574.7L882.7 575.2L881.2 572.5ZM904.4 548.8L884.4 557.5L882.4 550.9L890.9 541.3L901.0 522.4L900.3 531.1L905.2 533.7L901.2 544.3L907.8 548.8ZM845.6 567.9L848.2 569.8L853.4 562.1L867.7 563.6L866.0 572.2L855.1 575.2L848.2 573.9L845.7 577.3L843.8 576.2ZM852.6 573.9L851.1 581.6L856.8 583.2L852.2 595.9L847.1 599.0L846.9 596.3L845.3 597.8L842.5 596.0L840.8 598.0L840.0 595.3L835.6 594.8L839.1 573.6L845.7 577.3L848.2 573.9Z", "bb": [835.6, 522.4, 72.2, 85.1]}, "mizoram": {"d": "M838.6 627.0L834.6 622.3L831.9 622.1L829.1 629.0L830.8 631.1L829.1 633.4L824.6 632.2L821.8 621.4L823.5 617.3L821.9 616.2L823.0 604.2L821.5 602.1L830.2 599.3L832.8 589.8L830.9 585.9L833.1 581.2L836.7 581.6L838.5 584.4L835.7 594.9L839.9 595.4L840.8 598.1L842.7 596.1L845.2 597.8L842.9 608.7L838.6 610.7ZM838.6 615.3L838.6 610.7L843.5 607.3L845.8 596.4L847.1 599.1L850.5 597.7L854.8 614.7L853.3 622.8L847.4 625.3L847.0 611.9L843.9 610.5L843.4 615.5ZM844.8 643.3L843.5 637.7L838.8 636.1L837.4 633.3L847.6 627.9L848.3 630.5L852.2 630.8L852.7 639.7L848.8 645.8ZM832.5 582.0L830.2 599.3L821.5 602.1L822.0 598.5L819.7 596.6L817.9 598.5L818.3 588.9L820.7 588.6L821.4 584.8L824.1 583.8L827.1 576.2L829.7 582.8ZM834.1 666.3L835.2 674.4L829.6 676.8L830.8 688.8L824.7 684.8L823.8 691.0L820.8 692.7L816.8 657.5L819.9 657.5L827.1 668.9L828.9 663.0ZM823.4 628.3L824.6 636.8L825.5 634.8L831.0 636.0L832.2 646.8L830.7 651.5L834.9 663.0L833.2 666.8L828.9 663.0L827.7 668.9L824.4 663.5L822.3 663.4L819.9 657.5L815.4 657.3L814.3 650.8L811.0 648.8L810.0 635.0L814.4 632.7L815.0 628.0ZM821.5 602.1L823.4 628.3L815.0 628.0L815.3 631.1L812.0 633.7L807.0 616.4L806.4 608.6L809.4 604.1L808.0 588.5L813.1 588.5L814.9 593.9L817.8 591.9L817.9 598.5L819.7 596.6L822.0 598.5ZM830.8 688.8L829.6 676.6L835.4 673.7L833.6 655.5L837.0 657.2L840.0 654.8L842.5 664.4L841.2 667.5L844.4 672.3L845.2 679.9L842.6 680.8L842.9 683.7L838.5 682.8L839.3 687.2L837.3 687.0L836.9 692.8L834.8 690.5L833.0 694.3ZM824.0 630.8L829.1 633.4L830.7 623.8L834.6 622.3L838.6 627.0L837.3 633.8L843.5 637.7L844.8 643.3L842.5 643.2L842.0 645.7L838.6 643.8L834.2 637.3L831.2 637.8L830.0 634.6L825.5 634.8L824.9 637.0ZM838.6 627.0L838.6 615.3L843.4 615.5L843.9 610.5L847.8 614.2L847.4 625.3L852.9 623.1L853.2 628.3L851.9 630.7L848.3 630.5L847.6 627.9L845.3 630.3L838.4 631.7ZM833.5 655.9L830.7 651.5L832.2 646.8L831.2 637.9L833.6 637.2L842.5 646.3L843.5 650.0L840.7 655.7L838.0 655.2L837.0 657.2Z", "bb": [806.4, 576.2, 48.4, 118.1]}, "assam": {"d": "M938.3 451.3L927.5 442.0L929.7 430.7L943.3 418.5L958.2 418.2L949.4 429.1L953.0 443.0L960.0 445.4ZM939.6 422.0L903.7 447.6L887.7 444.4L887.3 433.3L896.5 436.9ZM929.5 431.1L927.5 442.0L937.9 445.5L937.0 456.4L917.2 452.1L911.6 458.2L907.8 449.7L901.9 455.7L906.0 443.0ZM888.5 438.5L890.3 447.7L903.0 445.7L900.9 453.9L869.4 470.4L865.3 462.6ZM901.9 455.7L908.3 450.0L907.6 465.4L916.1 464.2L903.0 475.5L893.8 464.4ZM893.9 464.6L902.3 475.6L883.2 492.2L877.6 468.5ZM839.3 465.9L842.7 481.1L809.8 485.2L810.5 465.7L823.4 460.9ZM868.2 469.5L876.1 465.7L884.9 492.3L869.3 517.0L872.9 490.2L865.4 480.4L848.5 479.0ZM810.6 465.8L810.6 481.5L803.3 477.5L797.9 486.4L786.8 484.7L783.8 470.9ZM749.9 482.4L733.6 490.5L728.7 466.9L753.2 472.1ZM783.8 470.9L787.7 486.3L767.1 486.0L759.0 477.7L754.2 489.1L754.8 480.7L749.7 481.7L759.0 470.5ZM813.0 484.6L849.6 476.7L848.6 484.9L838.5 483.7L841.6 488.0L832.7 489.8L819.9 509.9L817.5 501.3L812.0 503.0L819.1 492.7ZM727.8 468.6L732.0 491.5L725.9 497.3L718.9 492.7L720.3 498.6L710.7 502.9L708.3 474.5ZM810.6 481.5L785.6 498.6L789.1 481.5L797.9 486.4L798.8 478.5ZM748.8 484.0L754.8 480.7L754.2 489.1L759.0 477.7L765.2 479.8L764.7 500.0L743.3 502.3ZM765.2 484.2L778.9 482.7L771.9 502.0L764.1 500.0ZM809.8 485.2L819.1 492.7L803.4 505.1L795.1 495.6ZM778.6 484.0L788.6 491.2L778.1 501.6L784.2 510.8L778.7 506.7L764.1 521.0L763.0 514.6L755.3 516.3L759.1 507.8L752.5 504.0L771.9 502.0ZM730.4 488.0L748.8 484.0L749.3 491.6L732.3 500.6ZM707.7 490.6L710.7 502.9L723.4 490.6L725.9 497.3L733.9 494.6L707.7 513.6L701.8 499.5ZM785.6 498.6L795.1 495.6L803.0 504.7L778.2 505.5ZM741.5 499.0L758.6 506.8L756.2 513.5L718.9 510.1L724.9 499.8ZM839.4 518.5L856.1 536.4L846.8 555.5L817.9 549.6L828.6 544.2L819.3 531.6ZM817.9 549.6L847.5 555.5L838.2 581.2L829.6 582.7L823.2 572.9L823.8 562.6L813.0 555.6ZM816.9 559.6L814.8 586.2L803.7 588.8L805.4 558.7ZM819.6 560.0L827.7 573.9L814.9 593.7ZM911.8 458.1L917.2 452.1L933.6 457.3L917.8 466.3L907.6 465.4ZM900.7 454.0L890.8 467.8L875.9 467.3ZM865.3 462.6L864.2 475.6L853.0 473.8L842.6 480.9L839.3 465.9ZM826.7 505.7L834.3 498.9L846.0 520.8ZM707.7 513.6L722.2 507.0L709.8 519.9L714.9 526.2L708.0 532.7ZM848.9 481.9L865.4 480.4L873.3 491.2L865.9 515.4L849.1 529.8L842.1 522.6L846.8 517.2L841.2 504.6L828.3 498.2L841.6 488.0L838.5 483.7ZM812.0 503.0L819.2 502.9L818.4 509.8L826.2 505.4L839.8 518.4L819.8 528.8L811.6 519.5L802.1 523.3L802.6 509.6Z", "bb": [701.8, 418.2, 258.2, 175.5]}, "nagaland": {"d": "M923.5 492.3L918.5 494.8L916.1 494.2L916.6 492.0L914.8 491.9L914.0 486.4L914.2 480.5L909.8 479.1L909.5 476.2L911.7 475.3L909.9 471.6L914.0 465.6L915.4 464.7L919.2 466.0L926.4 460.7L928.0 466.8L925.9 468.9L928.4 472.3L927.1 474.8L928.1 476.9L924.6 480.0L921.0 487.6L923.8 490.6ZM907.7 473.8L909.1 472.0L910.9 472.4L910.1 473.0L911.7 475.3L909.5 476.2L909.5 478.0L914.2 480.5L914.9 490.8L912.2 490.7L908.9 487.1L906.6 487.8L905.8 486.2L907.6 480.7L905.0 478.5L908.2 476.2ZM907.7 473.8L908.2 476.2L905.0 478.5L907.6 480.7L905.7 484.4L906.3 489.5L900.7 495.0L901.5 498.2L898.0 498.4L897.3 494.9L895.8 498.8L892.8 499.4L893.3 497.9L891.3 497.2L892.6 492.8L889.5 489.1L894.0 483.7L894.1 480.2L898.9 476.1L901.9 476.2L902.0 474.5L903.0 475.5ZM906.6 487.8L908.9 487.1L912.2 490.7L915.0 490.8L917.1 494.6L923.7 492.6L923.2 503.3L926.1 504.9L919.1 513.2L917.4 513.7L915.4 510.6L912.1 511.3L913.9 507.8L912.2 506.3L909.8 507.8L905.0 507.3L906.4 506.0L906.5 500.3L904.9 498.5L902.1 499.2L900.5 496.5ZM905.0 507.3L909.8 507.8L912.2 506.3L913.9 507.8L912.1 511.3L915.4 510.6L917.4 513.7L919.1 513.2L920.2 520.1L913.7 527.2L911.1 519.1L908.5 518.2L906.9 521.0L905.6 517.4L902.6 516.6L900.9 513.3ZM857.7 523.1L863.7 524.3L874.7 523.3L875.0 528.5L868.0 529.4L869.7 532.9L864.8 537.6L861.5 545.0L856.0 541.6L855.5 534.3L852.7 533.0L850.2 529.2ZM890.5 487.1L889.9 490.9L890.9 489.8L892.6 492.8L891.3 497.2L893.3 497.9L891.3 500.0L893.4 502.9L892.4 507.8L886.6 507.4L884.2 509.5L876.5 508.6L875.7 509.6L877.7 500.3L881.9 493.5L884.9 492.3L885.1 487.3L889.2 482.5ZM892.8 499.2L895.8 498.8L897.3 494.9L898.0 498.4L905.8 499.1L906.4 506.0L900.9 513.3L902.6 516.6L905.6 517.4L906.8 519.3L902.4 518.4L900.5 520.5L899.8 516.9L896.3 515.0L888.8 517.6L889.7 517.0L886.4 513.9L889.2 511.0L888.8 507.8L892.4 507.8L893.4 502.9L891.3 500.0ZM913.7 527.2L914.3 528.2L912.2 528.4L909.7 532.1L908.3 531.5L905.2 533.7L902.8 532.9L900.3 531.0L900.1 527.5L901.9 524.9L901.0 522.4L897.6 526.4L895.0 527.2L894.7 529.5L887.8 531.4L885.2 529.7L888.8 517.6L896.3 515.0L899.8 516.9L900.5 520.5L902.4 518.4L906.8 519.3L906.9 521.0L908.5 518.2L911.1 519.1ZM875.0 528.5L874.7 523.3L878.1 517.1L876.7 513.6L877.7 508.7L884.2 509.5L886.6 507.4L888.9 508.0L889.2 511.0L886.4 513.9L889.7 517.0L886.3 523.3L885.4 528.9L882.0 530.2L878.1 526.9ZM875.7 509.6L877.7 508.7L876.7 513.6L878.3 515.3L876.2 522.3L872.9 523.9L857.7 523.1L860.0 519.3L865.9 515.4L864.6 512.6L868.0 509.6L869.3 517.0L876.7 512.0Z", "bb": [850.2, 460.7, 78.2, 84.3]}}, "towns": {"Srinagar": [92.8, 137.5], "Leh": [206.4, 133.8], "Nubra Valley": [204.8, 106.8], "Gangtok": [657.3, 446.7], "Dehradun": [224.8, 310.0], "Almora": [291.4, 343.1], "Ukhrul": [892.3, 551.8], "Aizawl": [825.3, 612.4], "Tezpur": [828.2, 479.3], "Dimapur": [866.6, 512.8]}};
@@ -400,7 +428,31 @@ const COMMODITIES = [
     meta:"Mizoram's low-chemical horticulture supplies ginger and botanicals for all-natural beverages.",
     tags:["Environmental","Social","Commodity"],
     farmerShare:52, chain:["Hill farm","Village aggregation","Washing / grading","Brewing","Retail"],
-    evidence:"Purchase records ◌" }
+    evidence:"Purchase records ◌" },
+  { id:"saffron", name:"Saffron — Kashmir", short:"Saffron", geo:"jk", gi:{has:true,label:"GI · Kashmir Saffron (2020)"},
+    clusters:"Pampore karewa plateaus", ventures:[],
+    meta:"The world's highest-grown saffron; GI certification and grading anchored by the Pampore Spice Park.",
+    tags:["Environmental","Commodity","GI Status"],
+    farmerShare:55, chain:["Karewa field","Cooperative drying","GI grading","Retail / export"],
+    evidence:"GI Registry (2020) · Spice Park records" },
+  { id:"tejpat", name:"Tejpatta & hill spices", short:"Tejpatta", geo:"uk", gi:{has:true,label:"GI · Uttarakhand Tejpat"},
+    clusters:"Kumaon mid-hills", ventures:[],
+    meta:"Bay-leaf agroforestry of the Kumaon hills — a GI-backed cash income beside subsistence terraces.",
+    tags:["Environmental","Biodiversity","GI Status"],
+    farmerShare:57, chain:["Agroforest plot","Village drying","Aggregation","Wholesale"],
+    evidence:"GI Registry" },
+  { id:"hathei", name:"Hathei chilli (Sirarakhong)", short:"Hathei", geo:"manipur", gi:{has:true,label:"GI · 2021"},
+    clusters:"Ukhrul hill terraces", ventures:[],
+    meta:"Ukhrul's prized chilli, GI-tagged in 2021 — grown in the same hills powering the 'Made in Ukhrul' startup wave.",
+    tags:["Environmental","Social","Commodity","GI Status"],
+    farmerShare:60, chain:["Hill terrace","Sun-drying","Women's collective","Retail"],
+    evidence:"GI Registry (2021)" },
+  { id:"kajinemu", name:"Kaji Nemu (Assam lemon)", short:"Kaji Nemu", geo:"assam", gi:{has:true,label:"GI · Assam"},
+    clusters:"Brahmaputra valley homesteads", ventures:[],
+    meta:"Assam's GI-tagged lemon — part of the valley's citrus and tea heritage feeding the Northeast's natural-beverage brands.",
+    tags:["Environmental","Commodity","GI Status"],
+    farmerShare:54, chain:["Homestead grove","Local aggregation","Grading","Retail / processing"],
+    evidence:"GI Registry" }
 ];
 
 const VENTURES = {
@@ -470,6 +522,51 @@ const VENTURES = {
     price:null,
     uplift:[100,118,136,158,176], sdg:["SDG 4","SDG 8","SDG 10"],
     impact:["Digital access in remote hill districts","Curriculum grounded in Naga context & languages","Local employment in content & tech"] },
+  fastbeetle:{ name:"FastBeetle", geo:"jk", sector:"Logistics & e-commerce enablement", lite:true, tiles:null,
+    desc:"Srinagar-based delivery and courier network — among the first Kashmiri startups to raise institutional funding; now handling ~5 lakh shipments a month across 18,000 PIN codes.",
+    sdg:["SDG 8","SDG 9"], impact:["~500,000 shipments/month across 18,000 PIN codes","First Kashmir startup to raise $100k","Local youth employment in logistics"] },
+  curve:{ name:"Curve Electric", geo:"jk", sector:"Clean mobility", lite:true, tiles:null,
+    desc:"Srinagar EV venture renting — and now manufacturing — electric bikes; about 60% of riders are locals, 40% tourists.",
+    sdg:["SDG 7","SDG 13"], impact:["Local EV assembly in Kashmir","Low-emission tourism mobility"] },
+  zarin:{ name:"Zarin", geo:"jk", sector:"Agri & aquaculture market linkage", lite:true, tiles:null,
+    desc:"Builds markets beyond Kashmir for local produce — Himalayan rainbow trout and apples — lifting yields and farm incomes.",
+    sdg:["SDG 8"], impact:["Market access for trout & apple farmers"] },
+  lieper:{ name:"Lieperbooks", geo:"jk", sector:"Publishing & reading", lite:true, tiles:null,
+    desc:"Kashmir-grown book platform founded by Faheem Bhat, widening access to books and local writing.",
+    sdg:["SDG 4"], impact:["Profile pending founder survey"] },
+  neorigins:{ name:"NE Origins", geo:"sikkim", sector:"Indigenous D2C marketplace", lite:true, tiles:null,
+    desc:"'Truly Indigenous' — marketplace taking Northeast foods and crafts to national consumers.",
+    sdg:["SDG 8","SDG 12"], impact:["National shelf for NE indigenous products"] },
+  sajilo:{ name:"Sajilo", geo:"sikkim", sector:"Local services", lite:true, tiles:null,
+    desc:"Gangtok-based services venture; full profile pending founder survey.",
+    sdg:[], impact:["Profile pending founder survey"] },
+  bayul:{ name:"Bayul Creations", geo:"sikkim", sector:"Craft livelihoods — crochet", lite:true, tiles:null,
+    desc:"Fast-growing pan-India Sikkimese crochet brand founded by Phuntshok Ongmoo Bhutia — craft income for local women.",
+    sdg:["SDG 5","SDG 8"], impact:["Pan-India market for Sikkimese crochet","Women-led craft incomes"] },
+  crafted:{ name:"Crafted Fibres", geo:"sikkim", sector:"Craft & textiles", lite:true, tiles:null,
+    desc:"Sikkim fibre-craft venture; full profile pending founder survey.",
+    sdg:[], impact:["Profile pending founder survey"] },
+  acres:{ name:"Acres of Ice", geo:"ladakh", sector:"Climate adaptation — ice reservoirs", lite:true, tiles:null,
+    desc:"Leh-based automated ice reservoirs (AIR) that store 4M+ litres each; in Igoo village, irrigation water availability rose over 30%. Winner of the adaptation prize at the Mountain Future Awards.",
+    sdg:["SDG 6","SDG 13"], impact:["4M+ litres stored per automated reservoir","+30% irrigation water in Igoo","Mountain Future Awards — adaptation prize"] },
+  bites:{ name:"Ladakh Bites", geo:"ladakh", sector:"Food processing — solar-dried snacks", lite:true, tiles:null,
+    desc:"Sugar-free, preservative-free fruit chips — cutting post-harvest wastage and lengthening shelf life for Ladakhi farmers.",
+    sdg:["SDG 8","SDG 12"], impact:["Post-harvest loss reduction","Farmer livelihoods via solar drying"] },
+  descat:{ name:"D.E.S.C.A.T UK", geo:"uk", sector:"Environment & community", lite:true, tiles:null,
+    desc:"'Caring for Earth & People' — Uttarakhand environment-and-community venture; full profile pending founder survey.",
+    sdg:["SDG 13"], impact:["Profile pending founder survey"] },
+  kumaon:{ name:"Kumaon Khand", geo:"uk", sector:"Indigenous food", lite:true, tiles:null,
+    desc:"Kumaoni hill-produce brand; full profile pending founder survey.",
+    sdg:["SDG 8"], impact:["Profile pending founder survey"] },
+  danphey:{ name:"Danphey", geo:"uk", sector:"Mountain enterprise", lite:true, tiles:null,
+    desc:"Uttarakhand mountain venture; full profile pending founder survey.",
+    sdg:[], impact:["Profile pending founder survey"] },
+  hillwild:{ name:"Hill Wild", geo:"manipur", sector:"Indigenous food — chocolate", lite:true, tiles:null,
+    desc:"Ukhrul's first chocolatiers — Zeinorin Stephen and Leiyolan Vashum craft chocolate with local pumpkin seed, hodgsonia, plum wine and king chilli.",
+    sdg:["SDG 8","SDG 12"], impact:["'Made in Ukhrul' movement","Sourcing from local nut & fruit farmers"] },
+  rivtra:{ name:"Rivtra", geo:"assam", sector:"Inland-waterways logistics", lite:true, tiles:null,
+    desc:"Tezpur-based cargo logistics on the Brahmaputra's inland waterways — recognised under DPIIT Startup India and Assam Startup.",
+    sdg:["SDG 9","SDG 13"], impact:["Low-carbon river cargo corridors","DPIIT / Assam Startup recognised"] },
 };
 
 /* ============================== STATE ============================== */
@@ -744,12 +841,13 @@ function renderL1(){
     (gs.length>1?legendHTML(ndviSeries,true):"") + lineChartSVG({series:ndviSeries, labels:MONTHS, fmtV:v=>v.toFixed(2), endLabels:gs.length===1}),
     ["Month",...gs.map(g=>g.name)], MONTHS.map((m,i)=>[m,...gs.map(g=>g.ndvi[i].toFixed(2))]));
 
-  const fData = Object.values(GEOS).map(g=>({l:g.name, v:g.forest, color: activeGeos().includes(Object.keys(GEOS).find(k=>GEOS[k]===g)) ? g.color : "var(--grid)", tip:g.name+" · ISFR 2021"+(g.forestEst?" (indicative)":"")}));
+  const SN = {jk:"J&K", uk:"U'khand"};
+  const fData = Object.entries(GEOS).map(([k,g])=>({l:SN[k]||g.name, v:g.forest, color: activeGeos().includes(k) ? g.color : "var(--grid)", tip:g.name+" · ISFR 2021"+(g.forestEst?" (indicative)":"")}));
   card("#ch-forest","Forest cover by geography","% of geographic area · ISFR 2021",
     barChartSVG({data:fData, unit:"%", fmtV:v=>v.toFixed(1)}),
     ["Geography","Forest cover (%)"], Object.values(GEOS).map(g=>[g.name, g.forest.toFixed(1)]));
 
-  const aData = Object.values(GEOS).map((g)=>({l:g.name, v:g.agri, color: activeGeos().includes(Object.keys(GEOS).find(k=>GEOS[k]===g)) ? g.color : "var(--grid)", tip:g.name+" · workforce share in agriculture (indicative)"}));
+  const aData = Object.entries(GEOS).map(([k,g])=>({l:SN[k]||g.name, v:g.agri, color: activeGeos().includes(k) ? g.color : "var(--grid)", tip:g.name+" · workforce share in agriculture (indicative)"}));
   card("#ch-agri",`Workforce in agriculture & allied`, `${estMark("indicative")} · % of workers`,
     barChartSVG({data:aData, unit:"%", fmtV:v=>v}),
     ["Geography","Workforce in agri (%)"], Object.values(GEOS).map(g=>[g.name, "~"+g.agri]));
@@ -861,8 +959,9 @@ function renderL3(){
     </div>
     <div class="card c4 tile">
       <div class="t-label">Women & farmers engaged (view)</div>
-      <div class="t-value">${fmt(vs.reduce((a,[,v])=>{const t=v.tiles[0]; return a + (parseInt(String(t.v).replace(/[^0-9]/g,""))||0);},0))}</div>
-      <div class="t-note">${estMark("first-tile sum across ventures in view — partly illustrative")}</div>
+      ${(()=>{ const s = vs.reduce((a,[,v])=>{const t=v.tiles&&v.tiles[0]; return a + (t?(parseInt(String(t.v).replace(/[^0-9]/g,""))||0):0);},0);
+        return s>0 ? `<div class="t-value">${fmt(s)}</div><div class="t-note">${estMark("first-tile sum across ventures in view — partly illustrative")}</div>`
+                   : `<div class="t-value">—</div><div class="t-note">founder-survey metrics pending for ventures in this view</div>`; })()}
     </div>`;
 
   $("#ventureChips").innerHTML = vs.map(([k,v])=>
@@ -890,16 +989,16 @@ function renderL3(){
       </div>
     </div>
     <div class="grid">
-      ${v.tiles.map(t=>`<div class="card c3 tile">
+      ${v.tiles? v.tiles.map(t=>`<div class="card c3 tile">
         <div class="t-label">${t.l}</div>
         <div class="t-value">${t.est?estMark(t.v):t.v}${t.u?`<span class="unit">${t.u}</span>`:""}</div>
         <div class="t-note">${t.note}${t.src?` · <span class="src">${t.src}</span>`:""}</div>
-      </div>`).join("")}
+      </div>`).join("") : `<div class="card" style="color:var(--ink2);font-size:12.5px">Detailed impact metrics for ${v.name} are pending founder-survey integration — its location and sector appear on the portfolio map in Layer 1.</div>`}
     </div>
-    <div class="grid" style="margin-top:14px">
+    ${(v.price||v.uplift)?`<div class="grid" style="margin-top:14px">
       ${v.price?`<div class="card c6" id="ch-price"></div>`:""}
-      <div class="card ${v.price?"c6":"c6"}" id="ch-uplift"></div>
-    </div>`;
+      ${v.uplift?`<div class="card c6" id="ch-uplift"></div>`:""}
+    </div>`:""}`;
 
   if(v.price){
     card("#ch-price", `Price paid vs local benchmark`, `${v.price.unit} · ${estMark("illustrative")}`,
@@ -908,10 +1007,12 @@ function renderL3(){
       ["Commodity","Paid ("+v.price.unit+")","Benchmark ("+v.price.unit+")","Premium"],
       v.price.rows.map(r=>[r[0],r[1],r[2],"+"+Math.round((r[1]/r[2]-1)*100)+"%"]));
   }
+  if(v.uplift){
   const upl = [{name:v.name, color:"var(--s1)", values:v.uplift},{name:"Benchmark", color:"var(--s2)", values:[100,104,107,110,113]}];
   card("#ch-uplift", v.price?`Producer income — indexed`:`Reach — indexed growth`, `Index, FY21 = 100 · ${estMark("illustrative")}`,
     legendHTML(upl,true)+lineChartSVG({series:upl, labels:years, fmtV:v2=>Math.round(v2), endLabels:true}),
     ["Year",v.name,"Benchmark"], years.map((y,i)=>[y, v.uplift[i], [100,104,107,110,113][i]]));
+  }
 }
 
 /* ============================== TABS / RENDER ============================== */
