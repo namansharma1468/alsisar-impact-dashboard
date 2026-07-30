@@ -186,6 +186,23 @@
   .pm-note{font-size:10.5px;color:var(--muted);margin-top:4px}
   @media(max-width:760px){.pmap-wrap{flex-direction:column}.pmap-panel{width:auto}}
 
+  /* ---------- himalayan coverage ---------- */
+  .cov-wrap{display:flex;gap:26px;flex-wrap:wrap;margin:6px 0 4px}
+  .cov-stat{width:255px;flex:none}
+  .cov-num{font-size:46px;font-weight:680;letter-spacing:-.02em;line-height:1}
+  .cov-num span{font-size:22px;font-weight:550;color:var(--muted)}
+  .cov-lbl{font-size:12.5px;color:var(--ink2);margin:6px 0 10px}
+  .cov-chips{flex:1;min-width:260px;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
+  .chip-ihr{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:550;color:var(--ink);background:var(--plane);cursor:pointer}
+  .chip-ihr:hover{background:var(--accent-soft)}
+  .chip-ihr .dot{width:8px;height:8px;border-radius:50%;background:var(--good);flex:none}
+  .chip-ihr[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  .chip-ihr[aria-pressed="true"] .dot{background:var(--accent-ink)}
+  .chip-ihr.off{border-style:dashed;color:var(--muted);cursor:default;background:transparent}
+  .chip-ihr.off:hover{background:transparent}
+  .cov-tbl{margin-top:14px;overflow-x:auto}
+  tr.hl td{color:var(--ink) !important;font-weight:600}
+
   /* ---------- tooltip / footer ---------- */
   #tip{position:fixed;z-index:99;pointer-events:none;background:var(--ink);color:var(--plane);font-size:12px;line-height:1.45;padding:7px 10px;border-radius:7px;max-width:260px;opacity:0;transition:opacity .1s;box-shadow:0 4px 14px rgba(0,0,0,.18)}
   #tip b{font-weight:650}
@@ -235,15 +252,13 @@
     <div class="layer-head">
       <p class="eyebrow">Layer 1 · Regional Overview</p>
       <h2>The operating context</h2>
-      <p>Public datasets across the geographies where portfolio ventures operate — demographics, workforce, climate, forest cover and hazard exposure. The geography filter above scopes every layer of the platform.</p>
+      <p>Demographic context across the Indian Himalayan Region — 12 Himalayan states &amp; UTs, of which Alsisar Impact is active in 8. The geography filter above scopes every layer of the platform.</p>
     </div>
     <div class="card" id="pmap" style="margin-bottom:14px"></div>
     <div class="grid" id="l1-tiles"></div>
     <div class="grid" id="l1-geocards" style="margin-top:14px"></div>
     <div class="grid" style="margin-top:14px">
-      <div class="card c6" id="ch-rain"></div>
-      <div class="card c6" id="ch-ndvi"></div>
-      <div class="card c6" id="ch-forest"></div>
+      <div class="card c6" id="ch-lit"></div>
       <div class="card c6" id="ch-agri"></div>
     </div>
   </section>
@@ -291,6 +306,7 @@
           <li>Demographics &amp; literacy — Census of India 2011 · Forest cover — India State of Forest Report (ISFR 2021)</li>
           <li>Rainfall — IMD station normals (indicative) · GI records — <a href="https://ipindia.gov.in/gi.htm" target="_blank" rel="noopener">Geographical Indications Registry, Govt. of India</a></li>
           <li>Raktsey Karpo apricot GI (Ladakh's first, Dec 2022); Dalle Khursani GI (Sikkim, 2021, extended to Darjeeling &amp; Kalimpong); Sikkim Large Cardamom GI</li>
+          <li>Indian Himalayan Region — 12 Himalayan states &amp; UTs (NITI Aayog IHR classification); Alsisar Impact active in 8</li>
           <li>Portfolio footprint — Alsisar Impact portfolio deck (8 regions); state silhouettes derived from Census-2011 district GeoJSON (<a href="https://github.com/udit-001/india-maps-data" target="_blank" rel="noopener">udit-001/india-maps-data</a>), simplified for display; startup HQ towns compiled from public profiles &amp; press (≈ marked approximate)</li>
         </ul>
       </div>
@@ -721,83 +737,39 @@ function fitBox(bb, pad){
   if(w/h > AR){ const nh=w/AR; y-=(nh-h)/2; h=nh; } else { const nw=h*AR; x-=(nw-w)/2; w=nw; }
   return [x,y,w,h];
 }
-let rmapVB = null;
-function renderRegionalMap(){
-  const el = $("#pmap"), G = REGION_GEO;
-  const IND = {
-    pop:{label:"Population", get:g=>g.popN, fmt:g=>g.pop, unit:"Census 2011"},
-    forest:{label:"Forest %", get:g=>g.forest, fmt:g=>(g.forestEst?"~":"")+g.forest+"%", unit:"ISFR 2021"},
-    rain:{label:"Rainfall", get:g=>g.rainTotal, fmt:g=>"~"+fmt(g.rainTotal)+" mm", unit:"annual, indicative"},
-    lit:{label:"Literacy", get:g=>g.lit, fmt:g=>(g.litEst?"~":"")+g.lit+"%", unit:"Census 2011"}
-  };
-  if(!state.mapInd) state.mapInd = "pop";
-  const ind = IND[state.mapInd];
-  const zr = state.geo!=="all" ? PORTFOLIO.find(r=>r.key===state.geo) : null;
-  const target = zr ? fitBox(G.states[zr.shape].bb, zr.shape==="sikkim"?0.7:0.22) : [0,0,G.w,G.h];
-  const RAMP = ["var(--seq2)","var(--seq3)","var(--seq4)","var(--seq5)","var(--seq6)"];
-  const sorted = [...PORTFOLIO].sort((a,b)=>ind.get(GEOS[a.key])-ind.get(GEOS[b.key]));
-  const shade = {}; sorted.forEach((r,i)=> shade[r.key] = RAMP[Math.round(i/(sorted.length-1)*(RAMP.length-1))]);
-  let inner = "";
-  PORTFOLIO.forEach(r=>{
-    const g = GEOS[r.key], dim = zr && zr!==r;
-    inner += `<path class="pm-state ${zr===r?'sel':''}" data-rgeo="${r.key}" d="${G.states[r.shape].d}" style="fill:${shade[r.key]};stroke:${shade[r.key]}" opacity="${dim?0.15:1}" data-tip="<b>${g.name}</b><br>Population ${g.pop} · Forest ${(g.forestEst?'~':'')+g.forest}%<br>Rainfall ~${fmt(g.rainTotal)} mm · Literacy ${(g.litEst?'~':'')+g.lit}%"/>`;
-  });
-  if(!zr) PORTFOLIO.forEach(r=>{
-    inner += `<text class="pm-label" x="${r.lbl[0]}" y="${r.lbl[1]}" text-anchor="middle">${GEOS[r.key].name}</text>`;
-  });
-  let panel;
-  if(!zr){
-    panel = `<div class="p-head">${ind.label} by region · ${ind.unit}</div>` + sorted.slice().reverse().map(r=>{
-      const g = GEOS[r.key];
-      return `<button class="pmap-row" data-rgeo="${r.key}"><span style="width:9px;height:9px;border-radius:3px;background:${shade[r.key]};flex:none"></span><b>${g.name}</b><span class="cnt">${ind.fmt(g)}</span></button>`;
-    }).join("") + `<div class="pm-note">shaded by rank, light → dark · click a region to zoom &amp; filter</div>`;
-  } else {
-    const g = GEOS[state.geo];
-    panel = `<button class="pmap-back" data-rback>← All regions</button>
-      <div class="p-head">${g.name} · ${g.type}</div>
-      <dl class="kv" style="margin:0 0 4px">
-        <dt>Population</dt><dd>${g.pop}</dd>
-        <dt>Area (km²)</dt><dd>${g.area}</dd>
-        <dt>Literacy</dt><dd>${g.litEst?"~":""}${g.lit}%</dd>
-        <dt>Workforce in agriculture</dt><dd>~${g.agri}%</dd>
-        <dt>Forest cover</dt><dd>${g.forestEst?"~":""}${g.forest}%</dd>
-        <dt>Rainfall (annual)</dt><dd>~${fmt(g.rainTotal)} mm</dd>
-      </dl>
-      <div class="hazards">${g.hazards.map(([h,lv])=>`<span class="pill ${lv}">${lv==="ok"?"✓ ":lv==="serious"?"▲ ":lv==="warn"?"◆ ":"○ "}${h}</span>`).join("")}</div>
-      <div class="pm-note">${g.note}</div>`;
-  }
-  const switcher = Object.entries(IND).map(([k,d])=>
-    `<button class="tbl-btn" style="${state.mapInd===k?"color:var(--accent);border-color:var(--accent);":""}margin-left:6px" data-rind="${k}" aria-pressed="${state.mapInd===k}">${d.label}</button>`).join("");
-  el.innerHTML = `<div class="card-head"><h3>Operating regions — demographic &amp; geographic overview</h3><span class="hint">click a region to zoom &amp; filter</span><span style="margin-left:auto;display:flex;flex-wrap:wrap">${switcher}<button class="tbl-btn" style="margin-left:6px" data-toggle>⊞ table</button></span></div>
-    <div class="viz pmap-wrap"><div class="pmap-svg"><svg id="rmap-canvas" viewBox="${(rmapVB||target).join(" ")}" role="img" aria-label="Map of operating regions with regional statistics">${inner}</svg></div>
-    <div class="pmap-panel">${panel}</div></div>
-    <div class="tblwrap">${tableHTML(["Region","Population (2011)","Area km²","Literacy","Agri workforce","Forest cover","Rainfall (mm)"],
-      PORTFOLIO.map(r=>{const g=GEOS[r.key];return [g.name,g.pop,g.area,(g.litEst?"~":"")+g.lit+"%","~"+g.agri+"%",(g.forestEst?"~":"")+g.forest+"%","~"+fmt(g.rainTotal)];}))}</div>`;
-  el.querySelector("[data-toggle]").onclick = () => {
-    el.classList.toggle("show-table");
-    el.querySelector("[data-toggle]").textContent = el.classList.contains("show-table") ? "◫ chart" : "⊞ table";
-  };
-  el.querySelectorAll("[data-rind]").forEach(b=> b.onclick = ()=>{ state.mapInd = b.dataset.rind; renderRegionalMap(); });
-  el.querySelectorAll("[data-rgeo]").forEach(t=> t.addEventListener("click", ()=>{
-    state.geo = state.geo===t.dataset.rgeo ? "all" : t.dataset.rgeo;
+const IHR = [
+  {n:"Jammu & Kashmir", key:"jk"}, {n:"Ladakh", key:"ladakh"}, {n:"Himachal Pradesh"}, {n:"Uttarakhand", key:"uk"},
+  {n:"Sikkim", key:"sikkim"}, {n:"Arunachal Pradesh"}, {n:"Nagaland", key:"nagaland"}, {n:"Manipur", key:"manipur"},
+  {n:"Mizoram", key:"mizoram"}, {n:"Tripura"}, {n:"Meghalaya"}, {n:"Assam (hill region)", key:"assam"}
+];
+function renderCoverage(){
+  const el = $("#pmap");
+  const active = IHR.filter(s=>s.key).length;
+  const chips = IHR.map(s=> s.key
+    ? `<button class="chip-ihr" data-cgeo="${s.key}" aria-pressed="${state.geo===s.key}"><span class="dot"></span>${s.n}</button>`
+    : `<span class="chip-ihr off" data-tip="Not yet an operating geography">${s.n}</span>`).join("");
+  const dens = g => Math.round(g.popN*1e6/parseInt(g.area.replace(/,/g,"")));
+  el.innerHTML = `<div class="card-head"><h3>Himalayan footprint</h3><span class="hint">Indian Himalayan Region · click an active state to filter the platform</span></div>
+    <div class="cov-wrap">
+      <div class="cov-stat">
+        <div class="cov-num">${active}<span> / ${IHR.length}</span></div>
+        <div class="cov-lbl">Himalayan states &amp; UTs where Alsisar Impact is active</div>
+        <div class="meter" data-tip="<b>Coverage</b><br>${active} of ${IHR.length} Himalayan states &amp; UTs"><i style="width:${Math.round(active/IHR.length*100)}%"></i></div>
+        <div class="pm-note">The Indian Himalayan Region spans ${IHR.length} states &amp; UTs, from Jammu &amp; Kashmir to the Northeast hills.</div>
+      </div>
+      <div class="cov-chips">${chips}</div>
+    </div>
+    <div class="cov-tbl">${tableHTML(["Region","Population (2011)","Area km²","Density /km²","Literacy","Workforce in agriculture"],
+      Object.entries(GEOS).map(([k,g])=>[g.name, g.pop, g.area, fmt(dens(g)), (g.litEst?"~":"")+g.lit+"%", "~"+g.agri+"%"]))}</div>`;
+  el.querySelectorAll("[data-cgeo]").forEach(b=> b.onclick = ()=>{
+    state.geo = state.geo===b.dataset.cgeo ? "all" : b.dataset.cgeo;
     const vs = Object.entries(VENTURES).filter(([,v])=>state.geo==="all"||v.geo===state.geo);
     if(vs.length && !vs.some(([k])=>k===state.venture)) state.venture = vs[0][0];
     renderAll();
-  }));
-  const back = el.querySelector("[data-rback]");
-  if(back) back.onclick = ()=>{ state.geo="all"; renderAll(); };
-  const svg = el.querySelector("#rmap-canvas");
-  const from = rmapVB || target;
-  if(from.join()!==target.join() && !matchMedia("(prefers-reduced-motion: reduce)").matches){
-    const t0 = performance.now(), DUR = 340;
-    const step = now => {
-      const t = Math.min(1,(now-t0)/DUR), e = t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
-      svg.setAttribute("viewBox", from.map((f,i)=>f+(target[i]-f)*e).join(" "));
-      if(t<1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  } else svg.setAttribute("viewBox", target.join(" "));
-  rmapVB = target;
+  });
+  el.querySelectorAll(".cov-tbl tbody tr").forEach((tr,i)=>{
+    if(Object.keys(GEOS)[i]===state.geo) tr.classList.add("hl");
+  });
 }
 let pmapVB = null;
 function renderPortfolioMap(){
@@ -874,27 +846,27 @@ function renderPortfolioMap(){
   pmapVB = target;
 }
 function renderL1(){
-  renderRegionalMap();
+  renderCoverage();
   const gs = activeGeos().map(k=>GEOS[k]);
   const pop = gs.reduce((a,g)=>a+g.popN,0);
-  const forest = gs.reduce((a,g)=>a+g.forest,0)/gs.length;
+  const lit = gs.reduce((a,g)=>a+g.lit,0)/gs.length;
+  const agri = gs.reduce((a,g)=>a+g.agri,0)/gs.length;
   const ventures = Object.values(VENTURES).filter(v=>state.geo==="all"||v.geo===state.geo).length;
   $("#l1-tiles").innerHTML = `
     <div class="card c3 tile"><div class="t-label">Population covered</div>
       <div class="t-value">${pop.toFixed(2)}<span class="unit">M</span></div>
       <div class="t-note">Census 2011 · ${gs.length} ${gs.length>1?"geographies":"geography"}</div></div>
-    <div class="card c3 tile"><div class="t-label">Forest cover${gs.length>1?" (avg)":""}</div>
-      <div class="t-value">${forest.toFixed(1)}<span class="unit">%</span></div>
-      <div class="t-note">ISFR 2021 · % of geographic area</div></div>
-    <div class="card c3 tile"><div class="t-label">Annual rainfall${gs.length>1?" (range)":""}</div>
-      <div class="t-value">${gs.length>1
-        ? `${fmt(Math.min(...gs.map(g=>g.rainTotal)))}–${fmt(Math.max(...gs.map(g=>g.rainTotal)))}`
-        : fmt(gs[0].rainTotal)}<span class="unit">mm</span></div>
-      <div class="t-note">IMD normals, ${estMark("indicative")}</div></div>
+    <div class="card c3 tile"><div class="t-label">Literacy${gs.length>1?" (avg)":""}</div>
+      <div class="t-value">${lit.toFixed(1)}<span class="unit">%</span></div>
+      <div class="t-note">Census 2011${gs.some(g=>g.litEst)?" · partly "+"indicative":""}</div></div>
+    <div class="card c3 tile"><div class="t-label">Workforce in agriculture${gs.length>1?" (avg)":""}</div>
+      <div class="t-value">~${Math.round(agri)}<span class="unit">%</span></div>
+      <div class="t-note">${estMark("indicative")} · share of workers</div></div>
     <div class="card c3 tile"><div class="t-label">Portfolio ventures here</div>
       <div class="t-value">${ventures}</div>
       <div class="t-note">of 36+ ventures supported to date</div></div>`;
 
+  const dens = g => Math.round(g.popN*1e6/parseInt(g.area.replace(/,/g,"")));
   $("#l1-geocards").innerHTML = gs.map(g=>`
     <div class="card ${gs.length===1?'c6':'c3'} geo-card">
       <h4><span style="width:9px;height:9px;border-radius:3px;background:${g.color};display:inline-block"></span>${g.name}</h4>
@@ -902,29 +874,19 @@ function renderL1(){
       <dl class="kv">
         <dt>Population</dt><dd>${g.pop}</dd>
         <dt>Area (km²)</dt><dd>${g.area}</dd>
+        <dt>Density (/km²)</dt><dd>${fmt(dens(g))}</dd>
         <dt>Literacy</dt><dd>${g.litEst?estMark(g.lit+"%"):g.lit+"%"}</dd>
         <dt>Workforce in agriculture</dt><dd>${estMark("~"+g.agri+"%")}</dd>
-        <dt>Forest cover</dt><dd>${g.forestEst?estMark("~"+g.forest+"%"):g.forest+"%"}</dd>
       </dl>
       <div class="hazards">${g.hazards.map(([h,lv])=>`<span class="pill ${lv}">${lv==="ok"?"✓ ":lv==="serious"?"▲ ":lv==="warn"?"◆ ":"○ "}${h}</span>`).join("")}</div>
       <p style="font-size:12px;color:var(--ink2);margin:10px 0 0">${g.note}</p>
     </div>`).join("");
 
-  const rainSeries = gs.map(g=>({name:g.name, color:g.color, values:g.rain}));
-  card("#ch-rain","Monthly rainfall","mm · IMD normals (indicative)",
-    (gs.length>1?legendHTML(rainSeries,true):"") + lineChartSVG({series:rainSeries, labels:MONTHS, fmtV:v=>Math.round(v), unit:" mm", endLabels:gs.length===1}),
-    ["Month",...gs.map(g=>g.name+" (mm)")], MONTHS.map((m,i)=>[m,...gs.map(g=>g.rain[i])]));
-
-  const ndviSeries = gs.map(g=>({name:g.name, color:g.color, values:g.ndvi}));
-  card("#ch-ndvi",`Vegetation index (NDVI)`, `${estMark("illustrative")} · seasonal profile`,
-    (gs.length>1?legendHTML(ndviSeries,true):"") + lineChartSVG({series:ndviSeries, labels:MONTHS, fmtV:v=>v.toFixed(2), endLabels:gs.length===1}),
-    ["Month",...gs.map(g=>g.name)], MONTHS.map((m,i)=>[m,...gs.map(g=>g.ndvi[i].toFixed(2))]));
-
   const SN = {jk:"J&K", uk:"U'khand"};
-  const fData = Object.entries(GEOS).map(([k,g])=>({l:SN[k]||g.name, v:g.forest, color: activeGeos().includes(k) ? g.color : "var(--grid)", tip:g.name+" · ISFR 2021"+(g.forestEst?" (indicative)":"")}));
-  card("#ch-forest","Forest cover by geography","% of geographic area · ISFR 2021",
-    barChartSVG({data:fData, unit:"%", fmtV:v=>v.toFixed(1)}),
-    ["Geography","Forest cover (%)"], Object.values(GEOS).map(g=>[g.name, g.forest.toFixed(1)]));
+  const lData = Object.entries(GEOS).map(([k,g])=>({l:SN[k]||g.name, v:g.lit, color: activeGeos().includes(k) ? g.color : "var(--grid)", tip:g.name+" · Census 2011"+(g.litEst?" (indicative)":"")}));
+  card("#ch-lit","Literacy by geography","% · Census 2011",
+    barChartSVG({data:lData, unit:"%", fmtV:v=>v.toFixed(1)}),
+    ["Geography","Literacy (%)"], Object.values(GEOS).map(g=>[g.name, (g.litEst?"~":"")+g.lit]));
 
   const aData = Object.entries(GEOS).map(([k,g])=>({l:SN[k]||g.name, v:g.agri, color: activeGeos().includes(k) ? g.color : "var(--grid)", tip:g.name+" · workforce share in agriculture (indicative)"}));
   card("#ch-agri",`Workforce in agriculture & allied`, `${estMark("indicative")} · % of workers`,
