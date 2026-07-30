@@ -2,7 +2,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root{
-    --plane:#f5f1e9; --surface:#fffefa; --ink:#141110; --ink2:#5a5248; --muted:#8b8377;
+    --plane:#ffffff; --surface:#ffffff; --tint:#f5f1e9;
+    --shadow:0 1px 2px rgba(20,17,16,.05),0 10px 28px rgba(20,17,16,.06);
+    --shadow-h:0 2px 6px rgba(20,17,16,.08),0 16px 40px rgba(20,17,16,.11); --ink:#141110; --ink2:#5a5248; --muted:#8b8377;
     --grid:#e6dfd0; --baseline:#cbc2b0; --border:rgba(20,17,16,.12);
     --accent:#8d1812; --accent-ink:#fff; --accent-soft:rgba(141,24,18,.07);
     --apricot:#c17f6c; --apricot-soft:rgba(193,127,108,.14);
@@ -15,7 +17,11 @@
   }
   @media (prefers-color-scheme: dark){
     :root:where(:not([data-theme="light"])){
-      --plane:#121010; --surface:#1d1918; --ink:#f6f2ec; --ink2:#c9c0b4; --muted:#8b8377;
+      --plane:#121010; --surface:#1d1918; --tint:#272220;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);
+    --shadow-h:0 2px 6px rgba(0,0,0,.5),0 16px 40px rgba(0,0,0,.45); --tint:#272220;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);
+      --shadow-h:0 2px 6px rgba(0,0,0,.5),0 16px 40px rgba(0,0,0,.45); --ink:#f6f2ec; --ink2:#c9c0b4; --muted:#8b8377;
       --grid:#322c27; --baseline:#463e37; --border:rgba(255,255,255,.10);
       --accent:#c4574e; --accent-ink:#fff; --accent-soft:rgba(196,87,78,.16);
       --apricot:#d1937f; --apricot-soft:rgba(209,147,127,.16);
@@ -64,7 +70,8 @@
   .filterbar .wrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .f-label{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-right:2px}
   .chip{border:1px solid var(--border);border-radius:999px;padding:5px 13px;font-size:12.5px;font-weight:520;color:var(--ink2);background:var(--surface);transition:background .12s}
-  .chip:hover{background:var(--accent-soft);color:var(--ink)}
+  .chip{transition:background .15s,transform .15s}
+  .chip:hover{background:var(--accent-soft);color:var(--ink);transform:translateY(-1px)}
   .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
   .chip .n{opacity:.65;font-weight:400;margin-left:4px}
   .f-sep{width:1px;align-self:stretch;background:var(--border);margin:0 4px}
@@ -78,7 +85,14 @@
   .layer-head h2{font-size:21px;font-weight:650;margin:0 0 6px;letter-spacing:-.01em;text-wrap:balance}
   .layer-head p{color:var(--ink2);margin:0;font-size:13.5px}
   .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
-  .card{grid-column:span 12;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px 14px;min-width:0}
+  .card{grid-column:span 12;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px 14px;min-width:0;box-shadow:var(--shadow);transition:box-shadow .22s,transform .22s}
+  .card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .grid .card{animation:rise .4s ease both}
+  .grid .card:nth-child(2){animation-delay:.05s}.grid .card:nth-child(3){animation-delay:.1s}
+  .grid .card:nth-child(4){animation-delay:.15s}.grid .card:nth-child(5){animation-delay:.2s}
+  .grid .card:nth-child(6){animation-delay:.25s}.grid .card:nth-child(7){animation-delay:.3s}
+  .grid .card:nth-child(8){animation-delay:.35s}
   .c6{grid-column:span 6}.c4{grid-column:span 4}.c3{grid-column:span 3}.c8{grid-column:span 8}
   @media(max-width:900px){.c6,.c8{grid-column:span 12}.c4{grid-column:span 6}.c3{grid-column:span 6}}
   @media(max-width:560px){.c4,.c3{grid-column:span 12}}
@@ -111,7 +125,7 @@
   .pill.serious{background:color-mix(in srgb,var(--serious) 15%,transparent);color:var(--ink)}
   .pill.info{background:var(--accent-soft);color:var(--accent)}
   .gi-seal{display:inline-flex;align-items:center;gap:5px;background:var(--apricot-soft);color:var(--apricot);font-size:11px;font-weight:650;border-radius:999px;padding:2.5px 10px}
-  .tag{display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.03em;color:var(--ink2);border:1px solid var(--border);border-radius:5px;padding:1.5px 7px;margin:2px 3px 2px 0;background:var(--plane)}
+  .tag{display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.03em;color:var(--ink2);border:1px solid var(--border);border-radius:5px;padding:1.5px 7px;margin:2px 3px 2px 0;background:var(--tint)}
   .est{border-bottom:1px dotted var(--muted);cursor:help}
   .src{font-size:10.5px;color:var(--muted)}
 
@@ -154,7 +168,7 @@
   .comm-head h4{margin:0;font-size:14.5px;font-weight:650}
   .comm-meta{font-size:12px;color:var(--ink2);margin:6px 0 2px}
   .vc{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:10px;font-size:11px;color:var(--ink2)}
-  .vc .step{border:1px solid var(--border);background:var(--plane);border-radius:5px;padding:2px 8px;font-weight:550}
+  .vc .step{border:1px solid var(--border);background:var(--tint);border-radius:5px;padding:2px 8px;font-weight:550}
   .vc .arr{color:var(--muted)}
   .fs-row{display:flex;align-items:baseline;justify-content:space-between;margin-top:12px;font-size:12px;color:var(--ink2)}
   .fs-row b{color:var(--ink);font-variant-numeric:tabular-nums}
@@ -176,12 +190,12 @@
   .pm-label{font-size:15px;font-weight:600;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:3.5px;pointer-events:none}
   .pmap-panel{width:252px;flex:none;display:flex;flex-direction:column;gap:5px}
   .pmap-panel .p-head{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:2px 0 3px}
-  .pmap-row{display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:var(--plane);font-size:12.5px;text-align:left;width:100%}
+  .pmap-row{display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:var(--tint);font-size:12.5px;text-align:left;width:100%}
   .pmap-row:hover{background:var(--accent-soft)}
   .pmap-row.on{outline:2px solid var(--accent);outline-offset:-1px;background:var(--accent-soft)}
   .pmap-row b{flex:1;font-weight:600}
   .pmap-row .cnt{color:var(--muted);font-size:11px}
-  .pm-v{display:flex;align-items:baseline;gap:7px;padding:6px 10px;border-left:2px solid var(--brandmap);font-size:12.5px;background:var(--plane);border-radius:0 7px 7px 0}
+  .pm-v{display:flex;align-items:baseline;gap:7px;padding:6px 10px;border-left:2px solid var(--brandmap);font-size:12.5px;background:var(--tint);border-radius:0 7px 7px 0}
   .pm-v b{font-weight:600}
   .pm-v .tn{margin-left:auto;color:var(--muted);font-size:11px;white-space:nowrap}
   .pmap-back{align-self:flex-start;font-size:12px;font-weight:600;color:var(--accent);border:1px solid var(--border);border-radius:7px;padding:4px 10px;margin-bottom:2px}
@@ -190,14 +204,17 @@
   @media(max-width:760px){.pmap-wrap{flex-direction:column}.pmap-panel{width:auto}}
 
   /* ---------- himalayan coverage ---------- */
-  .cov-wrap{display:flex;gap:26px;flex-wrap:wrap;margin:6px 0 4px}
+  #pmap{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--surface) 55%,var(--tint) 100%)}
+  #pmap .ridge-deco{position:absolute;right:-20px;bottom:-14px;width:340px;opacity:.5;pointer-events:none}
+  .cov-wrap{display:flex;gap:26px;flex-wrap:wrap;margin:6px 0 4px;position:relative}
   .cov-stat{width:255px;flex:none}
   .cov-num{font-size:46px;font-weight:680;letter-spacing:-.02em;line-height:1;color:var(--accent)}
   .cov-num span{font-size:22px;font-weight:550;color:var(--muted)}
   .cov-lbl{font-size:12.5px;color:var(--ink2);margin:6px 0 10px}
   .cov-chips{flex:1;min-width:260px;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
-  .chip-ihr{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:550;color:var(--ink);background:var(--plane);cursor:pointer}
-  .chip-ihr:hover{background:var(--accent-soft)}
+  .chip-ihr{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:550;color:var(--ink);background:var(--tint);cursor:pointer}
+  .chip-ihr{transition:background .15s,transform .15s,box-shadow .15s}
+  .chip-ihr:hover{background:var(--accent-soft);transform:translateY(-1px);box-shadow:var(--shadow)}
   .chip-ihr .dot{width:8px;height:8px;border-radius:50%;background:var(--good);flex:none}
   .chip-ihr[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
   .chip-ihr[aria-pressed="true"] .dot{background:var(--accent-ink)}
@@ -216,7 +233,7 @@
   .foot-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:28px}
   @media(max-width:760px){.foot-grid{grid-template-columns:1fr}}
   .legend-note{display:flex;gap:8px;align-items:baseline;margin-top:14px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
-  @media (prefers-reduced-motion: reduce){*{transition:none !important}}
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important}}
 </style>
 
 <header class="mast">
@@ -762,7 +779,11 @@ function renderCoverage(){
   const chips = IHR.map(s=> s.key
     ? `<button class="chip-ihr" data-cgeo="${s.key}" aria-pressed="${state.geo===s.key}"><span class="dot"></span>${s.n}</button>`
     : `<span class="chip-ihr off" data-tip="Not yet an operating geography">${s.n}</span>`).join("");
-  el.innerHTML = `<div class="card-head"><h3>Himalayan footprint</h3><span class="hint">Indian Himalayan Region · click an active state to filter the platform</span></div>
+  el.innerHTML = `<svg class="ridge-deco" viewBox="0 0 340 120" aria-hidden="true">
+      <path d="M0 110 L60 60 L95 88 L150 30 L205 92 L250 55 L290 80 L340 40 L340 120 L0 120 Z" fill="var(--tint)"/>
+      <path d="M0 112 L60 62 L95 90 L150 32 L205 94 L250 57 L290 82 L340 42" fill="none" stroke="var(--brandgreen)" stroke-width="2" opacity=".45"/>
+      <path d="M150 32 L142 44 L158 44 Z" fill="var(--accent)" opacity=".55"/>
+    </svg><div class="card-head"><h3>Himalayan footprint</h3><span class="hint">Indian Himalayan Region · click an active state to filter the platform</span></div>
     <div class="cov-wrap">
       <div class="cov-stat">
         <div class="cov-num">${active}<span> / ${IHR.length}</span></div>
@@ -854,7 +875,7 @@ function renderGeoMapSat(el, ind, IND){
   const switcher = Object.entries(IND).map(([k,d])=>
     `<button class="tbl-btn" style="${state.geoInd===k?"color:var(--accent);border-color:var(--accent);":""}margin-left:6px" data-gind="${k}">${d.label}</button>`).join("");
   el.innerHTML = `<div class="card-head"><h3>Geographic map — operating regions</h3><span class="hint">free Esri satellite imagery · toggle layers on the map · click a region to fly &amp; filter</span><span style="margin-left:auto;display:flex;flex-wrap:wrap">${switcher}<button class="tbl-btn" style="margin-left:6px" data-toggle>⊞ table</button></span></div>
-    <div class="viz pmap-wrap"><div class="pmap-svg"><div id="leafmap" style="height:600px;border-radius:8px;overflow:hidden;background:var(--plane)"></div></div>
+    <div class="viz pmap-wrap"><div class="pmap-svg"><div id="leafmap" style="height:600px;border-radius:8px;overflow:hidden;background:var(--tint)"></div></div>
     <div class="pmap-panel">${panel}</div></div>
     <div class="tblwrap">${tableHTML(["Region","Area km²","Forest cover","Rainfall (mm/yr)","Key hazards"],
       PORTFOLIO.map(r=>{const g=GEOS[r.key];return [g.name, g.area, (g.forestEst?"~":"")+g.forest+"%", "~"+fmt(g.rainTotal), g.hazards.map(h=>h[0]).join(" · ")];}))}</div>`;
@@ -960,6 +981,19 @@ function renderPortfolioMap(){
   } else svg.setAttribute("viewBox", target.join(" "));
   pmapVB = target;
 }
+function animateCounts(scope){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  scope.querySelectorAll(".cnum").forEach(el=>{
+    const v = parseFloat(el.dataset.v), dec = +(el.dataset.dec||0), grp = el.dataset.grp;
+    const t0 = performance.now(), DUR = 550;
+    const step = now => {
+      const t = Math.min(1,(now-t0)/DUR), e = 1-Math.pow(1-t,3);
+      el.textContent = grp ? fmt(Math.round(v*e)) : (v*e).toFixed(dec);
+      if(t<1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+}
 function renderL1(){
   renderCoverage();
   const gs = activeGeos().map(k=>GEOS[k]);
@@ -975,17 +1009,18 @@ function renderL1(){
   const agri = gs.reduce((a,g)=>a+g.agri,0)/gs.length;
   $("#l1-tiles").innerHTML = `
     <div class="card c3 tile"><div class="t-label">Population covered</div>
-      <div class="t-value">${pop.toFixed(2)}<span class="unit">M</span></div>
+      <div class="t-value"><span class="cnum" data-v="${pop.toFixed(2)}" data-dec="2">${pop.toFixed(2)}</span><span class="unit">M</span></div>
       <div class="t-note">Census 2011 · ${gs.length} ${gs.length>1?"geographies":"geography"}</div></div>
     <div class="card c3 tile"><div class="t-label">Population density</div>
-      <div class="t-value">${fmt(Math.round(pop*1e6/areaSel))}<span class="unit">/km²</span></div>
+      <div class="t-value"><span class="cnum" data-v="${Math.round(pop*1e6/areaSel)}" data-grp="1">${fmt(Math.round(pop*1e6/areaSel))}</span><span class="unit">/km²</span></div>
       <div class="t-note">people per km² of geographic area</div></div>
     <div class="card c3 tile"><div class="t-label">Literacy${gs.length>1?" (avg)":""}</div>
-      <div class="t-value">${lit.toFixed(1)}<span class="unit">%</span></div>
+      <div class="t-value"><span class="cnum" data-v="${lit.toFixed(1)}" data-dec="1">${lit.toFixed(1)}</span><span class="unit">%</span></div>
       <div class="t-note">Census 2011${gs.some(g=>g.litEst)?" · partly indicative":""}</div></div>
     <div class="card c3 tile"><div class="t-label">Workforce in agriculture${gs.length>1?" (avg)":""}</div>
-      <div class="t-value">~${Math.round(agri)}<span class="unit">%</span></div>
+      <div class="t-value">~<span class="cnum" data-v="${Math.round(agri)}">${Math.round(agri)}</span><span class="unit">%</span></div>
       <div class="t-note">${estMark("indicative")} · share of workers</div></div>`;
+  animateCounts($("#l1-tiles"));
 
   $("#l1-geocards").innerHTML = Object.entries(GEOS).map(([k,g])=>`
     <div class="card c3 geo-card${hl(k)}">
