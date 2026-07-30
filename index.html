@@ -276,6 +276,7 @@
       <h2>What is the venture doing differently?</h2>
       <p>Venture-level overlay: sourcing, procurement, prices paid against local benchmarks, premiums and livelihood outcomes across the portfolio.</p>
     </div>
+    <div class="card" id="pmap3" style="margin-bottom:14px"></div>
     <div class="grid" id="l3-overview"></div>
     <div class="v-chips" id="ventureChips" style="margin-top:18px"></div>
     <div id="ventureDetail"></div>
@@ -720,9 +721,87 @@ function fitBox(bb, pad){
   if(w/h > AR){ const nh=w/AR; y-=(nh-h)/2; h=nh; } else { const nw=h*AR; x-=(nw-w)/2; w=nw; }
   return [x,y,w,h];
 }
+let rmapVB = null;
+function renderRegionalMap(){
+  const el = $("#pmap"), G = REGION_GEO;
+  const IND = {
+    pop:{label:"Population", get:g=>g.popN, fmt:g=>g.pop, unit:"Census 2011"},
+    forest:{label:"Forest %", get:g=>g.forest, fmt:g=>(g.forestEst?"~":"")+g.forest+"%", unit:"ISFR 2021"},
+    rain:{label:"Rainfall", get:g=>g.rainTotal, fmt:g=>"~"+fmt(g.rainTotal)+" mm", unit:"annual, indicative"},
+    lit:{label:"Literacy", get:g=>g.lit, fmt:g=>(g.litEst?"~":"")+g.lit+"%", unit:"Census 2011"}
+  };
+  if(!state.mapInd) state.mapInd = "pop";
+  const ind = IND[state.mapInd];
+  const zr = state.geo!=="all" ? PORTFOLIO.find(r=>r.key===state.geo) : null;
+  const target = zr ? fitBox(G.states[zr.shape].bb, zr.shape==="sikkim"?0.7:0.22) : [0,0,G.w,G.h];
+  const RAMP = ["var(--seq2)","var(--seq3)","var(--seq4)","var(--seq5)","var(--seq6)"];
+  const sorted = [...PORTFOLIO].sort((a,b)=>ind.get(GEOS[a.key])-ind.get(GEOS[b.key]));
+  const shade = {}; sorted.forEach((r,i)=> shade[r.key] = RAMP[Math.round(i/(sorted.length-1)*(RAMP.length-1))]);
+  let inner = "";
+  PORTFOLIO.forEach(r=>{
+    const g = GEOS[r.key], dim = zr && zr!==r;
+    inner += `<path class="pm-state ${zr===r?'sel':''}" data-rgeo="${r.key}" d="${G.states[r.shape].d}" style="fill:${shade[r.key]};stroke:${shade[r.key]}" opacity="${dim?0.15:1}" data-tip="<b>${g.name}</b><br>Population ${g.pop} · Forest ${(g.forestEst?'~':'')+g.forest}%<br>Rainfall ~${fmt(g.rainTotal)} mm · Literacy ${(g.litEst?'~':'')+g.lit}%"/>`;
+  });
+  if(!zr) PORTFOLIO.forEach(r=>{
+    inner += `<text class="pm-label" x="${r.lbl[0]}" y="${r.lbl[1]}" text-anchor="middle">${GEOS[r.key].name}</text>`;
+  });
+  let panel;
+  if(!zr){
+    panel = `<div class="p-head">${ind.label} by region · ${ind.unit}</div>` + sorted.slice().reverse().map(r=>{
+      const g = GEOS[r.key];
+      return `<button class="pmap-row" data-rgeo="${r.key}"><span style="width:9px;height:9px;border-radius:3px;background:${shade[r.key]};flex:none"></span><b>${g.name}</b><span class="cnt">${ind.fmt(g)}</span></button>`;
+    }).join("") + `<div class="pm-note">shaded by rank, light → dark · click a region to zoom &amp; filter</div>`;
+  } else {
+    const g = GEOS[state.geo];
+    panel = `<button class="pmap-back" data-rback>← All regions</button>
+      <div class="p-head">${g.name} · ${g.type}</div>
+      <dl class="kv" style="margin:0 0 4px">
+        <dt>Population</dt><dd>${g.pop}</dd>
+        <dt>Area (km²)</dt><dd>${g.area}</dd>
+        <dt>Literacy</dt><dd>${g.litEst?"~":""}${g.lit}%</dd>
+        <dt>Workforce in agriculture</dt><dd>~${g.agri}%</dd>
+        <dt>Forest cover</dt><dd>${g.forestEst?"~":""}${g.forest}%</dd>
+        <dt>Rainfall (annual)</dt><dd>~${fmt(g.rainTotal)} mm</dd>
+      </dl>
+      <div class="hazards">${g.hazards.map(([h,lv])=>`<span class="pill ${lv}">${lv==="ok"?"✓ ":lv==="serious"?"▲ ":lv==="warn"?"◆ ":"○ "}${h}</span>`).join("")}</div>
+      <div class="pm-note">${g.note}</div>`;
+  }
+  const switcher = Object.entries(IND).map(([k,d])=>
+    `<button class="tbl-btn" style="${state.mapInd===k?"color:var(--accent);border-color:var(--accent);":""}margin-left:6px" data-rind="${k}" aria-pressed="${state.mapInd===k}">${d.label}</button>`).join("");
+  el.innerHTML = `<div class="card-head"><h3>Operating regions — demographic &amp; geographic overview</h3><span class="hint">click a region to zoom &amp; filter</span><span style="margin-left:auto;display:flex;flex-wrap:wrap">${switcher}<button class="tbl-btn" style="margin-left:6px" data-toggle>⊞ table</button></span></div>
+    <div class="viz pmap-wrap"><div class="pmap-svg"><svg id="rmap-canvas" viewBox="${(rmapVB||target).join(" ")}" role="img" aria-label="Map of operating regions with regional statistics">${inner}</svg></div>
+    <div class="pmap-panel">${panel}</div></div>
+    <div class="tblwrap">${tableHTML(["Region","Population (2011)","Area km²","Literacy","Agri workforce","Forest cover","Rainfall (mm)"],
+      PORTFOLIO.map(r=>{const g=GEOS[r.key];return [g.name,g.pop,g.area,(g.litEst?"~":"")+g.lit+"%","~"+g.agri+"%",(g.forestEst?"~":"")+g.forest+"%","~"+fmt(g.rainTotal)];}))}</div>`;
+  el.querySelector("[data-toggle]").onclick = () => {
+    el.classList.toggle("show-table");
+    el.querySelector("[data-toggle]").textContent = el.classList.contains("show-table") ? "◫ chart" : "⊞ table";
+  };
+  el.querySelectorAll("[data-rind]").forEach(b=> b.onclick = ()=>{ state.mapInd = b.dataset.rind; renderRegionalMap(); });
+  el.querySelectorAll("[data-rgeo]").forEach(t=> t.addEventListener("click", ()=>{
+    state.geo = state.geo===t.dataset.rgeo ? "all" : t.dataset.rgeo;
+    const vs = Object.entries(VENTURES).filter(([,v])=>state.geo==="all"||v.geo===state.geo);
+    if(vs.length && !vs.some(([k])=>k===state.venture)) state.venture = vs[0][0];
+    renderAll();
+  }));
+  const back = el.querySelector("[data-rback]");
+  if(back) back.onclick = ()=>{ state.geo="all"; renderAll(); };
+  const svg = el.querySelector("#rmap-canvas");
+  const from = rmapVB || target;
+  if(from.join()!==target.join() && !matchMedia("(prefers-reduced-motion: reduce)").matches){
+    const t0 = performance.now(), DUR = 340;
+    const step = now => {
+      const t = Math.min(1,(now-t0)/DUR), e = t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
+      svg.setAttribute("viewBox", from.map((f,i)=>f+(target[i]-f)*e).join(" "));
+      if(t<1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  } else svg.setAttribute("viewBox", target.join(" "));
+  rmapVB = target;
+}
 let pmapVB = null;
 function renderPortfolioMap(){
-  const el = $("#pmap"), G = REGION_GEO;
+  const el = $("#pmap3"), G = REGION_GEO;
   const zr = PORTFOLIO.find(r=>r.shape===state.mapView) || null;
   const target = zr ? fitBox(G.states[zr.shape].bb, zr.shape==="sikkim"?0.7:0.22) : [0,0,G.w,G.h];
   let inner = "";
@@ -795,7 +874,7 @@ function renderPortfolioMap(){
   pmapVB = target;
 }
 function renderL1(){
-  renderPortfolioMap();
+  renderRegionalMap();
   const gs = activeGeos().map(k=>GEOS[k]);
   const pop = gs.reduce((a,g)=>a+g.popN,0);
   const forest = gs.reduce((a,g)=>a+g.forest,0)/gs.length;
@@ -945,6 +1024,7 @@ function renderL2(){
 
 /* ============================== LAYER 3 ============================== */
 function renderL3(){
+  renderPortfolioMap();
   const vs = Object.entries(VENTURES).filter(([,v])=>state.geo==="all"||v.geo===state.geo);
   $("#l3-overview").innerHTML = `
     <div class="card c4 tile">
