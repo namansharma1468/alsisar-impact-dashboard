@@ -6,6 +6,7 @@
     --grid:#e3e2da; --baseline:#c4c3b8; --border:rgba(15,20,10,.10);
     --accent:#21634b; --accent-ink:#fff; --accent-soft:rgba(33,99,75,.09);
     --apricot:#b95f2c; --apricot-soft:rgba(185,95,44,.10);
+    --brandmap:#8f2320;
     --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#4a3aa7; --s8:#e34948;
     --seq1:#cde2fb; --seq2:#9ec5f4; --seq3:#6da7ec; --seq4:#3987e5; --seq5:#256abf; --seq6:#184f95;
     --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b; --good-text:#006300;
@@ -17,6 +18,7 @@
       --grid:#2b2e2a; --baseline:#3a3d38; --border:rgba(255,255,255,.10);
       --accent:#4fa583; --accent-ink:#0c110e; --accent-soft:rgba(79,165,131,.14);
       --apricot:#d78a55; --apricot-soft:rgba(215,138,85,.14);
+      --brandmap:#b04a44;
       --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
       --good-text:#0ca30c;
       color-scheme:dark;
@@ -27,6 +29,7 @@
     --grid:#2b2e2a; --baseline:#3a3d38; --border:rgba(255,255,255,.10);
     --accent:#4fa583; --accent-ink:#0c110e; --accent-soft:rgba(79,165,131,.14);
     --apricot:#d78a55; --apricot-soft:rgba(215,138,85,.14);
+    --brandmap:#b04a44;
     --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
     --good-text:#0ca30c;
     color-scheme:dark;
@@ -160,6 +163,21 @@
   .v-head .v-desc{color:var(--ink2);font-size:13px;max-width:640px;margin:0}
   .sdg{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:650;border-radius:5px;padding:2px 7px;background:var(--accent-soft);color:var(--accent);margin:2px 3px 0 0}
 
+  /* ---------- portfolio map ---------- */
+  .pmap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:900px){.pmap-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.pmap-grid{grid-template-columns:1fr}}
+  .pmap-tile{border:1px solid var(--border);border-radius:9px;padding:12px 12px 11px;background:var(--plane)}
+  .pmap-tile.clickable{cursor:pointer;transition:background .12s}
+  .pmap-tile.clickable:hover{background:var(--accent-soft)}
+  .pmap-tile.clickable:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .pmap-tile.active{outline:2px solid var(--accent);outline-offset:-1px;background:var(--accent-soft)}
+  .pmap-shape{width:76px;height:76px;display:block;margin:2px auto 7px}
+  .pmap-shape path{fill:var(--brandmap);stroke:var(--brandmap);stroke-width:2.4;stroke-linejoin:round}
+  .pmap-name{font-weight:650;font-size:13px;text-align:center}
+  .pmap-count{font-size:11px;color:var(--muted);text-align:center;margin:1px 0 8px}
+  .pmap-chips{display:flex;flex-wrap:wrap;gap:3px;justify-content:center}
+
   /* ---------- tooltip / footer ---------- */
   #tip{position:fixed;z-index:99;pointer-events:none;background:var(--ink);color:var(--plane);font-size:12px;line-height:1.45;padding:7px 10px;border-radius:7px;max-width:260px;opacity:0;transition:opacity .1s;box-shadow:0 4px 14px rgba(0,0,0,.18)}
   #tip b{font-weight:650}
@@ -211,6 +229,7 @@
       <h2>The operating context</h2>
       <p>Public datasets across the geographies where portfolio ventures operate — demographics, workforce, climate, forest cover and hazard exposure. The geography filter above scopes every layer of the platform.</p>
     </div>
+    <div class="card" id="pmap" style="margin-bottom:14px"></div>
     <div class="grid" id="l1-tiles"></div>
     <div class="grid" id="l1-geocards" style="margin-top:14px"></div>
     <div class="grid" style="margin-top:14px">
@@ -263,6 +282,7 @@
           <li>Demographics &amp; literacy — Census of India 2011 · Forest cover — India State of Forest Report (ISFR 2021)</li>
           <li>Rainfall — IMD station normals (indicative) · GI records — <a href="https://ipindia.gov.in/gi.htm" target="_blank" rel="noopener">Geographical Indications Registry, Govt. of India</a></li>
           <li>Raktsey Karpo apricot GI (Ladakh's first, Dec 2022); Dalle Khursani GI (Sikkim, 2021, extended to Darjeeling &amp; Kalimpong); Sikkim Large Cardamom GI</li>
+          <li>Portfolio footprint — Alsisar Impact portfolio deck (8 regions); state silhouettes derived from Census-2011 district GeoJSON (<a href="https://github.com/udit-001/india-maps-data" target="_blank" rel="noopener">udit-001/india-maps-data</a>), simplified for display</li>
         </ul>
       </div>
       <div>
@@ -315,6 +335,17 @@ const GEOS = {
     note:"Highest literacy among portfolio geographies; bamboo-dominant landscapes, horticulture growth." }
 };
 
+const REGION_SHAPES = {"ladakh": "M61.4 78.2L60.9 76.7L61.7 75.3L62.6 75.3L62.7 73.5L64.2 74.2L63.5 72.3L64.2 70.8L63.0 68.9L61.2 69.0L59.3 66.0L56.6 65.4L52.8 62.5L51.9 63.1L51.3 62.7L51.9 60.3L53.3 59.8L53.8 56.0L51.7 54.4L51.7 52.1L50.3 52.0L49.9 49.8L46.2 50.7L44.2 49.6L43.1 52.5L38.8 53.3L36.6 55.5L35.8 54.2L36.3 52.8L34.7 51.2L28.3 50.6L26.2 49.1L22.9 48.8L26.1 47.4L26.4 45.3L25.2 43.8L22.1 44.9L20.3 43.1L16.2 41.6L15.2 41.9L15.0 39.9L16.2 38.3L16.1 37.3L11.2 36.7L9.5 35.6L7.8 34.3L8.0 32.4L7.2 31.7L5.1 32.3L3.8 31.6L2.1 32.5L0.0 31.2L0.8 29.5L0.0 28.7L0.8 25.8L2.1 26.0L4.5 23.9L4.5 23.0L5.9 22.8L7.5 20.4L7.1 19.0L11.7 18.3L14.1 19.1L17.4 19.0L17.6 18.2L15.3 16.9L14.9 15.7L17.3 16.0L19.6 17.3L21.0 15.8L22.2 16.1L24.4 14.5L26.3 15.1L26.4 13.6L27.9 13.1L28.5 14.1L29.6 14.0L30.7 15.8L31.9 14.7L32.9 15.2L34.3 13.7L36.1 13.5L37.7 17.3L39.6 18.0L41.5 21.0L45.5 22.5L47.8 24.5L49.0 24.3L51.7 27.2L52.8 27.0L54.8 29.1L53.8 30.6L54.9 32.3L56.5 33.2L58.8 33.0L60.2 34.4L61.9 34.3L63.6 37.2L61.4 37.2L63.0 38.3L66.6 38.0L66.7 37.3L69.9 38.4L69.5 36.0L71.9 37.1L72.7 35.0L73.4 35.4L73.6 34.2L75.6 33.2L76.8 33.6L78.7 32.1L82.5 31.6L84.7 32.4L85.7 30.2L87.8 30.0L88.4 31.5L92.4 33.0L94.1 33.3L95.8 32.4L97.2 34.8L99.5 36.0L100.0 38.1L98.1 42.9L96.7 49.9L94.0 50.3L92.9 51.2L93.2 53.5L89.5 53.6L90.5 57.2L89.5 57.8L88.4 60.7L85.2 59.9L84.4 60.7L82.3 60.6L81.8 61.4L83.7 64.4L83.2 65.6L84.1 65.9L84.3 67.0L81.9 66.8L82.8 71.4L88.8 72.6L88.0 76.0L87.2 76.4L91.0 80.6L88.7 83.9L87.1 82.9L84.7 84.7L84.4 86.2L82.7 86.9L80.8 85.3L80.0 81.3L78.1 82.9L76.0 83.1L74.3 84.8L74.2 83.2L75.4 82.5L75.1 80.4L70.4 82.5L66.5 76.9L63.3 78.8L62.5 78.4L62.1 79.3L60.8 78.5ZM64.2 74.2L62.7 73.5L62.6 75.3L61.7 75.3L60.9 76.7L61.4 78.2L60.6 78.7L59.3 78.0L59.3 76.9L57.0 76.6L55.0 74.1L55.3 72.7L54.0 72.5L52.6 69.8L49.1 67.2L47.4 68.1L47.9 65.0L44.8 61.1L42.7 61.5L42.7 60.7L40.8 59.2L40.6 57.4L38.8 57.7L36.5 55.6L38.8 53.3L43.1 52.5L44.2 49.6L46.2 50.7L49.9 49.8L50.3 52.0L51.7 52.1L51.7 54.4L53.8 56.0L53.3 59.8L51.9 60.3L51.3 62.7L51.9 63.1L52.8 62.5L56.6 65.4L59.3 66.0L61.2 69.0L63.0 68.9L64.3 71.0L63.5 72.3Z", "jammu-and-kashmir": "M34.8 14.7L21.4 30.7L10.3 26.9L16.6 15.2L21.3 16.5L26.7 11.6ZM55.9 26.4L44.9 23.0L39.8 28.3L36.6 26.5L36.0 33.1L30.5 22.2L34.9 13.3L53.7 17.2L57.2 20.6ZM33.6 31.5L38.0 34.6L29.8 42.5L14.4 37.6L17.0 30.2L21.4 30.7L29.0 24.0L33.3 25.5ZM45.5 23.6L51.0 27.2L57.7 25.6L61.3 31.1L39.9 35.2L36.6 26.5L39.8 28.3ZM56.5 31.8L64.2 32.3L58.3 40.7L62.2 53.4L57.9 61.8L47.5 47.1L53.3 40.8L49.7 33.3ZM82.6 73.8L79.6 68.4L70.3 69.7L60.6 60.8L62.0 49.4L58.3 40.6L66.0 30.9L71.8 40.4L76.7 39.4L83.6 47.9L82.7 55.3L89.3 54.7L98.9 66.2L88.1 68.0ZM47.0 33.7L51.2 36.4L43.7 38.8L37.3 33.1ZM39.2 35.1L44.1 38.6L33.2 50.6L29.1 43.5L31.8 37.3ZM51.2 36.6L52.3 42.7L38.2 46.7L44.1 38.3ZM6.2 36.2L28.7 41.3L34.1 57.3L27.7 54.1L22.2 60.1L17.7 53.2L9.4 53.9L2.3 34.2ZM42.3 45.7L48.1 46.2L42.9 52.6L33.9 50.2ZM49.4 47.6L51.8 53.8L49.1 57.2L32.4 55.0L33.8 50.2L42.9 52.6ZM29.7 54.6L35.7 57.1L37.6 66.1L32.6 68.0L35.8 69.6L34.1 74.6L28.0 76.3L17.2 66.2L23.5 55.4ZM51.0 54.6L57.8 61.2L57.2 72.2L47.2 65.9L47.1 57.2ZM39.6 57.4L47.4 56.9L49.1 72.3L44.7 78.5L38.9 72.5L35.1 76.5L33.6 72.8L35.8 69.6L32.6 68.0L37.6 66.1L35.0 58.2ZM60.6 60.8L70.3 69.7L80.2 68.8L82.6 73.8L74.7 79.0L59.9 76.0L56.5 69.6ZM27.1 76.2L34.7 73.4L35.1 76.5L38.9 72.5L51.5 82.8L38.3 93.1L38.0 80.2L32.4 83.6ZM53.4 93.9L55.0 87.2L67.0 78.9L72.6 81.2L74.0 87.6L62.4 100.0ZM50.3 68.3L65.9 77.2L66.9 81.8L52.3 87.5L46.0 77.1ZM47.9 84.3L56.7 88.6L53.4 94.8L43.1 93.0ZM26.7 11.6L21.3 16.5L16.6 15.2L10.2 25.9L17.6 31.5L14.2 37.0L2.3 34.2L1.1 19.1L7.0 19.3L9.9 11.6L18.2 8.4L20.1 0.7L31.2 0.0L34.6 3.7L34.0 8.6ZM9.4 53.9L21.8 55.4L22.0 62.0L17.3 66.9L26.7 73.5L30.5 82.2L6.3 71.4L5.5 49.3Z", "sikkim": "M51.4 71.2L47.9 69.9L45.6 67.0L45.0 61.7L42.8 60.4L40.7 57.4L38.2 57.0L34.5 58.2L31.1 56.1L28.4 51.8L20.4 48.2L20.8 45.8L22.8 44.1L23.7 41.5L23.2 40.3L23.9 37.1L25.8 36.1L26.1 33.3L27.4 32.1L25.4 29.1L27.9 27.5L27.3 25.9L22.1 23.3L22.5 22.6L20.8 19.9L22.4 18.1L21.6 16.9L23.0 15.5L28.0 17.7L28.2 15.8L30.8 14.9L31.9 17.6L33.2 16.2L36.7 15.2L37.5 14.2L38.6 14.7L40.4 13.1L45.2 13.8L45.7 12.2L50.1 10.5L52.4 7.0L54.7 8.8L56.6 8.9L57.2 4.4L62.8 2.9L62.3 0.0L64.0 0.7L67.3 5.3L74.3 4.9L79.0 9.9L81.0 10.7L81.7 12.8L81.1 18.8L83.1 19.0L83.9 20.1L85.4 25.7L84.8 28.3L82.7 29.5L83.2 31.3L82.5 34.4L83.5 36.5L82.7 39.0L81.2 40.0L82.0 43.6L80.3 45.8L79.3 45.6L78.4 47.7L78.8 49.7L77.0 51.4L77.3 52.3L75.0 53.3L76.1 56.4L77.4 56.7L76.1 62.4L76.5 64.2L77.7 64.4L77.3 65.4L78.7 66.7L78.4 67.5L72.0 67.0L68.9 68.9L63.5 70.1L60.2 68.9L57.1 69.6L54.5 68.8ZM20.4 48.2L28.4 51.8L31.1 56.1L34.5 58.2L33.0 59.4L33.9 68.4L38.5 67.7L39.0 68.9L40.2 68.2L40.9 69.1L40.7 71.2L38.5 71.9L37.8 74.1L35.8 75.5L37.0 77.5L36.7 78.4L34.0 80.0L36.1 82.2L36.2 85.1L38.7 88.4L35.9 90.5L34.3 94.5L30.3 95.5L28.9 94.3L26.1 94.2L23.7 96.4L18.9 94.1L17.1 89.2L17.4 87.7L14.2 85.9L12.0 86.7L13.5 83.1L13.6 79.8L16.6 75.1L14.4 71.7L14.8 68.4L17.1 65.8L16.5 63.5L14.6 61.5L14.5 59.8L15.9 58.3L15.8 56.0L17.5 53.4L17.8 51.0ZM34.5 58.2L38.2 57.0L40.7 57.4L42.8 60.4L45.0 61.7L45.6 67.0L47.9 69.9L51.4 71.2L51.3 75.4L48.5 77.0L47.6 81.7L51.8 84.3L51.6 87.5L52.6 89.0L55.5 90.1L55.3 92.8L52.5 95.2L50.7 95.3L49.3 98.3L46.6 100.0L47.1 99.2L40.8 97.7L39.5 96.4L38.0 96.8L37.4 94.9L34.6 94.7L34.4 94.3L35.9 90.5L38.7 88.4L36.2 85.1L36.1 82.2L34.0 80.0L36.7 78.4L37.0 77.5L35.8 75.5L37.8 74.1L38.5 71.9L40.7 71.2L40.9 69.1L40.2 68.2L39.0 68.9L38.5 67.7L33.9 68.4L33.0 59.4ZM51.4 71.2L54.5 68.8L57.1 69.6L60.2 68.9L63.5 70.1L68.9 68.9L72.0 67.0L77.5 67.4L81.2 70.9L83.1 70.1L85.0 74.3L87.7 75.5L88.0 76.4L86.7 81.0L84.6 82.0L80.7 81.9L78.3 83.3L77.3 89.2L75.2 89.9L74.7 92.3L72.9 93.8L71.5 93.6L70.1 91.0L68.6 90.2L65.6 91.6L61.0 88.9L55.5 90.1L52.6 89.0L51.6 87.5L51.8 84.3L47.6 81.7L48.5 77.0L51.3 75.4Z", "uttarakhand": "M52.8 17.2L48.7 21.2L49.0 28.9L37.6 23.8L36.7 28.4L29.2 30.1L27.8 35.4L25.1 32.5L24.2 37.4L20.3 32.6L12.5 32.3L14.7 29.0L12.8 22.3L8.1 21.2L6.8 17.7L22.9 10.1L26.2 13.1L35.6 13.1L37.8 16.4L41.3 16.0L37.6 10.2L43.1 4.5ZM49.0 28.9L48.7 21.2L53.0 17.2L58.4 21.9L66.0 20.6L72.8 26.7L69.3 29.4L71.1 33.1L69.2 43.0L64.1 43.6L64.5 52.2L55.0 52.2L51.8 55.4L47.5 53.7L43.3 45.6L46.0 43.1L44.2 40.3L51.1 32.4ZM7.3 18.7L8.1 21.2L12.7 22.1L14.7 29.0L10.5 36.2L19.1 38.9L16.1 41.5L20.9 44.8L19.0 46.8L21.1 49.4L17.7 54.2L11.2 44.9L0.0 39.6L7.3 35.4L3.7 28.1ZM12.6 32.5L20.3 32.6L24.2 37.4L25.1 32.5L27.8 35.4L29.2 30.1L36.7 28.4L37.6 23.8L42.1 26.1L36.0 37.1L38.8 44.3L31.9 45.0L29.2 51.2L19.6 48.4L20.3 43.1L16.1 41.5L19.1 38.9L10.5 36.2ZM42.0 26.0L49.6 29.0L51.1 32.4L44.2 40.3L46.0 43.1L38.2 47.0L36.0 37.1ZM69.5 42.4L71.1 33.1L69.3 29.4L74.9 26.1L77.1 28.2L76.0 33.5L87.4 37.3L100.0 46.0L96.0 45.6L91.3 52.8L81.6 59.8L81.7 66.4L76.9 71.5L69.9 67.6L64.7 60.5L69.5 60.8L70.3 56.7L74.4 56.2L71.8 52.4L73.2 45.4ZM54.7 53.7L64.5 52.2L64.1 43.6L70.6 42.5L73.2 45.4L71.8 52.4L74.4 56.2L70.3 56.7L69.5 60.8L64.8 60.2L66.7 62.6L62.9 62.9ZM11.1 45.0L21.9 59.8L12.8 66.9L10.3 66.3L10.9 62.7L6.5 63.4L4.1 57.4ZM43.3 45.6L47.8 54.2L43.1 57.4L44.4 63.5L38.8 71.8L30.0 67.7L18.1 54.1L21.8 48.5L29.2 51.2L31.9 45.0ZM47.7 53.8L55.0 53.8L55.7 57.2L61.5 58.8L62.9 62.9L68.3 63.4L72.1 68.9L65.0 72.1L59.0 67.8L55.0 69.7L50.8 65.9L47.4 68.9L44.2 68.2L42.1 66.8L44.6 62.4L43.0 57.6ZM38.9 71.7L41.3 66.8L47.4 68.9L50.8 65.9L55.0 69.7L59.7 68.0L62.3 71.9L65.7 71.9L67.0 74.7L63.9 75.1L69.1 84.5L66.3 87.0L59.8 83.7L53.1 84.6L49.1 78.3L36.8 74.7ZM72.1 68.9L79.1 76.2L72.0 88.3L63.9 75.1L67.0 74.7L65.1 73.0L66.6 70.2ZM36.8 74.7L49.1 78.3L53.1 84.6L59.8 83.7L66.3 87.0L70.3 83.2L71.7 93.5L68.6 95.5L66.7 91.7L64.4 92.9L64.7 90.0L53.3 90.7L51.8 86.7L46.0 85.9L45.5 82.4L38.4 82.1L33.1 76.2Z", "manipur": "M75.5 63.5L65.5 57.1L65.8 49.8L63.6 47.9L65.2 41.2L93.1 31.2L87.8 50.4L83.7 52.9L77.9 65.2ZM79.9 5.9L75.5 18.0L67.5 27.8L56.9 26.9L56.4 17.1L45.2 10.1L57.7 5.3L62.3 9.2L66.4 7.7L67.8 10.8L77.4 8.3L80.5 4.1ZM51.5 19.2L54.9 21.8L45.9 29.0L48.1 36.0L45.2 48.5L28.0 46.7L20.5 55.6L16.7 48.4L21.0 39.3L20.0 36.3L30.3 19.8L32.6 24.2L37.7 26.5L47.5 12.3L53.0 15.6ZM53.1 39.3L53.9 56.2L50.6 62.8L50.8 58.9L47.2 55.6L50.9 55.3L50.6 51.3L45.8 51.5L49.6 39.7L51.5 38.1L52.6 41.1ZM50.6 62.8L54.8 60.0L59.4 66.3L57.8 67.7L55.4 64.1L51.0 80.4ZM45.8 51.5L50.6 51.3L51.5 53.5L47.2 55.6L51.2 61.1L49.1 68.2L50.5 75.4L49.1 71.6L45.7 70.7L47.5 70.9L47.3 67.9L42.3 69.6ZM50.3 79.9L52.1 80.1L51.8 72.2L55.4 64.1L64.3 70.5L67.4 77.9L66.7 83.9L69.5 86.7L64.1 100.0L57.9 95.1L47.6 95.1L44.4 90.8ZM50.3 79.9L46.3 83.8L44.4 91.3L38.6 90.5L32.8 94.2L26.6 86.4L32.1 71.4L25.2 69.6L27.1 60.5L30.1 62.0L44.0 57.9L42.3 69.6L47.3 67.9L47.5 70.9L45.7 70.7L49.1 71.6ZM54.1 52.4L52.0 42.2L55.9 41.8L54.8 39.2L57.7 39.6L58.3 34.4L59.8 43.7L63.6 41.6L59.5 52.3L60.9 54.0L57.6 56.1ZM16.7 48.3L19.5 50.6L16.8 62.3L11.6 58.8L13.4 47.4ZM65.2 41.2L63.6 47.9L66.8 57.5L62.4 57.0L63.3 51.8L59.6 53.8L63.6 41.6L59.8 43.7L58.3 34.4L54.6 42.8L52.7 42.7L53.7 39.0L52.6 41.1L51.5 38.1L49.6 39.7L44.4 57.5L42.8 56.4L48.1 36.0L45.9 29.0L54.9 21.8L51.5 19.2L53.2 16.0L56.4 17.1L56.9 26.9L67.5 27.8L62.8 33.5ZM52.8 61.2L52.4 53.5L54.2 52.3L57.6 56.1L63.3 51.8L61.3 58.8L63.2 62.0ZM65.5 57.1L75.3 61.6L76.9 65.1L69.4 85.0L66.7 83.9L67.4 77.9L64.3 70.5L57.7 65.3L58.7 61.4L63.2 62.0L61.3 58.8ZM89.1 31.0L65.2 41.2L62.8 33.5L73.0 22.2L79.9 5.9L85.1 0.0L84.2 10.2L90.1 13.3L85.2 25.7L93.2 31.0ZM18.7 53.5L21.8 55.6L28.0 46.7L45.2 48.5L43.1 58.5L30.1 62.0L21.8 60.5L18.9 64.5L16.5 63.2ZM27.1 60.5L25.2 69.6L32.1 71.4L26.6 86.4L20.5 90.0L20.3 86.8L18.4 88.5L15.0 86.4L12.9 88.8L11.9 85.7L6.8 85.1L11.0 60.2L18.9 64.5L21.8 60.5Z", "mizoram": "M56.9 43.0L53.5 39.0L51.1 38.8L48.7 44.7L50.1 46.4L48.7 48.4L44.7 47.4L42.4 38.3L43.8 34.8L42.4 33.8L43.3 23.7L42.1 21.9L49.7 19.6L51.9 11.5L50.3 8.2L52.2 4.2L55.3 4.6L56.9 6.9L54.5 15.8L58.1 16.3L58.9 18.5L60.6 16.8L62.7 18.3L60.7 27.5L56.9 29.2ZM57.0 33.1L56.9 29.2L61.2 26.3L63.2 17.1L64.7 17.4L64.4 19.3L67.3 18.2L71.1 32.6L69.8 39.4L64.6 41.6L64.3 30.3L61.6 29.0L61.2 33.3ZM62.4 56.8L61.3 52.0L57.2 50.7L55.9 48.3L64.8 43.8L65.4 45.9L68.8 46.2L69.3 53.7L65.9 58.9ZM51.6 4.9L50.3 8.2L51.8 12.2L49.7 19.6L41.8 21.8L42.5 18.9L40.5 17.2L38.9 18.8L39.3 10.8L41.4 10.5L42.0 7.3L44.3 6.4L47.0 0.0L49.2 5.6ZM53.0 76.3L54.0 83.2L49.1 85.2L50.2 95.4L44.9 91.9L44.0 97.2L41.5 98.6L37.9 68.8L40.7 68.8L47.0 78.5L48.5 73.5ZM43.7 44.1L44.8 51.3L45.6 49.6L50.4 50.6L51.4 59.8L50.1 63.8L53.8 73.5L52.3 76.7L48.5 73.5L47.5 78.5L44.6 73.9L42.8 73.9L40.7 68.8L36.8 68.7L35.8 63.1L32.9 61.5L32.1 49.8L35.9 47.9L36.4 43.9ZM42.1 21.9L43.3 23.7L42.0 28.0L43.5 31.5L42.4 38.3L43.7 44.1L36.4 43.9L36.7 46.5L33.7 48.6L29.4 34.0L28.9 27.4L31.5 23.6L30.3 10.4L34.8 10.4L36.3 15.0L38.8 13.3L38.9 18.8L40.5 17.2L42.5 18.9ZM50.2 95.4L49.2 85.0L54.2 82.6L52.6 67.1L55.6 68.6L58.2 66.5L60.4 74.7L59.2 77.3L62.1 81.4L62.7 87.8L60.5 88.6L60.8 91.0L56.9 90.3L57.6 94.0L55.8 93.8L55.5 98.7L53.7 96.8L52.1 100.0ZM44.3 46.2L48.7 48.4L50.1 40.3L53.5 39.0L56.9 43.0L55.8 48.8L61.3 52.0L62.4 56.8L60.3 56.8L59.9 58.9L57.0 57.2L53.2 51.7L50.5 52.2L49.5 49.4L45.6 49.6L45.0 51.5ZM56.9 43.0L57.0 33.1L61.2 33.3L61.6 29.0L65.0 32.1L64.6 41.6L69.4 39.7L69.7 44.1L68.6 46.2L65.4 45.9L64.8 43.8L62.8 45.8L56.8 47.0ZM52.6 67.5L50.1 63.8L51.4 59.8L50.5 52.2L52.6 51.6L60.4 59.3L61.2 62.5L58.8 67.3L56.5 66.9L55.6 68.6Z", "assam": "M91.6 28.9L87.4 25.4L88.3 21.0L93.5 16.3L99.3 16.2L95.9 20.4L97.3 25.8L100.0 26.7ZM92.1 17.7L78.2 27.5L72.0 26.3L71.9 22.0L75.4 23.4ZM88.2 21.2L87.4 25.4L91.4 26.7L91.1 30.9L83.4 29.2L81.3 31.6L79.8 28.4L77.5 30.6L79.1 25.8ZM72.3 24.0L73.0 27.6L77.9 26.8L77.1 30.0L64.9 36.3L63.3 33.3ZM77.5 30.6L80.0 28.5L79.7 34.4L83.0 33.9L77.9 38.3L74.4 34.0ZM74.4 34.1L77.6 38.3L70.3 44.7L68.1 35.6ZM53.2 34.6L54.6 40.4L41.7 41.8L42.1 34.5L47.1 32.7ZM64.5 36.0L67.5 34.5L70.9 44.8L64.9 54.2L66.3 44.0L63.4 40.1L56.8 39.6ZM42.1 34.5L42.1 40.6L39.3 39.1L37.2 42.5L32.9 41.8L31.8 36.5ZM18.6 40.9L12.3 44.1L10.4 35.0L19.9 37.0ZM31.8 36.5L33.3 42.4L25.3 42.3L22.1 39.1L20.3 43.5L20.5 40.3L18.5 40.7L22.1 36.4ZM43.1 41.8L57.3 38.7L56.9 41.9L52.9 41.4L54.1 43.1L50.7 43.8L45.8 51.5L44.8 48.2L42.7 48.9L45.4 44.9ZM10.1 35.6L11.7 44.4L9.3 46.7L6.6 44.9L7.2 47.2L3.4 48.8L2.5 37.9ZM42.1 40.6L32.5 47.2L33.8 40.6L37.2 42.5L37.6 39.4ZM18.2 41.5L20.5 40.3L20.3 43.5L22.1 39.1L24.5 39.9L24.4 47.7L16.1 48.6ZM24.6 41.6L29.9 41.1L27.2 48.5L24.1 47.7ZM41.8 42.0L45.4 44.9L39.4 49.7L36.1 46.0ZM29.8 41.5L33.6 44.3L29.5 48.3L31.9 51.9L29.8 50.3L24.1 55.8L23.7 53.3L20.7 54.0L22.2 50.7L19.7 49.2L27.2 48.5ZM11.1 43.1L18.2 41.5L18.4 44.5L11.8 47.9ZM2.3 44.1L3.4 48.8L8.4 44.1L9.3 46.7L12.4 45.6L2.3 52.9L-0.0 47.5ZM32.5 47.2L36.1 46.0L39.2 49.5L29.6 49.8ZM15.4 47.3L22.0 50.3L21.1 52.9L6.6 51.6L9.0 47.6ZM53.3 54.8L59.8 61.7L56.1 69.1L45.0 66.8L49.1 64.7L45.5 59.9ZM45.0 66.8L56.4 69.1L52.8 79.0L49.5 79.6L47.0 75.8L47.3 71.8L43.1 69.1ZM44.6 70.7L43.8 80.9L39.5 81.9L40.1 70.3ZM45.6 70.8L48.8 76.2L43.8 83.8ZM81.3 31.6L83.4 29.2L89.8 31.3L83.7 34.7L79.7 34.4ZM77.0 30.0L73.2 35.3L67.4 35.1ZM63.3 33.3L62.9 38.3L58.5 37.6L54.5 40.4L53.2 34.6ZM48.4 49.9L51.3 47.3L55.9 55.7ZM2.3 52.9L7.9 50.4L3.1 55.4L5.1 57.8L2.4 60.3ZM57.0 40.7L63.4 40.1L66.4 44.3L63.6 53.6L57.1 59.2L54.3 56.4L56.2 54.3L54.0 49.5L49.0 47.0L54.1 43.1L52.9 41.4ZM42.7 48.9L45.5 48.8L45.2 51.5L48.2 49.8L53.4 54.8L45.7 58.8L42.5 55.2L38.8 56.7L39.0 51.4Z", "nagaland": "M90.9 37.5L84.9 40.4L82.1 39.7L82.6 37.2L80.5 37.0L79.5 30.5L79.8 23.5L74.5 21.9L74.2 18.4L76.8 17.3L74.6 13.0L79.5 5.8L81.2 4.8L85.7 6.3L94.4 0.0L96.3 7.2L93.8 9.8L96.8 13.8L95.2 16.7L96.4 19.2L92.2 22.9L87.9 31.9L91.2 35.4ZM72.0 15.6L73.7 13.4L75.8 13.9L74.8 14.6L76.8 17.3L74.2 18.4L74.1 20.5L79.8 23.5L80.7 35.7L77.4 35.6L73.5 31.3L70.7 32.1L69.7 30.3L71.9 23.7L68.7 21.1L72.7 18.4ZM72.0 15.6L72.7 18.4L68.7 21.1L71.9 23.7L69.7 28.1L70.4 34.2L63.6 40.7L64.6 44.5L60.4 44.7L59.5 40.6L57.8 45.2L54.2 45.9L54.7 44.1L52.4 43.3L53.9 38.1L50.2 33.7L55.6 27.3L55.7 23.1L61.5 18.3L65.1 18.4L65.2 16.4L66.4 17.6ZM70.7 32.1L73.5 31.3L77.4 35.6L80.7 35.7L83.3 40.2L91.2 37.9L90.6 50.5L94.0 52.4L85.6 62.3L83.6 62.8L81.3 59.2L77.2 60.0L79.4 55.9L77.4 54.2L74.5 55.9L68.8 55.3L70.5 53.7L70.5 47.0L68.6 44.8L65.4 45.6L63.4 42.5ZM68.8 55.3L74.5 55.9L77.4 54.2L79.4 55.9L77.2 60.0L81.3 59.2L83.6 62.8L85.7 62.3L86.9 70.5L79.2 78.9L76.1 69.3L73.0 68.3L71.1 71.5L69.5 67.3L65.9 66.3L63.9 62.4ZM12.2 74.1L19.4 75.5L32.5 74.3L32.9 80.4L24.5 81.5L26.5 85.6L20.7 91.2L16.7 100.0L10.2 96.0L9.5 87.4L6.2 85.8L3.2 81.3ZM51.4 31.3L50.8 35.9L51.9 34.5L53.9 38.1L52.4 43.3L54.7 44.1L52.4 46.7L54.9 50.1L53.8 55.9L46.7 55.4L43.9 57.9L34.7 56.8L33.8 58.1L36.1 47.0L41.2 39.0L44.7 37.5L45.0 31.6L49.9 25.9ZM54.2 45.7L57.8 45.2L59.5 40.6L60.4 44.7L69.7 45.6L70.5 53.7L63.9 62.4L65.9 66.3L69.5 67.3L70.9 69.5L65.7 68.5L63.4 71.0L62.5 66.6L58.4 64.4L49.4 67.6L50.5 66.7L46.5 63.2L49.9 59.7L49.4 55.9L53.8 55.9L54.9 50.1L52.4 46.7ZM79.2 78.9L79.9 80.0L77.4 80.3L74.4 84.7L72.8 84.0L69.0 86.6L66.2 85.7L63.1 83.4L63.0 79.3L65.0 76.2L64.0 73.2L59.9 77.9L56.8 78.9L56.4 81.6L48.2 83.9L45.1 81.9L49.4 67.6L58.4 64.4L62.5 66.6L63.4 71.0L65.7 68.5L70.9 69.5L71.1 71.5L73.0 68.3L76.1 69.3ZM32.9 80.4L32.5 74.3L36.6 66.9L34.9 62.8L36.1 56.9L43.9 57.9L46.7 55.4L49.5 56.2L49.9 59.7L46.5 63.2L50.5 66.7L46.4 74.3L45.3 80.9L41.3 82.4L36.7 78.6ZM33.8 58.1L36.1 56.9L34.9 62.8L36.9 64.8L34.3 73.1L30.3 75.0L12.2 74.1L14.9 69.5L22.1 64.8L20.4 61.6L24.6 58.1L26.0 66.8L35.0 60.9Z"};
+const PORTFOLIO = [
+  { shape:"sikkim", key:"sikkim", name:"Sikkim", ventures:["Agapi","NE Origins","Sajilo","Bayul Creations","Crafted Fibres"], plus:1 },
+  { shape:"jammu-and-kashmir", key:"jk", name:"Jammu & Kashmir", ventures:["FastBeetle","Curve Electric","Zarin","Lieperbooks"] },
+  { shape:"ladakh", key:"ladakh", name:"Ladakh", ventures:["Siachen Naturals","Acres of Ice","Ladakh Basket","Ladakh Bites","Nima Goos Goos"] },
+  { shape:"uttarakhand", key:"uk", name:"Uttarakhand", ventures:["D.E.S.C.A.T UK","Kumaon Khand","Danphey"] },
+  { shape:"manipur", key:"manipur", name:"Manipur", ventures:["Hill Wild"] },
+  { shape:"mizoram", key:"mizoram", name:"Mizoram", ventures:["Local All Natural Soda"] },
+  { shape:"assam", key:"assam", name:"Assam", ventures:["Rivtra"], plus:1 },
+  { shape:"nagaland", key:"nagaland", name:"Nagaland", ventures:["NagaEd"] },
+];
 const PROV_TAGS = ["Environmental","Biodiversity","Social","Traceability","Commodity","GI Status"];
 
 const COMMODITIES = [
@@ -570,7 +601,40 @@ function renderProvChips(){
 }
 
 /* ============================== LAYER 1 ============================== */
+function renderPortfolioMap(){
+  const el = $("#pmap");
+  const tiles = PORTFOLIO.map(r=>{
+    const covered = !!GEOS[r.key];
+    const active = state.geo===r.key;
+    const chips = r.ventures.map(v=>`<span class="tag">${v}</span>`).join("")
+      + (r.plus?`<span class="tag" style="opacity:.65">+${r.plus} more</span>`:"");
+    const count = r.ventures.length + (r.plus||0);
+    return `<div class="pmap-tile ${covered?'clickable':''} ${active?'active':''}"${covered?` data-pgeo="${r.key}" role="button" tabindex="0" aria-pressed="${active}"`:""}>
+      <svg class="pmap-shape" viewBox="-7 -7 114 114" aria-hidden="true"><path d="${REGION_SHAPES[r.shape]}"/></svg>
+      <div class="pmap-name">${r.name}</div>
+      <div class="pmap-count">${count} venture${count>1?"s":""}${covered?"":" · portfolio only"}</div>
+      <div class="pmap-chips">${chips}</div>
+    </div>`;
+  }).join("");
+  el.innerHTML = `<div class="card-head"><h3>Our portfolio across the Himalayas</h3><span class="hint">8 regions · click a region with data coverage to filter the platform</span><button class="tbl-btn" data-toggle>⊞ table</button></div>
+    <div class="viz"><div class="pmap-grid">${tiles}</div></div>
+    <div class="tblwrap">${tableHTML(["Region","Ventures","Regional data coverage"],
+      PORTFOLIO.map(r=>[r.name, r.ventures.join(", ")+(r.plus?` (+${r.plus} more)`:""), GEOS[r.key]?"Filterable in this dashboard":"Portfolio only"]))}</div>`;
+  el.querySelector("[data-toggle]").onclick = () => {
+    el.classList.toggle("show-table");
+    el.querySelector("[data-toggle]").textContent = el.classList.contains("show-table") ? "◫ chart" : "⊞ table";
+  };
+  el.querySelectorAll("[data-pgeo]").forEach(t=>{
+    const go = ()=>{ state.geo = state.geo===t.dataset.pgeo ? "all" : t.dataset.pgeo;
+      const vs = Object.entries(VENTURES).filter(([,v])=>state.geo==="all"||v.geo===state.geo);
+      if(vs.length && !vs.some(([k])=>k===state.venture)) state.venture = vs[0][0];
+      renderAll(); };
+    t.addEventListener("click", go);
+    t.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+  });
+}
 function renderL1(){
+  renderPortfolioMap();
   const gs = activeGeos().map(k=>GEOS[k]);
   const pop = gs.reduce((a,g)=>a+g.popN,0);
   const forest = gs.reduce((a,g)=>a+g.forest,0)/gs.length;
