@@ -2,36 +2,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root{
-    --plane:#f8f4f1; --surface:#fffdfb; --ink:#221c1b; --ink2:#5d534f; --muted:#8d817b;
-    --grid:#e9e1db; --baseline:#c9beb6; --border:rgba(40,33,32,.12);
-    --accent:#9d423c; --accent-ink:#fff; --accent-soft:rgba(157,66,60,.09);
-    --apricot:#b1544c; --apricot-soft:rgba(177,84,76,.12);
-    --brandmap:#9d423c;
+    --plane:#f5f1e9; --surface:#fffefa; --ink:#141110; --ink2:#5a5248; --muted:#8b8377;
+    --grid:#e6dfd0; --baseline:#cbc2b0; --border:rgba(20,17,16,.12);
+    --accent:#8d1812; --accent-ink:#fff; --accent-soft:rgba(141,24,18,.07);
+    --apricot:#c17f6c; --apricot-soft:rgba(193,127,108,.14);
+    --brandgreen:#3d7749; --brandgreen-soft:rgba(61,119,73,.14); --brandgreen-lt:#a3d39d;
+    --brandmap:#8d1812;
     --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#4a3aa7; --s8:#e34948;
     --seq1:#cde2fb; --seq2:#9ec5f4; --seq3:#6da7ec; --seq4:#3987e5; --seq5:#256abf; --seq6:#184f95;
-    --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b; --good-text:#006300;
+    --good:#3d7749; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b; --good-text:#2e5d38;
     color-scheme:light;
   }
   @media (prefers-color-scheme: dark){
     :root:where(:not([data-theme="light"])){
-      --plane:#171211; --surface:#221b19; --ink:#f5efec; --ink2:#c6bab3; --muted:#8d817b;
-      --grid:#352c29; --baseline:#453a36; --border:rgba(255,255,255,.10);
-      --accent:#c97f75; --accent-ink:#221512; --accent-soft:rgba(201,127,117,.16);
-      --apricot:#cd8a80; --apricot-soft:rgba(205,138,128,.16);
-      --brandmap:#b1544c;
+      --plane:#121010; --surface:#1d1918; --ink:#f6f2ec; --ink2:#c9c0b4; --muted:#8b8377;
+      --grid:#322c27; --baseline:#463e37; --border:rgba(255,255,255,.10);
+      --accent:#c4574e; --accent-ink:#fff; --accent-soft:rgba(196,87,78,.16);
+      --apricot:#d1937f; --apricot-soft:rgba(209,147,127,.16);
+      --brandgreen:#7fb87a; --brandgreen-soft:rgba(163,211,157,.16); --brandgreen-lt:#a3d39d;
+      --brandgreen:#7fb87a; --brandgreen-soft:rgba(163,211,157,.16); --brandgreen-lt:#a3d39d;
+    --brandmap:#a8322a;
       --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
-      --good-text:#0ca30c;
+      --good-text:#a3d39d;
       color-scheme:dark;
     }
   }
   :root[data-theme="dark"]{
-    --plane:#171211; --surface:#221b19; --ink:#f5efec; --ink2:#c6bab3; --muted:#8d817b;
-    --grid:#352c29; --baseline:#453a36; --border:rgba(255,255,255,.10);
-    --accent:#c97f75; --accent-ink:#221512; --accent-soft:rgba(201,127,117,.16);
-    --apricot:#cd8a80; --apricot-soft:rgba(205,138,128,.16);
-    --brandmap:#b1544c;
+    --plane:#121010; --surface:#1d1918; --ink:#f6f2ec; --ink2:#c9c0b4; --muted:#8b8377;
+    --grid:#322c27; --baseline:#463e37; --border:rgba(255,255,255,.10);
+    --accent:#c4574e; --accent-ink:#fff; --accent-soft:rgba(196,87,78,.16);
+    --apricot:#d1937f; --apricot-soft:rgba(209,147,127,.16);
+    --brandmap:#a8322a;
     --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
-    --good-text:#0ca30c;
+    --good-text:#a3d39d;
     color-scheme:dark;
   }
   *{box-sizing:border-box}
@@ -71,7 +74,7 @@
   section.layer{display:none}
   section.layer.active{display:block}
   .layer-head{margin:2px 0 18px;max-width:760px}
-  .eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--apricot);font-weight:650;margin:0 0 4px}
+  .eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:650;margin:0 0 4px}
   .layer-head h2{font-size:21px;font-weight:650;margin:0 0 6px;letter-spacing:-.01em;text-wrap:balance}
   .layer-head p{color:var(--ink2);margin:0;font-size:13.5px}
   .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
@@ -189,7 +192,7 @@
   /* ---------- himalayan coverage ---------- */
   .cov-wrap{display:flex;gap:26px;flex-wrap:wrap;margin:6px 0 4px}
   .cov-stat{width:255px;flex:none}
-  .cov-num{font-size:46px;font-weight:680;letter-spacing:-.02em;line-height:1}
+  .cov-num{font-size:46px;font-weight:680;letter-spacing:-.02em;line-height:1;color:var(--accent)}
   .cov-num span{font-size:22px;font-weight:550;color:var(--muted)}
   .cov-lbl{font-size:12.5px;color:var(--ink2);margin:6px 0 10px}
   .cov-chips{flex:1;min-width:260px;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
@@ -764,7 +767,7 @@ function renderCoverage(){
       <div class="cov-stat">
         <div class="cov-num">${active}<span> / ${IHR.length}</span></div>
         <div class="cov-lbl">Himalayan states &amp; UTs where Alsisar Impact is active</div>
-        <div class="meter" data-tip="<b>Coverage</b><br>${active} of ${IHR.length} Himalayan states &amp; UTs"><i style="width:${Math.round(active/IHR.length*100)}%"></i></div>
+        <div class="meter" style="background:var(--brandgreen-soft)" data-tip="<b>Coverage</b><br>${active} of ${IHR.length} Himalayan states &amp; UTs"><i style="width:${Math.round(active/IHR.length*100)}%;background:var(--brandgreen)"></i></div>
         <div class="pm-note">The Indian Himalayan Region spans ${IHR.length} states &amp; UTs, from Jammu &amp; Kashmir to the Northeast hills.</div>
       </div>
       <div class="cov-chips">${chips}</div>
@@ -809,7 +812,7 @@ function initLeafMapView(ind){
   PORTFOLIO.forEach(r=>{
     const g = GEOS[r.key], c = GEO_LL[r.key];
     const rad = 10 + 22*Math.sqrt(ind.get(g)/vmax);
-    L.circleMarker(c, {radius:rad, color:"#ffffff", weight:2, fillColor:"#b1544c", fillOpacity:.8})
+    L.circleMarker(c, {radius:rad, color:"#ffffff", weight:2, fillColor:"#c17f6c", fillOpacity:.8})
       .bindPopup(`<b>${g.name}</b> · ${g.type}<br>${ind.label}: ${ind.fmt(g)}<br>Area ${g.area} km² · Forest ${(g.forestEst?"~":"")+g.forest}%<br>Rainfall ~${fmt(g.rainTotal)} mm/yr<br><br>${g.hazards.map(h=>h[0]).join("<br>")}`)
       .addTo(regions);
   });
@@ -820,7 +823,7 @@ function initLeafMapView(ind){
     const c = TOWN_LL[v.town]; if(!c) return;
     const n = seen[v.town] = (seen[v.town]||0)+1;
     const pos = [c[0] + (n-1)*0.045, c[1] + (n-1)*0.02];
-    L.circleMarker(pos, {radius:6, color:"#ffffff", weight:2, fillColor:"#21634b", fillOpacity:.95})
+    L.circleMarker(pos, {radius:6, color:"#ffffff", weight:2, fillColor:"#3d7749", fillOpacity:.95})
       .bindPopup(`<b>${v.n}</b><br>${v.town}${v.approx?" (approx.)":""} · ${GEOS[r.key].name}`)
       .addTo(startups);
   }));
