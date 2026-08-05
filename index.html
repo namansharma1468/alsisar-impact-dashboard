@@ -79,8 +79,9 @@
   .f-sep{width:1px;align-self:stretch;background:var(--border);margin:0 4px}
 
   /* ---------- layout ---------- */
-  main{padding:26px 0 10px}
-  section.layer{display:none}
+  main{padding:0 0 10px}
+  section.layer{display:none;padding-top:26px}
+  #l1{padding-top:0}
   section.layer.active{display:block}
   .layer-head{margin:10px 0 24px;max-width:780px}
   .part-head{display:flex;align-items:center;gap:16px;margin:30px 0 14px}
@@ -232,6 +233,38 @@
   .cov-tbl{margin-top:14px;overflow-x:auto}
   tr.hl td{color:var(--ink) !important;font-weight:600}
 
+  /* ---------- layer 1 editorial bands ---------- */
+  main{overflow-x:clip}
+  .hero-band{margin:0 calc(50% - 50vw) 30px;padding:40px calc(50vw - 50%) 8px;background:linear-gradient(155deg,#1a1511 0%,#2b211a 70%,#33261c 100%);border-bottom:1px solid rgba(255,255,255,.05)}
+  .hero-band .eyebrow{color:#d98d80}
+  .hero-band .layer-head h2{color:#f7f2ea}
+  .hero-band .layer-head p{color:#b6aa9b}
+  .hero-band #pmap{background:transparent;border:none;box-shadow:none;padding:8px 0 30px;margin:0;overflow:visible}
+  .hero-band #pmap:hover{transform:none;box-shadow:none}
+  .hero-band #pmap .card-head h3{color:#f7f2ea}
+  .hero-band #pmap .hint{color:#8f8476}
+  .hero-band .cov-num{color:#e2685e}
+  .hero-band .cov-num span{color:#8f8476}
+  .hero-band .cov-lbl{color:#d6cabb}
+  .hero-band .pm-note{color:#8f8476}
+  .hero-band .meter{background:rgba(163,211,157,.16) !important}
+  .hero-band .meter i{background:#a3d39d !important}
+  .hero-band .chip-ihr{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.15);color:#efe8dc;box-shadow:none}
+  .hero-band .chip-ihr:hover{background:rgba(255,255,255,.11)}
+  .hero-band .chip-ihr .dot{background:#a3d39d}
+  .hero-band .chip-ihr[aria-pressed="true"]{background:#c2473d;border-color:#c2473d;color:#fff}
+  .hero-band .chip-ihr[aria-pressed="true"] .dot{background:#fff}
+  .hero-band .chip-ihr.off{color:#786e61;background:transparent}
+  .hero-band .ridge-deco{opacity:.6}
+  .hero-band .ridge-deco path:first-child{fill:rgba(255,255,255,.045)}
+  .hero-band .ridge-deco path:last-child{stroke:#5e8f60}
+  .band-b{margin:34px calc(50% - 50vw) -10px;padding:6px calc(50vw - 50%) 34px;background:linear-gradient(180deg,transparent,var(--tint) 90px)}
+  .stat-strip{padding:0;display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden}
+  .s-cell{padding:20px 24px 18px;border-left:1px solid var(--grid)}
+  .s-cell:first-child{border-left:none}
+  @media(max-width:900px){.stat-strip{grid-template-columns:1fr 1fr}.s-cell:nth-child(3){border-left:none}.s-cell{border-top:1px solid var(--grid)}.s-cell:nth-child(-n+2){border-top:none}}
+  @media(max-width:560px){.stat-strip{grid-template-columns:1fr}.s-cell{border-left:none;border-top:1px solid var(--grid)}.s-cell:first-child{border-top:none}}
+
   /* ---------- tooltip / footer ---------- */
   #tip{position:fixed;z-index:99;pointer-events:none;background:var(--ink);color:var(--plane);font-size:12px;line-height:1.45;padding:7px 10px;border-radius:7px;max-width:260px;opacity:0;transition:opacity .1s;box-shadow:0 4px 14px rgba(0,0,0,.18)}
   #tip b{font-weight:650}
@@ -276,12 +309,14 @@
 
   <!-- ================= LAYER 1 ================= -->
   <section class="layer active" id="l1" role="tabpanel" aria-labelledby="tab1">
+   <div class="hero-band">
     <div class="layer-head">
       <p class="eyebrow">Layer 1 · Regional Overview</p>
       <h2>The operating context</h2>
       <p>Part A — demographic context; Part B — geographic &amp; climate context. The Indian Himalayan Region spans 12 states &amp; UTs, with Alsisar Impact active in 8. The geography filter above scopes every layer of the platform.</p>
     </div>
-    <div class="card" id="pmap" style="margin-bottom:14px"></div>
+    <div class="card" id="pmap"></div>
+   </div>
     <div class="part-head"><span>Part A · Demographic overview</span></div>
     <div class="grid" id="l1-tiles"></div>
     <div class="grid" id="l1-geocards" style="margin-top:14px"></div>
@@ -289,6 +324,7 @@
       <div class="card c6" id="ch-lit"></div>
       <div class="card c6" id="ch-agri"></div>
     </div>
+   <div class="band-b">
     <div class="part-head"><span>Part B · Geographic overview</span></div>
     <div class="grid" id="l1b-tiles"></div>
     <div class="card" id="geomap" style="margin-top:14px"></div>
@@ -298,6 +334,7 @@
       <div class="card c6" id="ch-rain"></div>
       <div class="card c6" id="ch-ndvi"></div>
     </div>
+   </div>
   </section>
 
   <!-- ================= LAYER 2 ================= -->
@@ -1016,22 +1053,24 @@ function renderL1(){
   const lit = gs.reduce((a,g)=>a+g.lit,0)/gs.length;
   const agri = gs.reduce((a,g)=>a+g.agri,0)/gs.length;
   $("#l1-tiles").innerHTML = `
-    <div class="card c3 tile"><div class="t-label">Population covered</div>
+    <div class="card stat-strip">
+    <div class="s-cell tile"><div class="t-label">Population covered</div>
       <div class="t-value"><span class="cnum" data-v="${pop.toFixed(2)}" data-dec="2">${pop.toFixed(2)}</span><span class="unit">M</span></div>
       <div class="t-note">Census 2011 · ${gs.length} ${gs.length>1?"geographies":"geography"}</div></div>
-    <div class="card c3 tile"><div class="t-label">Population density</div>
+    <div class="s-cell tile"><div class="t-label">Population density</div>
       <div class="t-value"><span class="cnum" data-v="${Math.round(pop*1e6/areaSel)}" data-grp="1">${fmt(Math.round(pop*1e6/areaSel))}</span><span class="unit">/km²</span></div>
       <div class="t-note">people per km² of geographic area</div></div>
-    <div class="card c3 tile"><div class="t-label">Literacy${gs.length>1?" (avg)":""}</div>
+    <div class="s-cell tile"><div class="t-label">Literacy${gs.length>1?" (avg)":""}</div>
       <div class="t-value"><span class="cnum" data-v="${lit.toFixed(1)}" data-dec="1">${lit.toFixed(1)}</span><span class="unit">%</span></div>
       <div class="t-note">Census 2011${gs.some(g=>g.litEst)?" · partly indicative":""}</div></div>
-    <div class="card c3 tile"><div class="t-label">Workforce in agriculture${gs.length>1?" (avg)":""}</div>
+    <div class="s-cell tile"><div class="t-label">Workforce in agriculture${gs.length>1?" (avg)":""}</div>
       <div class="t-value">~<span class="cnum" data-v="${Math.round(agri)}">${Math.round(agri)}</span><span class="unit">%</span></div>
-      <div class="t-note">${estMark("indicative")} · share of workers</div></div>`;
+      <div class="t-note">${estMark("indicative")} · share of workers</div></div>
+    </div>`;
   animateCounts($("#l1-tiles"));
 
   $("#l1-geocards").innerHTML = Object.entries(GEOS).map(([k,g])=>`
-    <div class="card c3 geo-card${hl(k)}">
+    <div class="card c3 geo-card${hl(k)}" style="border-top:3px solid ${g.color}">
       <h4><span style="width:9px;height:9px;border-radius:3px;background:${g.color};display:inline-block"></span>${g.name}</h4>
       <div class="g-type">${g.type}</div>
       <dl class="kv">
@@ -1071,7 +1110,7 @@ function renderL1(){
   renderGeoMap();
 
   $("#l1b-geocards").innerHTML = Object.entries(GEOS).map(([k,g])=>`
-    <div class="card c3 geo-card${hl(k)}">
+    <div class="card c3 geo-card${hl(k)}" style="border-top:3px solid ${g.color}">
       <h4><span style="width:9px;height:9px;border-radius:3px;background:${g.color};display:inline-block"></span>${g.name}</h4>
       <div class="g-type">${g.type}</div>
       <dl class="kv">
