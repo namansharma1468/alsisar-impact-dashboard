@@ -2,148 +2,161 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root{
-    --plane:#ffffff; --surface:#ffffff; --tint:#f5f1e9;
-    --shadow:0 1px 2px rgba(20,17,16,.05),0 10px 28px rgba(20,17,16,.06);
-    --shadow-h:0 2px 6px rgba(20,17,16,.08),0 16px 40px rgba(20,17,16,.11);
-    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif; --ink:#141110; --ink2:#5a5248; --muted:#8b8377;
-    --grid:#e6dfd0; --baseline:#cbc2b0; --border:rgba(20,17,16,.12);
-    --accent:#8d1812; --accent-ink:#fff; --accent-soft:rgba(141,24,18,.07);
-    --apricot:#c17f6c; --apricot-soft:rgba(193,127,108,.14);
-    --brandgreen:#3d7749; --brandgreen-soft:rgba(61,119,73,.14); --brandgreen-lt:#a3d39d;
-    --brandmap:#8d1812;
+    /* --- editorial ground --- */
+    --plane:#EDEEEA; --surface:#F7F7F4; --tint:#E3E5DE;
+    --ink:#16201E; --ink2:#3A4B46; --muted:#6E7770;
+    --grid:#CBCEC6; --baseline:#A3A99F; --border:#CBCEC6;
+    --rule:#16201E;
+    --accent:#9E3B2C; --accent-ink:#F7F7F4; --accent-soft:rgba(158,59,44,.09);
+    --apricot:#B8862B; --apricot-soft:rgba(184,134,43,.14);
+    --brandgreen:#4A6741; --brandgreen-soft:rgba(74,103,65,.14); --brandgreen-lt:#6E9A94;
+    --glacier:#6E9A94; --brandmap:#9E3B2C;
+    /* --- inverse surfaces (masthead, ruler, hero stat, footprint, footer). These stay dark in
+           BOTH themes; in dark mode they go deeper than the page so they still read as inset. --- */
+    --invert-bg:#16201E; --invert-2:#22302C; --invert-line:#33433E;
+    --invert-fg:#EDEEEA; --invert-fg-2:#C6CCC8; --invert-mut:#8B9A94; --invert-mut-2:#6E7770;
+    --invert-accent:#C4674F;
+    /* --- categorical series (validated: adjacent CVD ΔE 9.1, normal 19.6 on this surface) --- */
     --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#4a3aa7; --s8:#e34948;
     --seq1:#cde2fb; --seq2:#9ec5f4; --seq3:#6da7ec; --seq4:#3987e5; --seq5:#256abf; --seq6:#184f95;
-    --good:#3d7749; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b; --good-text:#2e5d38;
+    /* --- value-chain ramp: highlight + receding neutrals --- */
+    --vc1:#9E3B2C; --vc2:#3A4B46; --vc3:#4E605A; --vc4:#68807A;
+    --good:#4A6741; --warn:#B8862B; --serious:#C4674F; --crit:#9E3B2C; --good-text:#3B5335;
+    --disp:"Bricolage Grotesque","Segoe UI Variable Display",-apple-system,"Segoe UI",system-ui,sans-serif;
+    --body:"Inter Tight",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
     color-scheme:light;
   }
   @media (prefers-color-scheme: dark){
     :root:where(:not([data-theme="light"])){
-      --plane:#121010; --surface:#1d1918; --tint:#272220;
-    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);
-    --shadow-h:0 2px 6px rgba(0,0,0,.5),0 16px 40px rgba(0,0,0,.45); --tint:#272220;
-      --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);
-      --shadow-h:0 2px 6px rgba(0,0,0,.5),0 16px 40px rgba(0,0,0,.45); --ink:#f6f2ec; --ink2:#c9c0b4; --muted:#8b8377;
-      --grid:#322c27; --baseline:#463e37; --border:rgba(255,255,255,.10);
-      --accent:#c4574e; --accent-ink:#fff; --accent-soft:rgba(196,87,78,.16);
-      --apricot:#d1937f; --apricot-soft:rgba(209,147,127,.16);
-      --brandgreen:#7fb87a; --brandgreen-soft:rgba(163,211,157,.16); --brandgreen-lt:#a3d39d;
-      --brandgreen:#7fb87a; --brandgreen-soft:rgba(163,211,157,.16); --brandgreen-lt:#a3d39d;
-    --brandmap:#a8322a;
+      --plane:#16201E; --surface:#1D2926; --tint:#26332F;
+      --ink:#EDEEEA; --ink2:#C6CCC8; --muted:#8B9A94;
+      --grid:#33433E; --baseline:#4A5C56; --border:#33433E; --rule:#8B9A94;
+      --accent:#C4674F; --accent-ink:#16201E; --accent-soft:rgba(196,103,79,.16);
+      --apricot:#C9A24B; --apricot-soft:rgba(201,162,75,.16);
+      --brandgreen:#7FA36F; --brandgreen-soft:rgba(127,163,111,.16); --brandgreen-lt:#8FB7B1;
+      --glacier:#8FB7B1; --brandmap:#C4674F;
+      --invert-bg:#0E1614; --invert-2:#1A2624; --invert-line:#2B3A35; --invert-mut-2:#78877F;
       --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
-      --good-text:#a3d39d;
+      --vc1:#C4674F; --vc2:#8B9A94; --vc3:#6E8079; --vc4:#53655F;
+      --good:#7FA36F; --warn:#C9A24B; --serious:#D08A6E; --crit:#C4574E; --good-text:#A9C79B;
       color-scheme:dark;
     }
   }
   :root[data-theme="dark"]{
-    --plane:#121010; --surface:#1d1918; --ink:#f6f2ec; --ink2:#c9c0b4; --muted:#8b8377;
-    --grid:#322c27; --baseline:#463e37; --border:rgba(255,255,255,.10);
-    --accent:#c4574e; --accent-ink:#fff; --accent-soft:rgba(196,87,78,.16);
-    --apricot:#d1937f; --apricot-soft:rgba(209,147,127,.16);
-    --brandmap:#a8322a;
+    --plane:#16201E; --surface:#1D2926; --tint:#26332F;
+    --ink:#EDEEEA; --ink2:#C6CCC8; --muted:#8B9A94;
+    --grid:#33433E; --baseline:#4A5C56; --border:#33433E; --rule:#8B9A94;
+    --accent:#C4674F; --accent-ink:#16201E; --accent-soft:rgba(196,103,79,.16);
+    --apricot:#C9A24B; --apricot-soft:rgba(201,162,75,.16);
+    --brandgreen:#7FA36F; --brandgreen-soft:rgba(127,163,111,.16); --brandgreen-lt:#8FB7B1;
+    --glacier:#8FB7B1; --brandmap:#C4674F;
+    --invert-bg:#0E1614; --invert-2:#1A2624; --invert-line:#2B3A35; --invert-mut-2:#78877F;
     --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
-    --good-text:#a3d39d;
+    --vc1:#C4674F; --vc2:#8B9A94; --vc3:#6E8079; --vc4:#53655F;
+    --good:#7FA36F; --warn:#C9A24B; --serious:#D08A6E; --crit:#C4574E; --good-text:#A9C79B;
     color-scheme:dark;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
-  body{background:var(--plane);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
-  body::before{content:"";position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#c17f6c 45%,var(--brandgreen));z-index:120}
+  html{scroll-behavior:smooth}
+  body{background:var(--plane);color:var(--ink);font:15px/1.6 var(--body);-webkit-font-smoothing:antialiased}
   button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
-  button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
-  a{color:var(--accent)}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+  button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--glacier);outline-offset:2px}
+  a{color:inherit;text-underline-offset:2px}
+  .wrap{max-width:1220px;margin:0 auto;padding:0 28px}
+  h1,h2,h3,h4{font-family:var(--disp);font-weight:600;letter-spacing:-.02em;line-height:1.1;margin:0}
+  .ring{color:var(--accent)}
 
   /* ---------- masthead ---------- */
-  header.mast{border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:40}
-  .mast-inner{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:17px 0 0}
-  .brand{display:flex;align-items:center;gap:11px;padding-bottom:14px}
-  .brand-logo{height:44px;width:auto;display:block;background:#fff;border-radius:7px;padding:5px 10px;border:1px solid var(--border);flex:none}
-  .brand h1{font-size:15px;font-weight:650;margin:0;line-height:1.2}
-  .brand .sub{font-size:11px;color:var(--ink2);letter-spacing:.04em}
-  .tabs{display:flex;gap:2px;margin-left:auto;align-self:stretch}
-  .tab{padding:12px 16px 15px;font-size:13px;font-weight:550;color:var(--ink2);border-bottom:2px solid transparent;display:flex;flex-direction:column;align-items:flex-start;gap:1px}
-  .tab .t-eyebrow{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
-  .tab:hover{color:var(--ink)}
-  .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
-  .tab[aria-selected="true"] .t-eyebrow{color:var(--accent)}
+  header.mast{border-bottom:1px solid var(--invert-line);background:var(--invert-bg);color:var(--invert-fg);position:sticky;top:0;z-index:40}
+  .mast-inner{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:14px 0 0}
+  .brand{display:flex;align-items:center;gap:11px;padding-bottom:12px}
+  .brand-logo{height:40px;width:auto;display:block;background:#F7F7F4;padding:5px 10px;border:1px solid var(--invert-line);flex:none}
+  .brand .sub{font-family:var(--mono);font-size:10.5px;color:var(--invert-mut);letter-spacing:.06em}
+  .tabs{display:flex;gap:0;margin-left:auto;align-self:stretch}
+  .tab{padding:10px 18px 13px;font-size:13.5px;font-weight:500;color:var(--invert-mut);border-bottom:2px solid transparent;display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+  .tab .t-eyebrow{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--invert-mut-2);font-weight:400}
+  .tab:hover{color:var(--invert-fg)}
+  .tab[aria-selected="true"]{color:var(--invert-fg);border-bottom-color:var(--accent)}
+  .tab[aria-selected="true"] .t-eyebrow{color:var(--invert-accent)}
+  @media(max-width:620px){.tabs{margin-left:0;width:100%;overflow-x:auto}}
 
   /* ---------- filter row ---------- */
-  .filterbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 0}
-  .filterbar .wrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .f-label{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-right:2px}
-  .chip{border:1px solid var(--border);border-radius:999px;padding:5px 13px;font-size:12.5px;font-weight:520;color:var(--ink2);background:var(--surface);transition:background .12s}
-  .chip{transition:background .15s,transform .15s}
-  .chip:hover{background:var(--accent-soft);color:var(--ink);transform:translateY(-1px)}
-  .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
-  .chip .n{opacity:.65;font-weight:400;margin-left:4px}
-  .f-sep{width:1px;align-self:stretch;background:var(--border);margin:0 4px}
+  .filterbar{background:var(--surface);border-bottom:1px solid var(--border);padding:9px 0}
+  .filterbar .wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .f-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+  .chip{border:1px solid var(--border);padding:4px 12px;font-size:12.5px;color:var(--ink2);background:var(--surface);transition:background .14s,color .14s}
+  .chip:hover{background:var(--accent-soft);color:var(--ink)}
+  .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--plane)}
+  .chip .n{opacity:.6;margin-left:5px;font-family:var(--mono);font-size:10px}
 
   /* ---------- layout ---------- */
-  main{padding:26px 0 10px}
+  main{padding:0 0 10px}
   section.layer{display:none}
   section.layer.active{display:block}
-  .layer-head{margin:10px 0 24px;max-width:780px}
-  .part-head{display:flex;align-items:center;gap:16px;margin:30px 0 14px}
-  .part-head span{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);font-weight:700;white-space:nowrap}
+  .layer-head{margin:44px 0 26px;max-width:800px}
+  .part-head{display:flex;align-items:center;gap:16px;margin:40px 0 14px}
+  .part-head span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
   .part-head::after{content:"";flex:1;height:1px;background:var(--grid)}
-  .eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:650;margin:0 0 4px}
-  .layer-head h2{font-family:var(--serif);font-size:34px;font-weight:600;margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
-  .layer-head p{color:var(--ink2);margin:0;font-size:13.5px}
-  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
-  .card{grid-column:span 12;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px 14px;min-width:0;box-shadow:var(--shadow);transition:box-shadow .22s,transform .22s}
-  .card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}
-  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-  .grid .card{animation:rise .4s ease both}
-  .grid .card:nth-child(2){animation-delay:.05s}.grid .card:nth-child(3){animation-delay:.1s}
-  .grid .card:nth-child(4){animation-delay:.15s}.grid .card:nth-child(5){animation-delay:.2s}
-  .grid .card:nth-child(6){animation-delay:.25s}.grid .card:nth-child(7){animation-delay:.3s}
-  .grid .card:nth-child(8){animation-delay:.35s}
+  .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:400;margin:0 0 10px}
+  .layer-head h2{font-size:clamp(28px,3.8vw,42px);margin:0 0 10px;text-wrap:balance}
+  .layer-head p{color:var(--ink2);margin:0;font-size:15px;max-width:64ch}
+  /* 1px gap + a 1px ring on every card: hairlines stay crisp even on a partly filled row */
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1px}
+  .card{grid-column:span 12;background:var(--surface);padding:18px 20px 16px;min-width:0;box-shadow:0 0 0 1px var(--border)}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .grid .card{animation:rise .38s ease both}
+  .grid .card:nth-child(2){animation-delay:.04s}.grid .card:nth-child(3){animation-delay:.08s}
+  .grid .card:nth-child(4){animation-delay:.12s}.grid .card:nth-child(5){animation-delay:.16s}
+  .grid .card:nth-child(6){animation-delay:.2s}.grid .card:nth-child(7){animation-delay:.24s}
+  .grid .card:nth-child(8){animation-delay:.28s}
+  .card.solo{box-shadow:0 0 0 1px var(--border)}
   .c6{grid-column:span 6}.c4{grid-column:span 4}.c3{grid-column:span 3}.c8{grid-column:span 8}
   @media(max-width:900px){.c6,.c8{grid-column:span 12}.c4{grid-column:span 6}.c3{grid-column:span 6}}
   @media(max-width:560px){.c4,.c3{grid-column:span 12}}
-  .card-head{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
-  .card-head h3{font-size:14px;font-weight:700;margin:0}
-  .card-head .hint{font-size:11.5px;color:var(--muted)}
-  .tbl-btn{margin-left:auto;font-size:11px;font-weight:600;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:3px 11px;flex:none;background:var(--surface);transition:all .15s}
-  .tbl-btn:hover{color:var(--ink);background:var(--accent-soft)}
+  .card-head{display:flex;align-items:baseline;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+  .card-head h3{font-family:var(--body);font-size:13.5px;font-weight:600;letter-spacing:0;margin:0}
+  .card-head .hint{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em}
+  .tbl-btn{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--muted);border:1px solid var(--border);padding:3px 9px;flex:none;background:var(--surface);transition:all .14s}
+  .tbl-btn:hover{color:var(--ink);border-color:var(--ink)}
   .card.show-table .viz{display:none}
   .card .tblwrap{display:none;overflow-x:auto;margin-top:6px}
   .card.show-table .tblwrap{display:block}
   table.dt{border-collapse:collapse;width:100%;font-size:12.5px}
-  table.dt th{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);text-align:left;font-weight:600;padding:6px 12px 6px 0;border-bottom:1px solid var(--grid)}
-  table.dt td{padding:6px 12px 6px 0;border-bottom:1px solid var(--grid);color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap}
+  table.dt th{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);text-align:left;font-weight:400;padding:0 14px 8px 0;border-bottom:1px solid var(--rule)}
+  table.dt td{padding:7px 14px 7px 0;border-bottom:1px solid var(--grid);color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap}
   table.dt td:first-child{color:var(--ink)}
 
   /* ---------- stat tiles ---------- */
-  .tile .t-label{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:650;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-  .tile .t-value{font-size:38px;font-weight:700;letter-spacing:-.02em;line-height:1.05}
-  .tile .t-value .unit{font-size:14px;font-weight:520;color:var(--ink2);margin-left:2px}
-  .tile .t-note{font-size:11.5px;color:var(--muted);margin-top:7px}
-  .hero-num{font-size:52px;font-weight:680;letter-spacing:-.02em;line-height:1}
+  .tile .t-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .tile .t-value{font-family:var(--disp);font-size:40px;font-weight:600;letter-spacing:-.03em;line-height:1}
+  .tile .t-value .unit{font-family:var(--body);font-size:14px;font-weight:400;color:var(--ink2);margin-left:3px;letter-spacing:0}
+  .tile .t-note{font-size:12px;color:var(--muted);margin-top:9px;line-height:1.6}
+  .hero-num{font-family:var(--disp);font-size:58px;font-weight:600;letter-spacing:-.035em;line-height:1}
   .delta-up{color:var(--good-text);font-size:12.5px;font-weight:600}
 
   /* ---------- pills / badges ---------- */
-  .pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px;letter-spacing:.02em}
-  .pill svg{flex:none}
-  .pill.ok{background:color-mix(in srgb,var(--good) 12%,transparent);color:var(--good-text)}
-  .pill.warn{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--ink)}
-  .pill.serious{background:color-mix(in srgb,var(--serious) 15%,transparent);color:var(--ink)}
-  .pill.info{background:var(--accent-soft);color:var(--accent)}
-  .gi-seal{display:inline-flex;align-items:center;gap:5px;background:var(--apricot-soft);color:var(--apricot);font-size:11px;font-weight:650;border-radius:999px;padding:2.5px 10px}
-  .tag{display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.03em;color:var(--ink2);border:1px solid var(--border);border-radius:5px;padding:1.5px 7px;margin:2px 3px 2px 0;background:var(--tint)}
+  .pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;letter-spacing:.04em;padding:2.5px 8px;border:1px solid transparent}
+  .pill.ok{border-color:var(--good);color:var(--good-text)}
+  .pill.warn{border-color:var(--warn);color:var(--ink2)}
+  .pill.serious{border-color:var(--serious);color:var(--ink2)}
+  .pill.info{border-color:var(--border);color:var(--muted)}
+  .gi-seal{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--brandgreen);color:var(--brandgreen);font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px}
+  .tag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--ink2);border:1px solid var(--border);padding:2px 7px;margin:2px 3px 2px 0;background:var(--tint)}
   .est{border-bottom:1px dotted var(--muted);cursor:help}
-  .src{font-size:10.5px;color:var(--muted)}
+  .src{font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.75}
 
   /* ---------- geo cards ---------- */
-  .geo-card.hl{outline:2px solid var(--accent);outline-offset:-1px}
-  .geo-card h4{margin:0;font-size:15.5px;font-weight:700;display:flex;align-items:center;gap:9px}
-  .geo-card .g-type{display:inline-block;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);font-weight:650;background:var(--tint);border-radius:5px;padding:2.5px 8px;margin-top:6px}
+  .geo-card.hl{box-shadow:inset 3px 0 0 var(--accent)}
+  .geo-card h4{margin:0;font-family:var(--body);font-size:15px;font-weight:600;letter-spacing:0;display:flex;align-items:center;gap:9px}
+  .geo-card .g-type{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:7px}
   .kv{display:grid;grid-template-columns:1fr auto;gap:6px 14px;margin:12px 0 0;font-size:12.5px}
-  .geo-card .kv dt,.geo-card .kv dd{border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);padding-bottom:5px}
-  .mini-meter{height:5px;border-radius:3px;background:var(--tint);margin-top:10px;overflow:hidden}
-  .mini-meter i{display:block;height:100%;border-radius:3px;background:var(--brandgreen)}
+  .geo-card .kv dt,.geo-card .kv dd{border-bottom:1px dotted var(--grid);padding-bottom:5px}
+  .mini-meter{height:4px;background:var(--tint);margin-top:11px;overflow:hidden}
+  .mini-meter i{display:block;height:100%;background:var(--brandgreen)}
   .kv dt{color:var(--ink2);margin:0}
-  .kv dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+  .kv dd{margin:0;font-family:var(--mono);font-size:11px;text-align:right}
   .hazards{display:flex;flex-wrap:wrap;gap:5px;margin-top:11px}
 
   /* ---------- charts ---------- */
@@ -151,42 +164,123 @@
   .viz > svg, .pmap-svg > svg{display:block;width:100%;height:auto}
   .legend{display:flex;flex-wrap:wrap;gap:5px 16px;font-size:12px;color:var(--ink2);margin:2px 0 8px}
   .legend .li{display:inline-flex;align-items:center;gap:6px}
-  .legend .sw{width:9px;height:9px;border-radius:3px;flex:none}
-  .legend .lk{width:14px;height:2.5px;border-radius:2px;flex:none}
-  .axis-t{font-size:10.5px;fill:var(--muted)}
-  .dlabel{font-size:11px;font-weight:600;fill:var(--ink)}
-  .dlabel2{font-size:10.5px;fill:var(--ink2)}
+  .legend .sw{width:9px;height:9px;flex:none}
+  .legend .lk{width:14px;height:2.5px;flex:none}
+  .axis-t{font-size:10px;fill:var(--muted);font-family:var(--mono)}
+  .dlabel{font-size:11px;font-weight:600;fill:var(--ink);font-family:var(--mono)}
+  .dlabel2{font-size:10.5px;fill:var(--ink2);font-family:var(--mono)}
   .bar-hit{fill:transparent;cursor:default}
-  .meter{height:8px;border-radius:4px;background:var(--seq1);overflow:hidden;margin-top:6px}
-  :root[data-theme="dark"] .meter, :root:where(:not([data-theme="light"])) .meter{background:color-mix(in srgb,var(--seq6) 40%,var(--surface))}
-  .meter i{display:block;height:100%;background:var(--seq5);border-radius:4px}
+  .meter{height:7px;background:var(--tint);overflow:hidden;margin-top:6px}
+  .meter i{display:block;height:100%;background:var(--seq5)}
+
+  /* ---------- L2 · traceability console ---------- */
+  .ruler-block{border:1px solid var(--invert-line);background:var(--invert-bg);color:var(--invert-fg);padding:22px 24px 20px;margin:0 0 22px}
+  .ruler-head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+  .ruler-head .eyebrow{color:var(--invert-mut);margin:0}
+  .ruler{display:flex;height:52px;border:1px solid var(--invert-line);background:var(--invert-2)}
+  /* only the producer block animates; the remainder takes what is left, so the bar is always full */
+  .ruler i{display:block;height:100%;transition:width 1.1s cubic-bezier(.22,1,.36,1)}
+  .ruler i:last-child{flex:1;transition:none}
+  .ruler-ticks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--invert-mut);margin-top:8px;gap:8px}
+  .ruler-cap{font-size:14px;color:var(--invert-fg-2);max-width:66ch;margin:14px 0 0}
+  .ruler-cap b{color:var(--invert-fg);font-weight:500}
+  .ruler-cap .est{border-bottom-color:var(--invert-mut)}
+
+  .console{display:grid;grid-template-columns:190px minmax(0,1fr) 320px;border:1px solid var(--border);background:var(--surface)}
+  @media(max-width:1080px){.console{grid-template-columns:1fr}}
+  /* rail + map ride along with the long commodity panel instead of leaving dead space */
+  .rail{padding:18px 16px;border-right:1px solid var(--border);align-self:start;position:sticky;top:64px}
+  .panel{border-left:1px solid var(--border);min-width:0}
+  .stage{align-self:start;position:sticky;top:64px}
+  @media(max-width:1080px){.rail,.stage{position:static}}
+  @media(max-width:1080px){.rail{border-right:0;border-bottom:1px solid var(--border)}.panel{border-left:0;border-top:1px solid var(--border)}}
+  .rail h3{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:400;margin:0 0 12px}
+  .rail hr{border:0;border-top:1px solid var(--border);margin:16px 0}
+  .rail .note{font-size:12px;color:var(--muted);margin:0;line-height:1.7}
+  .lay{display:flex;align-items:center;gap:9px;width:100%;padding:6px 0;font-size:13px;color:var(--ink);text-align:left}
+  .lay .box{width:13px;height:13px;flex:none;border:1px solid var(--border);background:var(--surface);position:relative}
+  .lay[aria-pressed="true"] .box{background:currentColor;border-color:currentColor}
+  .lay[aria-pressed="true"] .box::after{content:"";position:absolute;inset:3px;background:var(--surface)}
+  .lay.env{color:var(--brandgreen)}.lay.bio{color:var(--glacier)}.lay.soc{color:var(--apricot)}
+  .lay.tra{color:var(--ink)}.lay.com{color:var(--accent)}.lay.gi{color:var(--accent)}
+  .lay small{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--muted)}
+  .lay:hover{color:var(--accent)}
+  .stage{padding:14px;min-width:0}
+  .stage .card{box-shadow:none;background:transparent;padding:20px 0 0;grid-column:auto}
+  .stage .card+.card{border-top:1px solid var(--border);margin-top:16px}
+  #map{width:100%;height:auto;display:block}
+  .map-legend{display:flex;gap:15px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:10px}
+  .map-legend span{display:flex;align-items:center;gap:5px}
+  .map-legend .sq{width:8px;height:8px;background:var(--ink)}
+  .map-legend .ci{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+  .map-legend .ln{width:14px;height:1px;background:var(--ink);opacity:.45}
+  .nd{cursor:pointer}
+  .nd text{pointer-events:none}
+  .nd:focus-visible{outline:2px solid var(--glacier)}
+  .link{stroke:var(--ink);stroke-width:.9;opacity:.24;fill:none;transition:opacity .2s,stroke .2s,stroke-width .2s}
+  .link.hot{opacity:.95;stroke:var(--accent);stroke-width:1.7}
+
+  .cc{padding:20px}
+  .cc-hd{border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:16px}
+  .cc-hd h4{font-family:var(--disp);font-size:22px;font-weight:600;margin:6px 0 0}
+  .cc-hd .eyebrow{margin:0}
+  .blk{margin-bottom:20px}
+  .blk>.eyebrow{font-size:9.5px;margin-bottom:8px}
+  .clu{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;padding:7px 0;border-bottom:1px dotted var(--grid);cursor:pointer;width:100%;text-align:left}
+  .clu:hover{color:var(--accent)}
+  .clu b{font-weight:500}
+  .clu>span{font-family:var(--mono);font-size:9.5px;color:var(--muted);text-align:right;flex:none}
+  .clu.on{color:var(--accent)}
+  .clu.on>span{color:var(--accent)}
+  .ckv{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:5px 0;border-bottom:1px dotted var(--grid)}
+  .ckv>span:first-child{color:var(--muted);flex:none}
+  .ckv>span:last-child{font-family:var(--mono);font-size:10.5px;text-align:right}
+  .chain{display:flex;height:26px;border:1px solid var(--border);gap:2px;background:var(--border)}
+  .chain i{display:block;height:100%}
+  .chain-lab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:6px;gap:6px}
+  .chain-steps{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:10px;font-size:11px;color:var(--ink2)}
+  .chain-steps .st{border:1px solid var(--border);background:var(--tint);padding:2px 8px}
+  .chain-steps .arr{color:var(--muted)}
+  .hero-stat{background:var(--invert-bg);color:var(--invert-fg);padding:12px 14px;margin-bottom:20px}
+  .hero-stat .eyebrow{color:var(--invert-mut);font-size:9.5px;margin:0}
+  .hero-stat b{display:block;font-family:var(--disp);font-size:34px;font-weight:600;letter-spacing:-.03em;color:var(--invert-accent);line-height:1;margin-top:5px}
+  .hero-stat .est{border-bottom-color:var(--invert-mut)}
+
+  /* ---------- L3 · dependency matrix ---------- */
+  .dep{display:grid;grid-template-columns:250px minmax(0,1fr);border:1px solid var(--border);background:var(--surface)}
+  @media(max-width:860px){.dep{grid-template-columns:1fr}}
+  .dep-l{padding:20px;border-right:1px solid var(--border)}
+  @media(max-width:860px){.dep-l{border-right:0;border-bottom:1px solid var(--border)}}
+  .dep-l h3{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:400;margin:0 0 12px}
+  .shock{display:block;width:100%;text-align:left;border:1px solid var(--border);padding:10px 12px;margin-bottom:8px;font-size:13px;color:var(--ink);transition:border-color .14s}
+  .shock:hover{border-color:var(--ink)}
+  .shock[aria-pressed="true"]{background:var(--ink);color:var(--plane);border-color:var(--ink)}
+  .shock em{display:block;font-style:normal;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:4px}
+  .shock[aria-pressed="true"] em{color:var(--invert-mut)}
+  .dep-r{padding:22px 26px}
+  .cas-step{display:grid;grid-template-columns:30px minmax(0,1fr);gap:14px;padding:14px 0}
+  .cas-step+.cas-step{border-top:1px dotted var(--grid)}
+  .cas-n{font-family:var(--mono);font-size:10px;color:var(--muted);padding-top:5px}
+  .cas-step h4{font-family:var(--body);font-size:15px;font-weight:600;letter-spacing:0;margin:0}
+  .cas-step p{margin:5px 0 0;font-size:13.5px;color:var(--ink2);line-height:1.65}
+  .cas-step .val{font-family:var(--mono);font-size:10.5px;color:var(--accent);margin-top:8px;display:inline-block}
+  .cas-step .val .est{border-bottom-color:var(--accent)}
+  .cas-step:last-child h4{color:var(--accent)}
 
   /* ---------- map ---------- */
   .mapbox{position:relative}
   .map-node{cursor:pointer}
-  .map-node circle.core{transition:r .15s}
-  .map-node:hover circle.halo{opacity:.28}
-  .map-label{font-size:11px;font-weight:600;fill:var(--ink)}
-  .map-sub{font-size:9.5px;fill:var(--muted)}
+  .map-label{font-size:11px;font-weight:600;fill:var(--ink);font-family:var(--body)}
+  .map-sub{font-size:9.5px;fill:var(--muted);font-family:var(--mono)}
   .flow{fill:none;stroke:var(--accent);stroke-width:1.2;opacity:.30}
   .ridge{fill:none;stroke:var(--grid);stroke-width:1}
-
-  /* ---------- commodity cards ---------- */
-  .comm-head{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-  .comm-head h4{margin:0;font-size:14.5px;font-weight:650}
-  .comm-meta{font-size:12px;color:var(--ink2);margin:6px 0 2px}
-  .vc{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:10px;font-size:11px;color:var(--ink2)}
-  .vc .step{border:1px solid var(--border);background:var(--tint);border-radius:5px;padding:2px 8px;font-weight:550}
-  .vc .arr{color:var(--muted)}
-  .fs-row{display:flex;align-items:baseline;justify-content:space-between;margin-top:12px;font-size:12px;color:var(--ink2)}
-  .fs-row b{color:var(--ink);font-variant-numeric:tabular-nums}
 
   /* ---------- venture ---------- */
   .v-chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
   .v-head{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
-  .v-head h3{margin:0 0 3px;font-size:17px;font-weight:660}
-  .v-head .v-desc{color:var(--ink2);font-size:13px;max-width:640px;margin:0}
-  .sdg{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:650;border-radius:5px;padding:2px 7px;background:var(--accent-soft);color:var(--accent);margin:2px 3px 0 0}
+  .v-head h3{margin:0 0 3px;font-family:var(--disp);font-size:22px;font-weight:600}
+  .v-head .v-desc{color:var(--ink2);font-size:13.5px;max-width:640px;margin:0}
+  .sdg{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;padding:2.5px 7px;border:1px solid var(--border);color:var(--ink2);margin:2px 3px 0 0}
 
   /* ---------- portfolio map ---------- */
   .pmap-wrap{display:flex;gap:18px;align-items:stretch}
@@ -195,54 +289,84 @@
   .pm-state{fill:var(--brandmap);stroke:var(--brandmap);stroke-width:1.6;stroke-linejoin:round;cursor:pointer}
   .pm-state:hover{filter:brightness(1.18)}
   .pm-state.sel{cursor:default}
-  .pm-label{font-size:15px;font-weight:600;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:3.5px;pointer-events:none}
-  .pmap-panel{width:252px;flex:none;display:flex;flex-direction:column;gap:5px}
-  .pmap-panel .p-head{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:2px 0 3px}
-  .pmap-row{display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:var(--tint);font-size:12.5px;text-align:left;width:100%}
+  .pm-label{font-size:15px;font-weight:600;fill:var(--ink);font-family:var(--body);paint-order:stroke;stroke:var(--surface);stroke-width:3.5px;pointer-events:none}
+  .pmap-panel{width:262px;flex:none;display:flex;flex-direction:column;gap:4px}
+  .pmap-panel .p-head{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:2px 0 6px}
+  .pmap-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--border);cursor:pointer;background:var(--surface);font-size:12.5px;text-align:left;width:100%}
   .pmap-row:hover{background:var(--accent-soft)}
-  .pmap-row.on{outline:2px solid var(--accent);outline-offset:-1px;background:var(--accent-soft)}
-  .pmap-row b{flex:1;font-weight:600}
-  .pmap-row .cnt{color:var(--muted);font-size:11px}
-  .pm-v{display:flex;align-items:baseline;gap:7px;padding:6px 10px;border-left:2px solid var(--brandmap);font-size:12.5px;background:var(--tint);border-radius:0 7px 7px 0}
-  .pm-v b{font-weight:600}
-  .pm-v .tn{margin-left:auto;color:var(--muted);font-size:11px;white-space:nowrap}
-  .pmap-back{align-self:flex-start;font-size:12px;font-weight:600;color:var(--accent);border:1px solid var(--border);border-radius:7px;padding:4px 10px;margin-bottom:2px}
-  .pmap-back:hover{background:var(--accent-soft)}
-  .pm-note{font-size:10.5px;color:var(--muted);margin-top:4px}
+  .pmap-row.on{background:var(--accent-soft);border-color:var(--accent)}
+  .pmap-row b{flex:1;font-weight:500}
+  .pmap-row .cnt{color:var(--muted);font-family:var(--mono);font-size:10px}
+  .pm-v{display:flex;align-items:baseline;gap:7px;padding:7px 10px;border-left:2px solid var(--brandmap);font-size:12.5px;background:var(--tint)}
+  .pm-v b{font-weight:500}
+  .pm-v .tn{margin-left:auto;color:var(--muted);font-family:var(--mono);font-size:10px;white-space:nowrap}
+  .pmap-back{align-self:flex-start;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--accent);border:1px solid var(--border);padding:4px 10px;margin-bottom:4px}
+  .pmap-back:hover{border-color:var(--accent)}
+  .pm-note{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:6px;line-height:1.7}
   @media(max-width:760px){.pmap-wrap{flex-direction:column}.pmap-panel{width:auto}}
 
   /* ---------- himalayan coverage ---------- */
-  #pmap{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--surface) 42%,var(--tint) 100%);padding:24px 28px 22px}
-  #pmap .card-head h3{font-family:var(--serif);font-size:24px;font-weight:600}
-  #pmap .ridge-deco{position:absolute;right:-10px;bottom:-34px;width:46%;min-width:300px;opacity:.35;pointer-events:none}
-  .cov-wrap{display:flex;gap:26px;flex-wrap:wrap;margin:6px 0 4px;position:relative}
-  .cov-stat{width:255px;flex:none}
-  .cov-num{font-size:66px;font-weight:750;letter-spacing:-.03em;line-height:1;color:var(--accent)}
-  .cov-num span{font-size:28px;font-weight:550;color:var(--muted)}
-  .cov-lbl{font-size:12.5px;color:var(--ink2);margin:6px 0 10px}
+  #pmap{position:relative;overflow:hidden;background:var(--invert-bg);color:var(--invert-fg);padding:28px;box-shadow:0 0 0 1px var(--invert-line)}
+  #pmap .ridge-deco path:first-child{fill:var(--invert-2)}
+  #pmap .ridge-deco path:last-child{stroke:var(--glacier);opacity:.6}
+  #pmap::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 47px,rgba(110,154,148,.06) 47px 48px)}
+  #pmap .card-head{position:relative;z-index:1}
+  #pmap .card-head h3{font-family:var(--disp);font-size:26px;font-weight:600}
+  #pmap .card-head .hint{color:var(--invert-mut)}
+  #pmap .ridge-deco{position:absolute;right:-10px;bottom:-34px;width:46%;min-width:300px;opacity:.5;pointer-events:none}
+  .cov-wrap{display:flex;gap:28px;flex-wrap:wrap;margin:8px 0 4px;position:relative;z-index:1}
+  .cov-stat{width:262px;flex:none}
+  .cov-num{font-family:var(--disp);font-size:70px;font-weight:600;letter-spacing:-.04em;line-height:1;color:var(--invert-accent)}
+  .cov-num span{font-size:28px;color:var(--invert-mut)}
+  .cov-lbl{font-size:13px;color:var(--invert-fg-2);margin:8px 0 12px}
+  .cov-stat .meter{background:rgba(110,154,148,.25)}
+  .cov-stat .meter i{background:var(--glacier)}
+  .cov-stat .pm-note{color:var(--invert-mut)}
   .cov-chips{flex:1;min-width:260px;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
-  .chip-ihr{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;color:var(--ink);background:var(--surface);cursor:pointer;box-shadow:var(--shadow)}
-  .chip-ihr{transition:background .15s,transform .15s,box-shadow .15s}
-  .chip-ihr:hover{background:var(--accent-soft);transform:translateY(-1px);box-shadow:var(--shadow)}
-  .chip-ihr .dot{width:8px;height:8px;border-radius:50%;background:var(--good);flex:none}
-  .chip-ihr[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-  .chip-ihr[aria-pressed="true"] .dot{background:var(--accent-ink)}
-  .chip-ihr.off{border-style:dashed;color:var(--muted);cursor:default;background:transparent}
-  .chip-ihr.off:hover{background:transparent}
+  .chip-ihr{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--invert-line);padding:7px 14px;font-size:13px;color:var(--invert-fg);background:transparent;cursor:pointer;transition:background .14s,border-color .14s}
+  .chip-ihr:hover{background:var(--invert-2);border-color:var(--glacier)}
+  .chip-ihr .dot{width:7px;height:7px;background:var(--glacier);flex:none}
+  .chip-ihr[aria-pressed="true"]{background:var(--invert-fg);border-color:var(--invert-fg);color:var(--invert-bg)}
+  .chip-ihr[aria-pressed="true"] .dot{background:var(--accent)}
+  .chip-ihr.off{border-style:dashed;color:var(--invert-mut-2);cursor:default}
+  .chip-ihr.off:hover{background:transparent;border-color:var(--invert-line)}
   .cov-tbl{margin-top:14px;overflow-x:auto}
   tr.hl td{color:var(--ink) !important;font-weight:600}
 
+  /* ---------- argument block ---------- */
+  .argu{border:1px solid var(--border);background:var(--surface);padding:30px 32px;margin-top:22px}
+  .argu h2{font-size:clamp(22px,3vw,32px);margin:8px 0 12px;max-width:22ch}
+  .argu p{color:var(--ink2);font-size:14.5px;max-width:70ch;margin:0 0 12px}
+  .argu p:last-child{margin-bottom:0}
+
+  /* ---------- leaflet chrome, squared off to match ---------- */
+  .leaflet-container{background:var(--tint)}
+  .leaflet-control-layers,.leaflet-bar,.leaflet-bar a,.leaflet-popup-content-wrapper,.leaflet-popup-tip{border-radius:0 !important}
+  .leaflet-control-layers,.leaflet-bar{border:1px solid var(--border) !important;box-shadow:none !important}
+  .leaflet-control-layers,.leaflet-bar a{background:var(--surface);color:var(--ink)}
+  .leaflet-bar a:hover{background:var(--tint);color:var(--ink)}
+  .leaflet-control-layers-list{font-family:var(--body);font-size:12.5px}
+  .leaflet-control-attribution{background:color-mix(in srgb,var(--surface) 88%,transparent) !important;font-family:var(--mono);font-size:9.5px}
+  .leaflet-control-attribution a{color:var(--accent)}
+  .leaflet-popup-content-wrapper{background:var(--surface);color:var(--ink);border:1px solid var(--border);box-shadow:none}
+  .leaflet-popup-content{font-family:var(--body);font-size:12.5px}
+
   /* ---------- tooltip / footer ---------- */
-  #tip{position:fixed;z-index:99;pointer-events:none;background:var(--ink);color:var(--plane);font-size:12px;line-height:1.45;padding:7px 10px;border-radius:7px;max-width:260px;opacity:0;transition:opacity .1s;box-shadow:0 4px 14px rgba(0,0,0,.18)}
-  #tip b{font-weight:650}
-  footer{border-top:1px solid var(--border);margin-top:34px;padding:22px 0 40px;color:var(--ink2);font-size:12.5px}
-  footer h4{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+  #tip{position:fixed;z-index:99;pointer-events:none;background:var(--ink);color:var(--plane);font-size:12px;line-height:1.45;padding:7px 10px;max-width:280px;opacity:0;transition:opacity .1s;border:1px solid var(--border)}
+  #tip b{font-weight:600}
+  footer{background:var(--invert-bg);color:var(--invert-mut);margin-top:44px;padding:38px 0 44px;font-size:12.5px}
+  footer .wrap{max-width:1220px}
+  footer h4{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--invert-mut-2);margin:0 0 10px;font-weight:400}
   footer ul{margin:0;padding-left:18px}
-  footer li{margin-bottom:3px}
-  .foot-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:28px}
+  footer li{margin-bottom:5px;line-height:1.65}
+  footer a{color:var(--invert-fg-2)}
+  footer b{color:var(--invert-fg)}
+  .foot-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:32px}
   @media(max-width:760px){.foot-grid{grid-template-columns:1fr}}
-  .legend-note{display:flex;gap:8px;align-items:baseline;margin-top:14px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
+  .legend-note{display:flex;gap:8px;align-items:baseline;margin-top:14px;padding:12px 14px;border:1px solid var(--invert-line)}
+  .legend-note .est{border-bottom-color:var(--invert-mut-2)}
   @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important}}
+  .own{color:var(--accent);font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase}
 </style>
 
 <header class="mast">
@@ -266,9 +390,6 @@
   <div class="wrap">
     <span class="f-label">Geography</span>
     <span id="geoChips" style="display:flex;gap:8px;flex-wrap:wrap"></span>
-    <span class="f-sep" id="provSep" hidden></span>
-    <span class="f-label" id="provLabel" hidden>Provenance</span>
-    <span id="provChips" style="display:none;gap:8px;flex-wrap:wrap"></span>
   </div>
 </div>
 
@@ -303,35 +424,67 @@
   <!-- ================= LAYER 2 ================= -->
   <section class="layer" id="l2" role="tabpanel" aria-labelledby="tab2">
     <div class="layer-head">
-      <p class="eyebrow">Layer 2 · Traceability &amp; Commodity Intelligence</p>
-      <h2>Where the product comes from — and can it be verified?</h2>
-      <p>Sourcing clusters, provenance evidence and commodity intelligence in one view. Use the provenance filters above to screen commodities by the evidence they carry.</p>
+      <p class="eyebrow">Layer 2 · Traceability &amp; commodity intelligence</p>
+      <h2>The land checks out. The money doesn't.</h2>
+      <p>Satellite layers confirm the land is intact. Surveys confirm the growers are paid. The registry confirms the product is genuinely Himalayan. And still, most of the value leaves the hills. Select a cluster on the map to open its commodity record.</p>
     </div>
-    <div class="grid">
-      <div class="card c8">
-        <div class="card-head"><h3>Sourcing map — clusters &amp; flows</h3><span class="hint">click a cluster to filter</span></div>
-        <div class="viz mapbox" id="map"></div>
+
+    <div class="ruler-block">
+      <div class="ruler-head"><p class="eyebrow" id="ruler-title">Where a rupee ends up</p><p class="eyebrow">Drawn to scale</p></div>
+      <div class="ruler" id="ruler"></div>
+      <div class="ruler-ticks" id="ruler-ticks"></div>
+      <p class="ruler-cap" id="ruler-cap"></p>
+    </div>
+
+    <div class="console">
+      <div class="rail">
+        <h3>Provenance layers</h3>
+        <div id="provRail"></div>
+        <hr>
+        <h3>Reading the map</h3>
+        <p class="note">Squares are ventures, at their home town. Circles are sourcing clusters — one per commodity, at its geography. Lines are the sourcing relationships on record. Area under cultivation is not yet collected, so every circle is drawn the same size.</p>
       </div>
-      <div class="card c4" id="cluster-compare"></div>
+
+      <div class="stage">
+        <svg id="map" viewBox="0 0 640 460" role="img" aria-labelledby="mt"><title id="mt">Traceability map linking ventures to the sourcing clusters they buy from across the Himalayan arc</title></svg>
+        <div class="map-legend"><span><i class="sq"></i>Venture</span><span><i class="ci"></i>Sourcing cluster</span><span><i class="ln"></i>Sources from</span></div>
+        <div class="card" id="ch-farmershare"></div>
+        <div class="card" id="ch-global"></div>
+      </div>
+
+      <div class="panel"><div class="cc" id="cc"></div></div>
     </div>
-    <div class="grid" style="margin-top:14px" id="commodity-cards"></div>
-    <div class="grid" style="margin-top:14px">
-      <div class="card c6" id="ch-global"></div>
-      <div class="card c6" id="ch-farmershare"></div>
-    </div>
+
+    <div class="part-head"><span>Evidence base</span></div>
+    <div class="card solo" id="evidence"></div>
   </section>
 
   <!-- ================= LAYER 3 ================= -->
   <section class="layer" id="l3" role="tabpanel" aria-labelledby="tab3">
     <div class="layer-head">
-      <p class="eyebrow">Layer 3 · Portfolio Intelligence</p>
-      <h2>What is the venture doing differently?</h2>
-      <p>Venture-level overlay: sourcing, procurement, prices paid against local benchmarks, premiums and livelihood outcomes across the portfolio.</p>
+      <p class="eyebrow">Layer 3 · Portfolio intelligence</p>
+      <h2>What a bad season actually costs</h2>
+      <p>The environmental layers are not decoration. Each one connects to a yield, an ingredient and a founder's revenue line. Pick a shock to trace the chain through a sourcing geography.</p>
     </div>
-    <div class="card" id="pmap3" style="margin-bottom:14px"></div>
+
+    <div class="dep">
+      <div class="dep-l">
+        <h3>Climate shock</h3>
+        <div id="shockList"></div>
+        <hr>
+        <h3>Traced through</h3>
+        <div id="depContext"></div>
+      </div>
+      <div class="dep-r"><div id="cascade"></div></div>
+    </div>
+
+    <div class="part-head"><span>What the ventures do differently</span></div>
+    <div class="card solo" id="pmap3" style="margin-bottom:22px"></div>
     <div class="grid" id="l3-overview"></div>
-    <div class="v-chips" id="ventureChips" style="margin-top:18px"></div>
+    <div class="v-chips" id="ventureChips" style="margin-top:22px"></div>
     <div id="ventureDetail"></div>
+
+    <div class="argu" id="argu"></div>
   </section>
 
   <footer>
@@ -627,7 +780,8 @@ const VENTURES = {
 };
 
 /* ============================== STATE ============================== */
-const state = { layer:"l1", geo:"all", prov:new Set(), venture:"agapi", cluster:null };
+const state = { layer:"l1", geo:"all", prov:new Set(), venture:"agapi", cluster:null,
+                commodity:"apricot", shock:"rain" };
 
 /* ============================== HELPERS ============================== */
 const $ = s => document.querySelector(s);
@@ -668,7 +822,8 @@ function barChartSVG({data, w=520, h=200, unit="", color="var(--s1)", fmtV=v=>v}
     const bh = plotH * d.v/max, x = padL + band*i + (band-bw)/2, y = padT + plotH - bh;
     s += `<path d="${topBar(x,y,bw,bh)}" fill="${d.color||color}"/>`;
     s += `<text class="dlabel" x="${x+bw/2}" y="${y-6}" text-anchor="middle">${fmtV(d.v)}${unit}</text>`;
-    s += `<text class="axis-t" x="${x+bw/2}" y="${h-7}" text-anchor="middle">${d.l}</text>`;
+    const mc = Math.max(4, Math.floor(band/5.6));
+    s += `<text class="axis-t" x="${x+bw/2}" y="${h-7}" text-anchor="middle">${d.l.length>mc?d.l.slice(0,mc-1)+"…":d.l}</text>`;
     s += `<rect class="bar-hit" x="${padL+band*i}" y="${padT}" width="${band}" height="${plotH}" data-tip="<b>${d.tip||d.l}</b><br>${fmtV(d.v)}${unit}"/>`;
   });
   return s + `</svg>`;
@@ -720,7 +875,8 @@ function groupedBarSVG({rows, w=520, h=210, unit=""}){
     s += `<path d="${topBar(x2, padT+plotH-h2, bw, h2)}" fill="var(--s2)"/>`;
     s += `<text class="dlabel" x="${x1+bw/2}" y="${padT+plotH-h1-6}" text-anchor="middle">${r[1]}</text>`;
     s += `<text class="dlabel2" x="${x2+bw/2}" y="${padT+plotH-h2-6}" text-anchor="middle">${r[2]}</text>`;
-    s += `<text class="axis-t" x="${cx}" y="${h-7}" text-anchor="middle">${r[0].length>16?r[0].slice(0,15)+"…":r[0]}</text>`;
+    const maxCh = Math.max(4, Math.floor(band/5.6));   /* keep neighbouring labels from colliding */
+    s += `<text class="axis-t" x="${cx}" y="${h-7}" text-anchor="middle">${r[0].length>maxCh?r[0].slice(0,maxCh-1)+"…":r[0]}</text>`;
     s += `<rect class="bar-hit" x="${padL+band*i}" y="${padT}" width="${band}" height="${plotH}" data-tip="<b>${r[0]}</b><br>Paid: ${r[1]} ${unit}<br>Benchmark: ${r[2]} ${unit}<br>Premium: +${Math.round((r[1]/r[2]-1)*100)}%"/>`;
   });
   return s + `</svg>`;
@@ -754,21 +910,7 @@ function renderGeoChips(){
     renderAll();
   });
 }
-function renderProvChips(){
-  const el = $("#provChips");
-  const show = state.layer==="l2";
-  el.style.display = show ? "flex" : "none";
-  $("#provLabel").hidden = !show; $("#provSep").hidden = !show;
-  if(!show) return;
-  el.innerHTML = PROV_TAGS.map(t=>{
-    const n = COMMODITIES.filter(c=>c.tags.includes(t)).length;
-    return `<button class="chip" aria-pressed="${state.prov.has(t)}" data-prov="${t}">${t}<span class="n">${n}</span></button>`;
-  }).join("");
-  el.querySelectorAll("[data-prov]").forEach(b=> b.onclick = ()=>{
-    const t=b.dataset.prov; state.prov.has(t) ? state.prov.delete(t) : state.prov.add(t);
-    renderL2();renderProvChips();
-  });
-}
+/* provenance filters now live in the Layer 2 rail — see renderProvRail() */
 
 /* ============================== LAYER 1 ============================== */
 function fitBox(bb, pad, G=REGION_GEO){
@@ -883,7 +1025,7 @@ function renderGeoMapSat(el, ind, IND){
   const switcher = Object.entries(IND).map(([k,d])=>
     `<button class="tbl-btn" style="${state.geoInd===k?"color:var(--accent);border-color:var(--accent);":""}margin-left:6px" data-gind="${k}">${d.label}</button>`).join("");
   el.innerHTML = `<div class="card-head"><h3>Geographic map — operating regions</h3><span class="hint">free Esri satellite imagery · toggle layers on the map · click a region to fly &amp; filter</span><span style="margin-left:auto;display:flex;flex-wrap:wrap">${switcher}<button class="tbl-btn" style="margin-left:6px" data-toggle>⊞ table</button></span></div>
-    <div class="viz pmap-wrap"><div class="pmap-svg"><div id="leafmap" style="height:600px;border-radius:8px;overflow:hidden;background:var(--tint)"></div></div>
+    <div class="viz pmap-wrap"><div class="pmap-svg"><div id="leafmap" style="height:600px;overflow:hidden;background:var(--tint);border:1px solid var(--border)"></div></div>
     <div class="pmap-panel">${panel}</div></div>
     <div class="tblwrap">${tableHTML(["Region","Area km²","Forest cover","Rainfall (mm/yr)","Key hazards"],
       PORTFOLIO.map(r=>{const g=GEOS[r.key];return [g.name, g.area, (g.forestEst?"~":"")+g.forest+"%", "~"+fmt(g.rainTotal), g.hazards.map(h=>h[0]).join(" · ")];}))}</div>`;
@@ -1100,98 +1242,463 @@ function renderL1(){
     ["Month",...Object.values(GEOS).map(g=>g.name)], MONTHS.map((m,i)=>[m,...Object.values(GEOS).map(g=>g.ndvi[i].toFixed(2))]));
 }
 
-/* ============================== LAYER 2 ============================== */
-const MAP_NODES = [
-  {id:"ladakh", x:140, y:78,  r:26, label:"Ladakh", sub:"apricot · sea buckthorn · botanicals"},
-  {id:"nepal",  x:330, y:172, r:13, label:"Nepal", sub:"partner geography", partner:true},
-  {id:"sikkim", x:428, y:158, r:22, label:"Sikkim", sub:"cardamom · dalle · botanicals"},
-  {id:"bhutan", x:492, y:150, r:12, label:"Bhutan", sub:"partner geography", partner:true},
-  {id:"nagaland",x:583, y:196, r:17, label:"Nagaland", sub:"education & agroforestry"},
-  {id:"mizoram",x:562, y:268, r:18, label:"Mizoram", sub:"ginger · botanicals"},
+/* ============================== LAYER 2 · TRACEABILITY CONSOLE ============================== */
+/* MONTHS is single-letter for chart axes; prose needs readable names */
+const MON3 = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const PROV_META = {
+  "Environmental":{cls:"env", src:"SAT"},
+  "Biodiversity" :{cls:"bio", src:"SAT"},
+  "Social"       :{cls:"soc", src:"SVY"},
+  "Traceability" :{cls:"tra", src:"SVY"},
+  "Commodity"    :{cls:"com", src:"DESK"},
+  "GI Status"    :{cls:"gi",  src:"REG"}
+};
+const EVIDENCE = [
+  ["Forest &amp; land cover","The land is being kept, not cleared","India State of Forest Report 2021 (ISFR)"],
+  ["Rainfall &amp; climate","The exposure that drives the dependency matrix","IMD station normals · CHIRPS"],
+  ["Vegetation health","Crop vigour across the season","MODIS / Sentinel NDVI profile"],
+  ["Hazard &amp; shock","Shock events set against business outcomes","State hazard records · NASA Landslide Catalog · MODIS / VIIRS"],
+  ["Biodiversity","Farming without harming fragile land","Protected-area &amp; organic-certification status"],
+  ["Demography &amp; workforce","Who is in the landscape, and on what livelihood","Census of India 2011"],
+  ["Source traceability<span class=\"own\"> · ours</span>","Which cluster the product genuinely came from","Founder survey &mdash; not a download"],
+  ["Social<span class=\"own\"> · ours</span>","Who benefits, and on what terms","Founder survey &mdash; not a download"],
+  ["Commodity &amp; GI","What the cluster's output is worth, and to whom","GI Registry of India · Spices Board · desk research"]
 ];
-function renderMap(){
-  const hq = {x:205, y:330};
-  const dim = id => state.geo!=="all" && id!==state.geo;
-  let s = `<svg viewBox="0 0 720 400" role="img" aria-label="Schematic sourcing map of the Himalayan belt">
-    <path class="ridge" d="M40,120 C140,60 240,110 340,88 C440,66 540,110 680,70"/>
-    <path class="ridge" d="M60,170 C160,120 260,160 360,138 C460,116 560,160 690,120"/>
-    <path class="ridge" d="M80,220 C180,175 280,210 380,190 C480,170 580,215 700,175"/>
-    <text class="map-sub" x="706" y="390" text-anchor="end">Schematic — positions approximate, not to scale</text>`;
-  MAP_NODES.filter(n=>!n.partner).forEach(n=>{
-    const mx = (n.x+hq.x)/2 - 40, my = Math.max(n.y,hq.y) + 55;
-    s += `<path class="flow" style="opacity:${dim(n.id)?0.08:0.3}" d="M${n.x},${n.y+n.r} Q${mx},${my} ${hq.x},${hq.y-8}"/>`;
+
+/* commodities that actually carry a sourcing relationship, and the ventures on the other end */
+const LINKED = COMMODITIES.filter(c=>c.ventures.length);
+const SOURCING_V = [...new Set(LINKED.flatMap(c=>c.ventures))];
+/* venture key -> home town, matched off the portfolio record */
+const VTOWN = (()=>{
+  const m = {};
+  SOURCING_V.forEach(k=>{
+    const v = VENTURES[k]; if(!v) return;
+    PORTFOLIO.forEach(r=> r.ventures.forEach(pv=>{ if(pv.n===v.name) m[k] = pv.town; }));
   });
-  MAP_NODES.forEach(n=>{
-    const o = dim(n.id) ? .35 : 1;
-    s += `<g class="map-node" data-geo-node="${n.id}" opacity="${o}" ${n.partner?"":`data-tip="<b>${n.label}</b><br>${n.sub}"`}>
-      ${n.partner
-        ? `<circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="none" stroke="var(--accent)" stroke-width="1.4" opacity=".55"/>`
-        : `<circle class="halo" cx="${n.x}" cy="${n.y}" r="${n.r}" fill="var(--accent)" opacity=".16"/>
-           <circle class="core" cx="${n.x}" cy="${n.y}" r="6" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/>`}
-      <text class="map-label" x="${n.x}" y="${n.y-n.r-8}" text-anchor="middle">${n.label}</text>
-      <text class="map-sub" x="${n.x}" y="${n.y-n.r+5}" text-anchor="middle" dy="12"></text>
-    </g>`;
+  return m;
+})();
+const MAP_W = 640, MAP_H = 460;
+const px = (lat,lon)=>({ x:(lon-73.5)/22*MAP_W, y:(36.0-lat)/14*MAP_H });
+const svgEl = t => document.createElementNS("http://www.w3.org/2000/svg", t);
+
+/* Cluster placement. Clusters start at their geography centroid, fan out when a geography carries
+   several commodities, then take a per-geography nudge so labels in the crowded Ladakh and
+   Northeast corners stay legible. The map is declared schematic, so the nudge costs nothing. */
+const CLUSTER_NUDGE = { ladakh:[0,76], jk:[-4,131], uk:[16,41], sikkim:[0,56],
+                        assam:[-24,-22], manipur:[27,-31], mizoram:[-61,8] };
+const CLUSTER_XY = (()=>{
+  const byGeo = {}, out = {};
+  COMMODITIES.forEach(c=> (byGeo[c.geo] = byGeo[c.geo]||[]).push(c));
+  const FANX = {1:[0], 2:[-46,46], 3:[-80,0,80], 4:[-84,-28,28,84]};
+  Object.entries(byGeo).forEach(([geo,list])=>{
+    const base = px(GEO_LL[geo][0], GEO_LL[geo][1]);
+    const nudge = CLUSTER_NUDGE[geo] || [0,44];
+    const xs = FANX[Math.min(list.length,4)] || FANX[4];
+    list.forEach((c,i)=>{
+      out[c.id] = { x:base.x + nudge[0] + xs[i%xs.length], y:base.y + nudge[1] };
+    });
   });
-  s += `<g data-tip="<b>Market / HQ</b><br>Alsisar Impact — Mumbai · national retail & D2C">
-      <rect x="${hq.x-6}" y="${hq.y-6}" width="12" height="12" rx="3" fill="var(--apricot)" stroke="var(--surface)" stroke-width="2"/>
-      <text class="map-label" x="${hq.x}" y="${hq.y+24}" text-anchor="middle">Mumbai HQ · markets</text></g></svg>`;
-  $("#map").innerHTML = s;
-  $("#map").querySelectorAll("[data-geo-node]").forEach(g=> g.addEventListener("click", ()=>{
-    const id = g.dataset.geoNode;
-    if(!GEOS[id]) return;
-    state.geo = state.geo===id ? "all" : id; renderAll();
-  }));
+  return out;
+})();
+const VENTURE_XY = (()=>{
+  const out = {}, seen = {};
+  Object.keys(VTOWN).forEach(k=>{
+    const ll = TOWN_LL[VTOWN[k]]; if(!ll) return;
+    const n = seen[VTOWN[k]] = (seen[VTOWN[k]]||0)+1;
+    const p = px(ll[0], ll[1]);
+    out[k] = { x:p.x, y:p.y + (n-1)*22 };
+  });
+  return out;
+})();
+
+/* indicative conventional-trade share, kept in one place so the ruler, the argument and the
+   comparison chart can never quote different numbers for the same crop */
+const convShare = c => Math.max(20, c.farmerShare-26);
+const provMatch = c => [...state.prov].every(t=>c.tags.includes(t));
+const geoMatch  = c => state.geo==="all" || c.geo===state.geo;
+
+function renderProvRail(){
+  const el = $("#provRail"); if(!el) return;
+  el.innerHTML = PROV_TAGS.map(t=>{
+    const m = PROV_META[t], n = COMMODITIES.filter(c=>c.tags.includes(t)).length;
+    return `<button class="lay ${m.cls}" aria-pressed="${state.prov.has(t)}" data-prov="${t}"
+      data-tip="<b>${t}</b><br>${n} of ${COMMODITIES.length} commodities carry this layer"><span class="box"></span>${t}<small>${m.src}</small></button>`;
+  }).join("");
+  el.querySelectorAll("[data-prov]").forEach(b=> b.onclick = ()=>{
+    const t = b.dataset.prov;
+    state.prov.has(t) ? state.prov.delete(t) : state.prov.add(t);
+    renderL2();
+  });
 }
+
+function renderTraceMap(){
+  const svg = $("#map"); if(!svg) return;
+  const t = svg.querySelector("title");
+  svg.innerHTML = ""; if(t) svg.appendChild(t);
+
+  const grat = svgEl("g");
+  grat.setAttribute("stroke","var(--grid)"); grat.setAttribute("stroke-width",".5");
+  grat.setAttribute("opacity", state.prov.has("Environmental")||state.prov.size===0 ? ".7" : ".3");
+  [92,184,276,368].forEach(y=> grat.innerHTML += `<line x1="0" y1="${y}" x2="${MAP_W}" y2="${y}"/>`);
+  [128,256,384,512].forEach(x=> grat.innerHTML += `<line x1="${x}" y1="0" x2="${x}" y2="${MAP_H}"/>`);
+  svg.appendChild(grat);
+
+  const arc = svgEl("path");
+  arc.setAttribute("d","M14 114 C 140 132, 250 196, 340 228 S 500 272, 632 310");
+  arc.setAttribute("fill","none"); arc.setAttribute("stroke","var(--glacier)");
+  arc.setAttribute("stroke-width","1.2"); arc.setAttribute("stroke-dasharray","4 4");
+  svg.appendChild(arc);
+  const arcT = svgEl("text");
+  arcT.setAttribute("x","14"); arcT.setAttribute("y","22"); arcT.setAttribute("class","map-sub");
+  arcT.setAttribute("letter-spacing",".08em"); arcT.textContent = "HIMALAYAN ARC";
+  svg.appendChild(arcT);
+
+  const L = svgEl("g"), N = svgEl("g");
+  const live = c => geoMatch(c) && provMatch(c);
+
+  LINKED.forEach(c=>{
+    const b = CLUSTER_XY[c.id]; if(!b) return;
+    c.ventures.forEach(vk=>{
+      const a = VENTURE_XY[vk]; if(!a) return;
+      const mx = (a.x+b.x)/2, my = (a.y+b.y)/2 - Math.abs(a.x-b.x)*.18 - 10;
+      const p = svgEl("path");
+      p.setAttribute("d",`M${a.x} ${a.y} Q${mx} ${my} ${b.x} ${b.y}`);
+      p.setAttribute("class","link"); p.dataset.c = c.id;
+      if(!live(c)) p.style.opacity = ".06";
+      L.appendChild(p);
+    });
+  });
+  svg.appendChild(L);
+
+  Object.entries(VENTURE_XY).forEach(([k,p])=>{
+    const v = VENTURES[k];
+    const dim = state.geo!=="all" && v.geo!==state.geo;
+    const g = svgEl("g");
+    g.setAttribute("class","nd"); g.setAttribute("opacity", dim ? ".28" : "1");
+    g.dataset.tip = `<b>${v.name}</b><br>${v.sector} · ${VTOWN[k]}`;
+    /* label sits beside the square, flipping side near the right edge, so stacked ventures
+       in one town never write over each other's marks */
+    const right = p.x < 480;
+    g.innerHTML =
+      `<rect x="${p.x-5}" y="${p.y-5}" width="10" height="10" fill="var(--ink)"/>` +
+      `<text class="map-label" x="${p.x + (right?9:-9)}" y="${p.y+3.5}" text-anchor="${right?"start":"end"}">${v.name}</text>`;
+    N.appendChild(g);
+  });
+
+  COMMODITIES.forEach(c=>{
+    const p = CLUSTER_XY[c.id]; if(!p) return;
+    const on = live(c), sel = state.commodity===c.id;
+    const g = svgEl("g");
+    g.setAttribute("class","nd"); g.setAttribute("tabindex","0"); g.setAttribute("role","button");
+    g.setAttribute("aria-label",`${c.short} — ${GEOS[c.geo].name}, open commodity record`);
+    g.dataset.c = c.id;
+    g.dataset.tip = `<b>${c.name}</b><br>${GEOS[c.geo].name} · ${c.clusters}`;
+    const op = !on ? ".16" : sel ? "1" : ".62";
+    g.innerHTML =
+      `<circle cx="${p.x}" cy="${p.y}" r="8" fill="var(--accent)" opacity="${op}"/>` +
+      (sel ? `<circle cx="${p.x}" cy="${p.y}" r="13" fill="none" stroke="var(--accent)" stroke-width="1"/>` : "") +
+      `<text class="map-sub" x="${p.x}" y="${p.y+21}" text-anchor="middle" opacity="${on?1:.3}">${c.short}</text>`;
+    g.addEventListener("click", ()=>pick(c.id));
+    g.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); pick(c.id); } });
+    N.appendChild(g);
+  });
+  svg.appendChild(N);
+
+  const note = svgEl("text");
+  note.setAttribute("class","map-sub"); note.setAttribute("x","8"); note.setAttribute("y",MAP_H-8);
+  note.textContent = "Positions from geography centroids — schematic, not to scale";
+  svg.appendChild(note);
+
+  document.querySelectorAll("#map .link").forEach(l=>
+    l.classList.toggle("hot", l.dataset.c===state.commodity));
+}
+
+const ckv = (k,v) => `<div class="ckv"><span>${k}</span><span>${v}</span></div>`;
+
+function renderRuler(c){
+  const share = c.farmerShare, rest = 100-share;
+  const gi = c.gi.has
+    ? `${c.short} has held a GI tag — ${c.gi.label.replace(/^GI · /,"")}. The registry confirms origin; it does not set this split.`
+    : `${c.short} carries no GI tag — the ${c.gi.label.replace(/^No GI — /,"")} is what stands behind the claim.`;
+  $("#ruler-title").innerHTML = `Where a rupee of ${c.short.toLowerCase()} ends up`;
+  $("#ruler").innerHTML =
+    `<i style="width:0;background:var(--vc1)" data-w="${share}" data-tip="<b>${c.chain[0]}</b><br>${share}% of final consumer value (indicative)"></i>` +
+    `<i style="background:var(--vc3)" data-tip="<b>Everything after the gate</b><br>${rest}% — ${c.chain.slice(1).join(", ")}"></i>`;
+  $("#ruler-ticks").innerHTML =
+    `<span>${c.chain[0]} · ${share}%</span><span>${c.chain.slice(1).join(" → ")} · ${rest}%</span>`;
+  $("#ruler-cap").innerHTML =
+    `That first block is the producer's share inside the portfolio channel — <b>${estMark(share+"%")}</b> of the bar, drawn at true width. ` +
+    `Conventional trade for the same crop runs nearer ${estMark(convShare(c)+"%")}. ${gi}`;
+  const seg = $("#ruler").querySelector("i");
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) seg.style.width = seg.dataset.w+"%";
+  else requestAnimationFrame(()=> requestAnimationFrame(()=> seg.style.width = seg.dataset.w+"%"));
+}
+
+function pick(cid){
+  const c = COMMODITIES.find(x=>x.id===cid); if(!c) return;
+  state.commodity = cid;
+  const g = GEOS[c.geo];
+  const vnames = c.ventures.map(k=>VENTURES[k].name).join(", ");
+  const sibs = COMMODITIES.filter(x=>x.geo===c.geo);
+  const peakNdvi = Math.max(...g.ndvi), peakM = MON3[g.ndvi.indexOf(peakNdvi)];
+  const wetIdx = g.rain.indexOf(Math.max(...g.rain));
+  const share = c.farmerShare;
+
+  $("#cc").innerHTML =
+    `<div class="cc-hd"><p class="eyebrow">${g.name} &rarr; ${vnames||"cluster intelligence only"}</p>` +
+    `<h4>${c.name}</h4>` +
+    (c.gi.has ? `<span class="gi-seal">&#9679; ${c.gi.label}</span>`
+              : `<span class="tag" style="margin-top:10px">${c.gi.label}</span>`) + `</div>` +
+
+    `<div class="blk"><p class="eyebrow">Sourcing clusters</p>` +
+    `<p style="font-size:12.5px;color:var(--ink2);margin:0 0 10px">${c.clusters}</p>` +
+    sibs.map(s=>`<button class="clu ${s.id===cid?"on":""}" data-j="${s.id}"><b>${s.short}</b>` +
+      `<span>${s.farmerShare}% producer share<span class="ring">&#9702;</span><br>${s.gi.has?"GI registered":"no GI"}</span></button>`).join("") +
+    ckv("In this geography", sibs.length+" commodit"+(sibs.length>1?"ies":"y")) + `</div>` +
+
+    `<div class="blk"><p class="eyebrow">Cluster conditions &middot; Layer 1 evidence</p>` +
+    ckv("Forest cover", (g.forestEst?"~":"")+g.forest+"%") +
+    ckv("Annual rainfall", "~"+fmt(g.rainTotal)+" mm") +
+    ckv("Wettest month", MON3[wetIdx]+" · "+g.rain[wetIdx]+" mm") +
+    ckv("Peak vegetation", peakNdvi.toFixed(2)+" NDVI · "+peakM) +
+    `<div class="hazards">${g.hazards.map(([h,lv])=>`<span class="pill ${lv}">${lv==="ok"?"✓ ":lv==="serious"?"▲ ":lv==="warn"?"◆ ":"○ "}${h}</span>`).join("")}</div></div>` +
+
+    `<div class="hero-stat"><p class="eyebrow">Producer value share</p><b>${estMark(share+"%")}</b></div>` +
+
+    `<div class="blk"><p class="eyebrow">Value chain &middot; drawn to scale</p>` +
+    `<div class="chain"><i style="width:${share}%;background:var(--vc1)"></i><i style="width:${100-share}%;background:var(--vc3)"></i></div>` +
+    `<div class="chain-lab"><span>${c.chain[0]} ${share}%</span><span>everything after ${100-share}%</span></div>` +
+    `<div class="chain-steps">${c.chain.map((st,i)=>`<span class="st">${st}</span>${i<c.chain.length-1?'<span class="arr">→</span>':""}`).join("")}</div></div>` +
+
+    `<div class="blk"><p class="eyebrow">Registry &amp; provenance</p>` +
+    ckv("GI status", c.gi.has ? c.gi.label.replace(/^GI · /,"") : "not registered") +
+    ckv("Proprietor", c.gi.has ? "see GI Registry record" : "&mdash;") +
+    ckv("Layers carried", c.tags.length+" of "+PROV_TAGS.length) +
+    `<div style="margin-top:9px">${c.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div></div>` +
+
+    `<p class="src">${c.meta}</p><p class="src" style="margin-top:8px">Evidence: ${c.evidence}</p>`;
+
+  $("#cc").querySelectorAll("[data-j]").forEach(d=> d.onclick = ()=>pick(d.dataset.j));
+  renderRuler(c);
+  document.querySelectorAll("#map .link").forEach(l=> l.classList.toggle("hot", l.dataset.c===cid));
+  document.querySelectorAll("#map .nd[data-c]").forEach(n=>{
+    const cc = COMMODITIES.find(x=>x.id===n.dataset.c);
+    const on = geoMatch(cc) && provMatch(cc);
+    const circle = n.querySelector("circle");
+    if(circle) circle.setAttribute("opacity", !on ? ".16" : n.dataset.c===cid ? "1" : ".62");
+  });
+}
+
 function renderL2(){
-  renderMap();
-  const inGeo = c => state.geo==="all" || c.geo===state.geo;
-  const inProv = c => [...state.prov].every(t=>c.tags.includes(t));
-  const list = COMMODITIES.filter(c=>inGeo(c)&&inProv(c));
+  renderProvRail();
+  const list = COMMODITIES.filter(c=>geoMatch(c)&&provMatch(c));
+  if(list.length){
+    /* keep the selection inside the current view */
+    if(!list.some(c=>c.id===state.commodity)) state.commodity = list[0].id;
+    renderTraceMap();
+    pick(state.commodity);
+  } else {
+    /* nothing matches — say so rather than opening an unrelated record */
+    renderTraceMap();
+    const where = state.geo==="all" ? "the portfolio" : GEOS[state.geo].name;
+    const picked = [...state.prov];
+    $("#ruler-title").textContent = "No commodity in view";
+    $("#ruler").innerHTML = `<i style="width:100%;background:var(--vc3);opacity:.35"></i>`;
+    $("#ruler-ticks").innerHTML = "";
+    $("#ruler-cap").innerHTML = `No commodity in ${where} carries ${picked.length>1?"every one of":""} the selected provenance layer${picked.length>1?"s":""}. Clear a layer in the rail, or widen the geography filter.`;
+    $("#cc").innerHTML =
+      `<div class="cc-hd"><p class="eyebrow">${where} &rarr; no match</p><h4>Nothing in view</h4></div>` +
+      `<p style="font-size:13px;color:var(--ink2);margin:0 0 14px">` +
+      (picked.length ? `Selected layers: ${picked.map(t=>`<span class="tag">${t}</span>`).join("")}` : "") +
+      `</p>` +
+      `<div class="blk"><p class="eyebrow">Closest matches</p>` +
+      COMMODITIES.filter(geoMatch).slice(0,6).map(c=>
+        `<button class="clu" data-j="${c.id}"><b>${c.short}</b><span>${c.tags.length} of ${PROV_TAGS.length} layers</span></button>`).join("") +
+      (COMMODITIES.filter(geoMatch).length ? "" : `<p class="src">No commodity is recorded in this geography yet — it appears here as cluster intelligence only.</p>`) +
+      `</div>`;
+    $("#cc").querySelectorAll("[data-j]").forEach(d=> d.onclick = ()=>{ state.prov.clear(); state.commodity = d.dataset.j; renderL2(); });
+  }
 
-  /* cluster comparison */
-  const compare = $("#cluster-compare");
-  compare.innerHTML = `<div class="card-head"><h3>National cluster share</h3><button class="tbl-btn" data-toggle>⊞ table</button></div>
-    <p style="font-size:12px;color:var(--ink2);margin:0 0 8px">Portfolio clusters vs national production ${estMark("indicative")}</p>
-    <div class="viz">
-      ${[["Sikkim — share of India's large cardamom",85],["Ladakh — share of India's dried apricot",70],["Ladakh — share of India's sea buckthorn",90],["Mizoram — bamboo-area share (NE India)",30]]
-        .map(([l,v])=>`<div class="fs-row"><span>${l}</span><b>~${v}%</b></div><div class="meter" data-tip="<b>${l}</b><br>~${v}% (indicative)"><i style="width:${v}%"></i></div>`).join("")}
-    </div>
-    <div class="tblwrap">${tableHTML(["Cluster","Share"],[["Sikkim / large cardamom","~85%"],["Ladakh / dried apricot","~70%"],["Ladakh / sea buckthorn","~90%"],["Mizoram / bamboo (NE)","~30%"]])}</div>`;
-  compare.querySelector("[data-toggle]").onclick = ()=>{ compare.classList.toggle("show-table");
-    compare.querySelector("[data-toggle]").textContent = compare.classList.contains("show-table")?"◫ chart":"⊞ table"; };
-
-  /* commodity cards */
-  $("#commodity-cards").innerHTML = list.length ? list.map(c=>{
-    const vnames = c.ventures.map(v=>VENTURES[v].name).join(", ") || "cluster intelligence only";
-    return `<div class="card c6">
-      <div class="comm-head">
-        <h4>${c.name}</h4>
-        ${c.gi.has?`<span class="gi-seal" data-tip="<b>Geographical Indication</b><br>Registered — GI Registry, Govt. of India">◉ ${c.gi.label}</span>`:`<span class="tag">${c.gi.label}</span>`}
-      </div>
-      <div class="comm-meta"><b style="color:var(--ink)">${GEOS[c.geo].name}</b> · ${c.clusters} · Ventures: ${vnames}</div>
-      <p style="font-size:12.5px;color:var(--ink2);margin:6px 0 0">${c.meta}</p>
-      <div style="margin-top:9px">${c.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
-      <div class="vc">${c.chain.map((st,i)=>`<span class="step">${st}</span>${i<c.chain.length-1?'<span class="arr">→</span>':""}`).join("")}</div>
-      <div class="fs-row"><span>Farmer share of final value ${estMark("indicative")}</span><b>${c.farmerShare}%</b></div>
-      <div class="meter" data-tip="<b>Farmer share</b><br>${c.farmerShare}% of final consumer value (indicative)"><i style="width:${c.farmerShare}%"></i></div>
-      <p class="src" style="margin:9px 0 0">Evidence: ${c.evidence}</p>
-    </div>`;
-  }).join("") : `<div class="card" style="color:var(--ink2)">No commodity in the current geography matches every selected provenance filter. Clear a filter to widen the view.</div>`;
-
-  /* global production */
+  /* global production — large cardamom is the one commodity with published world shares */
   card("#ch-global","Large cardamom — world production share","% of global output "+estMark("indicative"),
-    barChartSVG({data:[{l:"Nepal",v:50},{l:"India",v:35,tip:"India — Sikkim grows ~85% of national crop"},{l:"Bhutan",v:15}], unit:"%", color:"var(--s1)", fmtV:v=>v}),
+    barChartSVG({data:[{l:"Nepal",v:50},{l:"India",v:35,tip:"India — Sikkim grows ~85% of the national crop"},{l:"Bhutan",v:15}], unit:"%", color:"var(--s1)", fmtV:v=>v}),
     ["Origin","Share of global output"],[["Nepal","~50%"],["India (Sikkim-led)","~35%"],["Bhutan","~15%"]]);
 
-  /* farmer share comparison */
-  card("#ch-farmershare","Farmer share — portfolio channel vs conventional trade","% of final value "+estMark("indicative"),
+  const rows = (list.length?list:COMMODITIES);
+  card("#ch-farmershare","Producer share — portfolio channel vs conventional trade","% of final value "+estMark("indicative"),
     legendHTML([{name:"Portfolio channel",color:"var(--s1)"},{name:"Conventional trade",color:"var(--s2)"}]) +
-    groupedBarSVG({rows:(list.length?list:COMMODITIES).map(c=>[c.short, c.farmerShare, Math.max(20,c.farmerShare-26)]), unit:"%"}),
-    ["Commodity","Portfolio channel","Conventional trade"], (list.length?list:COMMODITIES).map(c=>[c.short, c.farmerShare+"%", Math.max(20,c.farmerShare-26)+"%"]));
+    groupedBarSVG({rows:rows.map(c=>[c.short, c.farmerShare, convShare(c)]), unit:"%"}),
+    ["Commodity","Portfolio channel","Conventional trade"],
+    rows.map(c=>[c.short, c.farmerShare+"%", convShare(c)+"%"]));
+
+  const ours = COMMODITIES.filter(c=>c.tags.includes("Traceability")||c.tags.includes("Social")).length;
+  $("#evidence").innerHTML =
+    `<div class="card-head"><h3>Every layer, and where it comes from</h3>` +
+    `<span class="hint">${EVIDENCE.length} layers · 2 are ours</span></div>` +
+    `<p style="font-size:13px;color:var(--ink2);margin:0 0 14px;max-width:70ch">Most layers are assembled from open datasets anyone can audit. Two are not — source traceability and social terms come from the founder survey, and they cover ${ours} of the ${COMMODITIES.length} commodities tracked here. Those are the ones that matter.</p>` +
+    tableHTML(["Layer","What it proves","Source"], EVIDENCE);
 }
 
-/* ============================== LAYER 3 ============================== */
+/* ============================== LAYER 3 · DEPENDENCY MATRIX ============================== */
+const SHOCKS = {
+  rain :{n:"Rainfall deficit",        src:"IMD normals · CHIRPS",              re:/rain|flood|water stress|drought/i},
+  frost:{n:"Early frost / cold snap", src:"ERA5 · station normals",            re:/snow|cold/i},
+  slide:{n:"Landslide &amp; access loss", src:"NASA Landslide Catalog · slope", re:/landslide|flood|erosion/i},
+  fire :{n:"Fire incidence",          src:"MODIS / VIIRS hotspots",            re:/fire/i}
+};
+const SEV = {serious:3, warn:2, info:1, ok:0};
+const shockHits = (g,k) => g.hazards.filter(h=>SHOCKS[k].re.test(h[0]));
+const shockScore = (g,k) => shockHits(g,k).reduce((a,h)=>a+(SEV[h[1]]||0),0);
+
+/* the geography this shock is traced through: the filter if set, else the most exposed */
+function depGeoFor(k){
+  if(state.geo!=="all") return state.geo;
+  return Object.keys(GEOS).sort((a,b)=>shockScore(GEOS[b],k)-shockScore(GEOS[a],k))[0];
+}
+function depSubject(geoKey){
+  const inGeo = COMMODITIES.filter(c=>c.geo===geoKey);
+  const c = inGeo.find(x=>x.ventures.length) || inGeo[0] || null;
+  let vk = c && c.ventures[0];
+  if(!vk) vk = Object.keys(VENTURES).find(k=>VENTURES[k].geo===geoKey);
+  return { c, v: vk?VENTURES[vk]:null, vk };
+}
+const procTile = v => v && v.tiles ? v.tiles.find(t=>/procur|botanical|produce|ginger|apricot/i.test(t.l)) : null;
+const premium  = v => {
+  if(!v || !v.price) return null;
+  const p = v.price.rows.reduce((a,r)=>a+(r[1]/r[2]-1),0)/v.price.rows.length;
+  return Math.round(p*100);
+};
+
+function cascadeFor(k, geoKey){
+  const g = GEOS[geoKey], {c,v} = depSubject(geoKey);
+  const hits = shockHits(g,k);
+  const haz = hits.length ? hits.map(h=>h[0]).join(" · ") : null;
+  const cName = c ? c.short.toLowerCase() : "the cluster crop";
+  const vName = v ? v.name : "the venture in this geography";
+  const clusters = c ? c.clusters : "the sourcing clusters";
+  const prem = premium(v), pt = procTile(v);
+  const E = s => estMark(s);
+
+  /* wettest three consecutive months and vegetation amplitude, computed from the Layer 1 series */
+  const total = g.rain.reduce((a,b)=>a+b,0);
+  let winI = 0, winV = -1;
+  for(let i=0;i<12;i++){
+    const s = g.rain[i]+g.rain[(i+1)%12]+g.rain[(i+2)%12];
+    if(s>winV){ winV = s; winI = i; }
+  }
+  const wetShare = Math.round(winV/total*100);
+  const wetWindow = MON3[winI]+"–"+MON3[(winI+2)%12];
+  const nMax = Math.max(...g.ndvi), nMin = Math.min(...g.ndvi);
+  const fallIdx = g.ndvi.indexOf(nMax);
+  const fallM = MON3[(fallIdx+1)%12];
+  const dried = /dry|cur|drying|sun/i.test(c ? c.chain.join(" ") : "");
+
+  if(k==="rain") return [
+    ["Rainfall deficit",
+     `${g.name}'s rain arrives in one window: ${wetWindow} carries ${wetShare}% of the year's total, against a ~${fmt(g.rainTotal)} mm annual normal. A shortfall inside those weeks has nowhere else to come from.`,
+     `${wetShare}% of rain in ${wetWindow}`, false],
+    ["Yield falls",
+     `Vegetation runs from ${nMin.toFixed(2)} to ${nMax.toFixed(2)} NDVI across the season and peaks in ${MON3[fallIdx]}. Bulking tracks that curve, so the shortfall reads on the same polygon in the same season.`,
+     `yield down ~15–20%`, true],
+    ["Ingredient shortfall",
+     `${vName}'s requirement is not met from ${clusters}. Sourcing either widens beyond the traced cluster — which costs the provenance claim — or the volume is simply not bought.`,
+     pt ? `${pt.v}${pt.u||""} contracted at risk` : `procurement gap`, true],
+    ["Business impact",
+     prem ? `Cost per kg rises against the local benchmark. ${vName} already pays about +${prem}% over it; the founder absorbs the difference or breaks a fixed-price buyer contract.`
+          : `Cost per kg rises. The founder absorbs it or breaks a fixed-price buyer contract.`,
+     prem ? `+${prem}% premium under pressure` : `margin pressure`, true]
+  ];
+
+  if(k==="frost") return [
+    ["Early frost / cold snap",
+     haz ? `${g.name} carries ${haz.toLowerCase()}. Vegetation is already falling away by ${fallM}; frost arriving ahead of that turn closes the window early.`
+         : `No cold-season hazard is flagged for ${g.name} in the hazard record — the chain below is the generic one, shown for comparison.`,
+     `NDVI turns after ${MON3[fallIdx]}`, false],
+    ["Harvest window closes",
+     `Crop that has not bulked cannot be left standing. ${c ? `${c.chain[0]} → ${c.chain[1]}` : "Harvest → first handling"} is a fixed sequence, so immature material goes forward instead.`,
+     `grade slips`, true],
+    ["Quality drops",
+     c && c.gi.has ? `The batch stops meeting the premium spec the ${c.gi.label.replace(/^GI · /,"")} claim rests on.`
+                   : `Grade falls below the spec the ${c ? c.gi.label.replace(/^No GI — /,"") : "community protocol"} rests on — with no registry to appeal to.`,
+     c && c.gi.has ? `GI spec risk` : `claim risk`, true],
+    ["Business impact",
+     prem ? `Premium positioning is the whole thesis: ${vName} pays +${prem}% over the local benchmark precisely for grade. Losing grade costs more than losing volume.`
+          : `Premium positioning is the whole thesis. Losing grade costs more than losing volume.`,
+     `price realisation falls`, true]
+  ];
+
+  if(k==="slide") return [
+    ["Landslide &amp; access loss",
+     haz ? `${g.name}: ${haz.toLowerCase()}. At ${(g.forestEst?"~":"")+g.forest}% forest cover on hill gradients, it is the collection route that fails, not the crop.`
+         : `No landslide or flood hazard is flagged for ${g.name} — access risk here is seasonal snow rather than slope failure.`,
+     hits.length ? `${hits.length} hazard${hits.length>1?"s":""} on record` : `not flagged`, false],
+    ["Crop is fine, access is not",
+     `Land cover on the traced polygon is unchanged. Nothing moves from ${clusters} to the collection point while the route is out.`,
+     `days cut off`, true],
+    [dried ? "Stock holds, cash does not" : "Perishable loss",
+     dried ? `${cName.charAt(0).toUpperCase()+cName.slice(1)} is dried or cured at the cluster, so the material survives — but payment to growers waits on despatch.`
+           : `Fresh material degrades without cold chain at the cluster, and there is none.`,
+     dried ? `payment delayed` : `spoilage`, true],
+    ["Business impact",
+     `A logistics failure reads as a supply failure to the buyer. What ${vName} loses is reliability, not yield — and reliability is what the shelf listing is priced on.`,
+     `contract risk`, true]
+  ];
+
+  return [
+    ["Fire incidence",
+     haz ? `${g.name} holds ${(g.forestEst?"~":"")+g.forest}% forest cover and ${haz.toLowerCase()}.`
+         : `${g.name} carries ${(g.forestEst?"~":"")+g.forest}% forest cover and no fire season on record — exposure here is low.`,
+     `${(g.forestEst?"~":"")+g.forest}% forest cover`, false],
+    ["Land cover check",
+     `ISFR 2021 and land-cover classification establish whether burn inside the sourcing polygon is jhum rotation or encroachment. The distinction decides everything that follows.`,
+     `under review`, true],
+    ["Claim exposure",
+     c ? `If burn overlaps the traced cluster, the ${[c.gi.has?"GI origin":"origin", geoKey==="sikkim"?"organic-state":"land-practice"].join(" and ")} claims on ${cName} both need defending.`
+       : `If burn overlaps a traced cluster, the origin and practice claims both need defending.`,
+     `audit trigger`, true],
+    ["Business impact",
+     `A certification challenge, not a crop loss. For ${vName} the evidence layer is the defence — which is the entire reason it is collected.`,
+     `claim defensible`, true]
+  ];
+}
+
+function renderDep(){
+  const k = state.shock, geoKey = depGeoFor(k), g = GEOS[geoKey];
+  const {c,v} = depSubject(geoKey);
+
+  $("#shockList").innerHTML = Object.entries(SHOCKS).map(([key,s])=>{
+    const n = shockHits(g,key).length;
+    return `<button class="shock" aria-pressed="${state.shock===key}" data-s="${key}">${s.n}<em>${s.src}` +
+      ` · ${n ? n+" hazard"+(n>1?"s":"")+" on record" : "not flagged here"}</em></button>`;
+  }).join("");
+  $("#shockList").querySelectorAll("[data-s]").forEach(b=> b.onclick = ()=>{ state.shock = b.dataset.s; renderDep(); });
+
+  $("#depContext").innerHTML =
+    ckv("Geography", g.name) +
+    ckv("Commodity", c ? c.short : "&mdash;") +
+    ckv("Venture", v ? v.name : "&mdash;") +
+    `<p class="pm-note">${state.geo==="all"
+      ? "No geography filter set — traced through the most exposed geography on the hazard record. Pick one above to re-scope."
+      : "Scoped by the geography filter."}</p>`;
+
+  $("#cascade").innerHTML = cascadeFor(k, geoKey).map((s,i)=>
+    `<div class="cas-step"><div class="cas-n">0${i+1}</div><div><h4>${s[0]}</h4><p>${s[1]}</p>` +
+    `<span class="val">${s[3] ? estMark(s[2]) : s[2]}</span></div></div>`).join("");
+}
+
+function renderArgument(){
+  const gi = COMMODITIES.filter(c=>c.gi.has);
+  const withVenture = COMMODITIES.filter(c=>c.ventures.length).length;
+  $("#argu").innerHTML =
+    `<p class="eyebrow">The argument</p>` +
+    `<h2>Recognition without benefit is the failure</h2>` +
+    `<p>${gi.length} of the ${COMMODITIES.length} commodities tracked here already hold a Geographical Indication — ${gi.slice(0,4).map(c=>c.short).join(", ")} among them. The tags sit with state departments and grower consortia. Across those ${gi.length} registrations the producer keeps ${estMark(Math.round(gi.reduce((a,c)=>a+c.farmerShare,0)/gi.length)+"%")} of final value inside the portfolio channel, against ${estMark(Math.round(gi.reduce((a,c)=>a+convShare(c),0)/gi.length)+"%")} in the conventional trade most of the crop still moves through. The tag moves neither figure: growers in these clusters are almost never registered as authorised users, and no inspection structure is enforced.</p>` +
+    `<p>The GI Act requires a quality-control and inspection mechanism. Almost nobody operates one. A satellite-plus-survey system that verifies cluster origin and practice every year is that mechanism — which makes this the missing half of a law that already exists.</p>` +
+    `<p>Only ${withVenture} of the ${COMMODITIES.length} commodities currently sit behind a portfolio venture. The rest are cluster intelligence: the argument for where the next venture should go.</p>`;
+}
+
 function renderL3(){
+  renderDep();
   renderPortfolioMap();
   const vs = Object.entries(VENTURES).filter(([,v])=>state.geo==="all"||v.geo===state.geo);
   $("#l3-overview").innerHTML = `
@@ -1206,7 +1713,7 @@ function renderL3(){
       <div class="t-note">flagship ventures, majority indigenous-women owned &amp; led<br><span class="src">Source: LinkedIn</span></div>
     </div>
     <div class="card c4 tile">
-      <div class="t-label">Women & farmers engaged (view)</div>
+      <div class="t-label">Women &amp; farmers engaged (view)</div>
       ${(()=>{ const s = vs.reduce((a,[,v])=>{const t=v.tiles&&v.tiles[0]; return a + (t?(parseInt(String(t.v).replace(/[^0-9]/g,""))||0):0);},0);
         return s>0 ? `<div class="t-value">${fmt(s)}</div><div class="t-note">${estMark("first-tile sum across ventures in view — partly illustrative")}</div>`
                    : `<div class="t-value">—</div><div class="t-note">founder-survey metrics pending for ventures in this view</div>`; })()}
@@ -1217,25 +1724,27 @@ function renderL3(){
     || `<span style="color:var(--ink2)">No ventures in this geography.</span>`;
   $("#ventureChips").querySelectorAll("[data-v]").forEach(b=> b.onclick=()=>{ state.venture=b.dataset.v; renderL3(); });
 
+  renderArgument();
+
   const v = VENTURES[state.venture];
   if(!v || (state.geo!=="all" && v.geo!==state.geo)){ $("#ventureDetail").innerHTML=""; return; }
   const years = ["FY21","FY22","FY23","FY24","FY25"];
   $("#ventureDetail").innerHTML = `
-    <div class="card" style="margin-bottom:14px">
+    <div class="card solo" style="margin-bottom:22px">
       <div class="v-head">
         <div style="flex:1;min-width:260px">
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
-            ${VLOGOS[state.venture]?`<img src="${VLOGOS[state.venture]}" alt="" style="height:42px;width:auto;border-radius:6px;border:1px solid var(--border);background:#fff;padding:2px 6px">`:`<span aria-hidden="true" style="width:40px;height:40px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex:none">${v.name.split(/\s+/).map(w=>w[0]).slice(0,2).join("")}</span>`}
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+            ${VLOGOS[state.venture]?`<img src="${VLOGOS[state.venture]}" alt="" style="height:42px;width:auto;border:1px solid var(--border);background:#fff;padding:2px 6px">`:`<span aria-hidden="true" style="width:40px;height:40px;border:1px solid var(--accent);color:var(--accent);display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;flex:none">${v.name.split(/\s+/).map(w=>w[0]).slice(0,2).join("")}</span>`}
             <h3 style="margin:0">${v.name}</h3>
           </div>
           <p class="v-desc">${v.desc}</p>
-          <div style="margin-top:8px">${v.sdg.map(s=>`<span class="sdg">${s}</span>`).join("")}</div>
+          <div style="margin-top:10px">${v.sdg.map(s=>`<span class="sdg">${s}</span>`).join("")}</div>
         </div>
-        <div style="min-width:200px">
-          <div class="src" style="margin-bottom:4px">GEOGRAPHY</div>
-          <div style="font-weight:640">${GEOS[v.geo].name} <span style="font-weight:400;color:var(--ink2)">· ${v.sector}</span></div>
-          <div class="src" style="margin:10px 0 4px">WHAT'S DIFFERENT</div>
-          ${v.impact.map(i=>`<div style="font-size:12.5px;color:var(--ink2);margin-bottom:3px">— ${i}</div>`).join("")}
+        <div style="min-width:210px">
+          <div class="src" style="margin-bottom:5px">GEOGRAPHY</div>
+          <div style="font-weight:600">${GEOS[v.geo].name} <span style="font-weight:400;color:var(--ink2)">· ${v.sector}</span></div>
+          <div class="src" style="margin:12px 0 5px">WHAT'S DIFFERENT</div>
+          ${v.impact.map(i=>`<div style="font-size:12.5px;color:var(--ink2);margin-bottom:4px">— ${i}</div>`).join("")}
         </div>
       </div>
     </div>
@@ -1244,11 +1753,11 @@ function renderL3(){
         <div class="t-label">${t.l}</div>
         <div class="t-value">${t.est?estMark(t.v):t.v}${t.u?`<span class="unit">${t.u}</span>`:""}</div>
         <div class="t-note">${t.note}${t.src?` · <span class="src">${t.src}</span>`:""}</div>
-      </div>`).join("") : `<div class="card" style="color:var(--ink2);font-size:12.5px">Detailed impact metrics for ${v.name} are pending founder-survey integration — its location and sector appear on the portfolio map in Layer 1.</div>`}
+      </div>`).join("") : `<div class="card" style="color:var(--ink2);font-size:13px">Detailed impact metrics for ${v.name} are pending founder-survey integration — its location and sector appear on the portfolio map above.</div>`}
     </div>
-    ${(v.price||v.uplift)?`<div class="grid" style="margin-top:14px">
-      ${v.price?`<div class="card c6" id="ch-price"></div>`:""}
-      ${v.uplift?`<div class="card c6" id="ch-uplift"></div>`:""}
+    ${(v.price||v.uplift)?`<div class="grid" style="margin-top:22px">
+      ${v.price?`<div class="card ${v.uplift?"c6":""}" id="ch-price"></div>`:""}
+      ${v.uplift?`<div class="card ${v.price?"c6":""}" id="ch-uplift"></div>`:""}
     </div>`:""}`;
 
   if(v.price){
@@ -1259,10 +1768,10 @@ function renderL3(){
       v.price.rows.map(r=>[r[0],r[1],r[2],"+"+Math.round((r[1]/r[2]-1)*100)+"%"]));
   }
   if(v.uplift){
-  const upl = [{name:v.name, color:"var(--s1)", values:v.uplift},{name:"Benchmark", color:"var(--s2)", values:[100,104,107,110,113]}];
-  card("#ch-uplift", v.price?`Producer income — indexed`:`Reach — indexed growth`, `Index, FY21 = 100 · ${estMark("illustrative")}`,
-    legendHTML(upl,true)+lineChartSVG({series:upl, labels:years, fmtV:v2=>Math.round(v2), endLabels:true}),
-    ["Year",v.name,"Benchmark"], years.map((y,i)=>[y, v.uplift[i], [100,104,107,110,113][i]]));
+    const upl = [{name:v.name, color:"var(--s1)", values:v.uplift},{name:"Benchmark", color:"var(--s2)", values:[100,104,107,110,113]}];
+    card("#ch-uplift", v.price?`Producer income — indexed`:`Reach — indexed growth`, `Index, FY21 = 100 · ${estMark("illustrative")}`,
+      legendHTML(upl,true)+lineChartSVG({series:upl, labels:years, fmtV:v2=>Math.round(v2), endLabels:true}),
+      ["Year",v.name,"Benchmark"], years.map((y,i)=>[y, v.uplift[i], [100,104,107,110,113][i]]));
   }
 }
 
@@ -1271,8 +1780,8 @@ document.querySelectorAll(".tab").forEach(t=> t.onclick = ()=>{
   state.layer = t.dataset.layer;
   document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected", x===t ? "true":"false"));
   document.querySelectorAll("section.layer").forEach(s=>s.classList.toggle("active", s.id===state.layer));
-  renderProvChips();
+  window.scrollTo({top:0, behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
 });
-function renderAll(){ renderGeoChips(); renderProvChips(); renderL1(); renderL2(); renderL3(); }
+function renderAll(){ renderGeoChips(); renderL1(); renderL2(); renderL3(); }
 renderAll();
 </script>
