@@ -92,10 +92,16 @@
   .chip .n{opacity:.6;margin-left:5px;font-family:var(--mono);font-size:10px}
 
   /* ---------- layout ---------- */
-  main{padding:0 0 10px}
+  main{padding:0 0 10px;overflow-x:clip}
   section.layer{display:none}
   section.layer.active{display:block}
   .layer-head{margin:44px 0 26px;max-width:800px}
+  .hero-band{margin:0 calc(50% - 50vw) 36px;padding:8px calc(50vw - 50%) 34px;background:var(--invert-bg);border-bottom:1px solid var(--invert-line)}
+  .hero-band .layer-head{margin:34px 0 24px}
+  .hero-band .eyebrow{color:var(--invert-accent)}
+  .hero-band .layer-head h2{color:var(--invert-fg)}
+  .hero-band .layer-head p{color:var(--invert-fg-2)}
+  .hero-band #pmap{box-shadow:none;padding-left:0;padding-right:0;margin:0}
   .part-head{display:flex;align-items:center;gap:16px;margin:40px 0 14px}
   .part-head span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
   .part-head::after{content:"";flex:1;height:1px;background:var(--grid)}
@@ -397,12 +403,14 @@
 
   <!-- ================= LAYER 1 ================= -->
   <section class="layer active" id="l1" role="tabpanel" aria-labelledby="tab1">
+   <div class="hero-band">
     <div class="layer-head">
       <p class="eyebrow">Layer 1 · Regional Overview</p>
       <h2>The operating context</h2>
       <p>Part A — demographic context; Part B — geographic &amp; climate context. The Indian Himalayan Region spans 12 states &amp; UTs, with Alsisar Impact active in 8. The geography filter above scopes every layer of the platform.</p>
     </div>
-    <div class="card" id="pmap" style="margin-bottom:14px"></div>
+    <div class="card" id="pmap"></div>
+   </div>
     <div class="part-head"><span>Part A · Demographic overview</span></div>
     <div class="grid" id="l1-tiles"></div>
     <div class="grid" id="l1-geocards" style="margin-top:14px"></div>
