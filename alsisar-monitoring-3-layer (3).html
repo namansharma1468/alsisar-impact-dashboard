@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Alsisar Impact — Impact Monitoring Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -356,6 +357,10 @@
   .leaflet-control-attribution a{color:var(--accent)}
   .leaflet-popup-content-wrapper{background:var(--surface);color:var(--ink);border:1px solid var(--border);box-shadow:none}
   .leaflet-popup-content{font-family:var(--body);font-size:12.5px}
+  .leaf-loading{display:grid;place-items:center;height:100%;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);animation:l2pulse 1.6s ease-in-out infinite}
+  @keyframes l2pulse{50%{opacity:.45}}
+  .gi-badge{display:inline-block;background:var(--apricot-soft);color:var(--apricot);font-family:var(--mono);font-size:10px;padding:1px 6px;margin:2px 2px 0 0;border:1px solid var(--apricot)}
+  .gi-none{font-family:var(--mono);font-size:10px;color:var(--muted)}
 
   /* ---------- tooltip / footer ---------- */
   #tip{position:fixed;z-index:99;pointer-events:none;background:var(--ink);color:var(--plane);font-size:12px;line-height:1.45;padding:7px 10px;max-width:280px;opacity:0;transition:opacity .1s;border:1px solid var(--border)}
@@ -782,7 +787,7 @@
       </div>
 
       <div class="stage">
-        <svg id="map" viewBox="0 0 640 460" role="img" aria-labelledby="mt"><title id="mt">Traceability map linking ventures to the sourcing clusters they buy from across the Himalayan arc</title></svg>
+        <div id="leafmapT" style="height:440px;overflow:hidden;background:var(--tint);border:1px solid var(--border)" role="img" aria-label="Satellite traceability map linking ventures to the commodity clusters they source across the Himalayan arc"><div class="leaf-loading">Loading satellite imagery…</div></div>
         <div class="map-legend"><span><i class="sq"></i>Venture</span><span><i class="ci"></i>Sourcing cluster</span><span><i class="ln"></i>Sources from</span></div>
         <div class="card" id="ch-farmershare"></div>
         <div class="card" id="ch-global"></div>
@@ -814,7 +819,7 @@
     </div>
 
     <div class="part-head"><span>Part A · Sourcing, procurement &amp; outcomes</span></div>
-    <div class="card solo" id="pmap3" style="margin-bottom:22px"></div>
+    <div class="card solo" id="l2sat" style="margin-bottom:22px"></div>
     <div class="grid" id="l3-overview"></div>
     <div class="v-chips" id="ventureChips" style="margin-top:22px"></div>
     <div id="ventureDetail"></div>
@@ -1411,6 +1416,192 @@ function renderGeoMapSat(el, ind, IND){
     if(lm) lm.innerHTML = `<div style="display:grid;place-items:center;height:100%;padding:30px;text-align:center;color:var(--ink2);font-size:13px">Satellite tiles can't load in this embedded view (external requests are blocked).<br><br>Open the dashboard locally or on your own hosting (e.g. GitHub Pages) for the full satellite map — or switch back to the schematic view.</div>`;
   });
 }
+/* ===== Layer 2 · sourcing satellite map (venture → commodity, GI-marked) ===== */
+const L2TOWNS = {
+  "Leh":[34.16,77.58], "Nubra Valley":[34.75,77.54], "Kashmir Valley":[34.01,75.33],
+  "Almora":[29.60,79.66], "Nainital":[29.38,79.45], "Gangtok":[27.34,88.61],
+  "Namchi":[27.16,88.36], "Central Sikkim":[27.53,88.51], "Darjeeling":[27.04,88.26],
+  "Aizawl":[23.73,92.72], "Ukhrul":[25.05,94.36], "Kathmandu":[27.70,85.32]
+};
+const L2SITES = [
+  {n:"Acres of Ice", town:"Leh", region:"Leh, Ladakh", gis:[], txt:"Ice-reservoir irrigation across 12 villages: apricot &amp; apple orchards, barley, wheat, vegetables, medicinal plants"},
+  {n:"Nima Goos Goos", town:"Leh", region:"Leh, Ladakh", gis:[], txt:"Ladakhi apricots, high-pasture barley, organic buckwheat (Takmachik), wild nettle, spearmint, Himalayan rhubarb, shilajit"},
+  {n:"Ladakh Basket", town:"Leh", region:"Leh, Ladakh", gis:["Sea buckthorn berries"], txt:"Halman apricots, sea buckthorn berries (GI), black buckwheat, tsampa barley, Ladakhi apples, walnuts, shilajit"},
+  {n:"Ladakh Bites", town:"Leh", region:"Leh, Ladakh", gis:["Raktsey Karpo apricot","Sea buckthorn"], txt:"Raktsey Karpo apricots (GI 2022), Ladakhi apples, sea buckthorn (GI); 99% sourced from Nubra, Nimo &amp; Aryan valleys"},
+  {n:"Siachen Naturals", town:"Nubra Valley", region:"Nubra Valley, Ladakh", gis:["Sea buckthorn"], txt:"Sea buckthorn (GI); Chuli apricots (Sham Valley), Ladakhi barley, shilajit, wild chives, nettle, caraway"},
+  {n:"Zarin", town:"Kashmir Valley", region:"Kashmir Valley, J&amp;K", gis:[], txt:"Kashmiri rainbow trout &amp; roe, Lidder River / Kolahoi glacier snow-fed waters — signature cold-water aquaculture"},
+  {n:"Kumaon Khand", town:"Almora", region:"Almora, Uttarakhand", gis:[], txt:"Kumaon Himalayan hemp (seeds, hearts, oil, flour) from 2,500+ hill farmers; Bhaang ka Namak hemp-seed salt"},
+  {n:"Reshapirul", town:"Nainital", region:"Nainital, Uttarakhand", gis:[], txt:"Pirul (chir-pine needles); Bhimal fibre; Harsil wool — named local sheep wool from Harsil valley"},
+  {n:"Agapi", town:"Gangtok", region:"Gangtok, Sikkim", gis:[], txt:"Sikkim-grown mugwort, guras/rhododendron blossom, orange peel, aloe, hemp, avocado (indigenous botanicals, no GI)"},
+  {n:"NE Origin", town:"Gangtok", region:"Gangtok (pan-NE)", gis:["Naga King Chilli","Chak-Hao","Dalle Khursani","Lakadong turmeric"], txt:"Naga King Chilli (GI), Chak-Hao (GI), Dalle Khursani (GI, 4 forms), Lakadong turmeric (GI); Temi tea, kinema, gundruk, stingless-bee honey, timbur"},
+  {n:"Crafted Fiber", town:"Namchi", region:"Namchi, Sikkim", gis:[], txt:"Angora rabbit wool (signature), Eri silk, merino; natural dyes — madder, indigo, lac, turmeric, sappan wood"},
+  {n:"Shimpu Guras", town:"Central Sikkim", region:"Sikkim", gis:[], txt:"Guras (rhododendron) blossoms for wine; own-farm Sikkim kiwi, yacon, guava, peach, plum, pear"},
+  {n:"Syngbo", town:"Darjeeling", region:"Darjeeling, WB", gis:["Darjeeling Tea"], txt:"Darjeeling Tea (GI No. 1) — base of their kombucha &amp; sparkling tea"},
+  {n:"Local Natural Soda", town:"Aizawl", region:"Aizawl, Mizoram", gis:["Mizo Ginger"], txt:"Thinglaidum ginger — Mizo Ginger (GI); Mizoram pomelo (sertawk), local oranges, dragon fruit"},
+  {n:"Hill Wild", town:"Ukhrul", region:"Ukhrul, Manipur", gis:["Naga King Chilli","Sirarakhong Hathei chilli","Chak-Hao black rice","Kachai Lemon"], txt:"Naga King Chilli (GI) chocolate; Sirarakhong Hathei chilli (GI) co-op; Chak-Hao black rice (GI); Kachai Lemon (GI) pickle; perilla, wild apple, plum, michinga peppercorn"},
+  {n:"NE Nepal", town:"Kathmandu", region:"Kathmandu, Nepal", gis:[], txt:"Lokta (Daphne-bark) handmade paper; recycled brass, silver, copper; hemp; felt — 6+ revived Nepali crafts"}
+];
+const L2_GICOUNT = L2SITES.filter(s=>s.gis.length).length;
+const L2REGIONS = (()=>{
+  const TR = {"Leh":"Ladakh","Nubra Valley":"Ladakh","Kashmir Valley":"Jammu & Kashmir","Almora":"Uttarakhand","Nainital":"Uttarakhand","Gangtok":"Sikkim","Namchi":"Sikkim","Central Sikkim":"Sikkim","Darjeeling":"Darjeeling (WB)","Aizawl":"Mizoram","Ukhrul":"Manipur","Kathmandu":"Nepal"};
+  const m = {};
+  L2SITES.forEach(s=>{ const r = TR[s.town] || s.region; (m[r]=m[r]||{name:r,n:0,towns:{}}); m[r].n++; m[r].towns[s.town]=1; });
+  return Object.values(m).map(r=>({name:r.name, count:r.n, pts:Object.keys(r.towns).map(t=>L2TOWNS[t]).filter(Boolean)})).sort((a,b)=>b.count-a.count);
+})();
+function l2Popup(s){
+  return "<b>"+s.n+"</b><br><span style='color:var(--muted)'>"+s.region+"</span>"+
+    (s.gis.length ? "<br>"+s.gis.map(g=>"<span class='gi-badge'>GI · "+g+"</span>").join(" ") : "<br><span class='gi-none'>No GI on record</span>")+
+    "<br><br><span style='color:var(--ink2)'>"+s.txt+"</span>";
+}
+function initL2Map(){
+  if(!window.L) return;
+  if(window.__leafMap2){ try{ window.__leafMap2.remove(); }catch(e){} window.__leafMap2 = null; }
+  const el = document.getElementById("leafmap2");
+  if(!el) return;
+  const m = L.map("leafmap2", {zoomSnap:0.5, scrollWheelZoom:false});
+  window.__leafMap2 = m;
+  m.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
+  const sat = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {maxZoom:18, attribution:"Imagery © Esri, Maxar, Earthstar Geographics"});
+  const ref = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", {maxZoom:18});
+  const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19, attribution:"© OpenStreetMap contributors"});
+  sat.addTo(m); ref.addTo(m);
+  const gGI = L.layerGroup(), gOther = L.layerGroup(), seen = {};
+  window.__l2markers = {};
+  L2SITES.forEach(s=>{
+    const c = L2TOWNS[s.town]; if(!c) return;
+    const k = seen[s.town] = (seen[s.town]||0)+1;
+    const pos = [c[0] + (k-1)*0.10, c[1] + (k-1)*0.05];
+    const has = s.gis.length > 0;
+    const mk = L.circleMarker(pos, {radius: has ? 7+Math.min(s.gis.length,4)*1.6 : 7, color:"#FFFFFF", weight:2,
+      fillColor: has ? "#B07C33" : "#8D1812", fillOpacity:.88}).bindPopup(l2Popup(s));
+    mk.addTo(has ? gGI : gOther);
+    window.__l2markers[s.n] = {mk, pos};
+  });
+  gGI.addTo(m); gOther.addTo(m);
+  L.control.layers({"Satellite (Esri)":sat, "Streets (OSM)":osm},
+    {"GI-tagged sourcing":gGI, "Other sourcing":gOther}, {collapsed:false}).addTo(m);
+  const pts = L2SITES.map(s=>L2TOWNS[s.town]).filter(Boolean);
+  m.fitBounds(pts, {padding:[38,38]});
+  setTimeout(()=>{ try{ m.invalidateSize(); m.fitBounds(pts,{padding:[38,38]}); }catch(e){} }, 80);
+}
+function renderL2Sat(){
+  const el = document.getElementById("l2sat");
+  if(!el) return;
+  const rows = L2REGIONS.map((r,i)=>
+    "<button class='pmap-row' data-l2r='"+i+"'><b>"+r.name+"</b><span class='cnt'>"+r.count+(r.count>1?" ventures":" venture")+"</span></button>").join("");
+  const panel = "<div class='p-head'>Regions · click to zoom</div>"+rows+
+    "<button class='pmap-row' data-l2r='all' style='margin-top:6px'><b>← All regions</b></button>"+
+    "<div class='pm-note'><span style='color:#B07C33'>●</span> ≥1 GI-tagged &nbsp; <span style='color:#8D1812'>●</span> no GI &nbsp;·&nbsp; "+L2_GICOUNT+" of "+L2SITES.length+" ventures GI-tagged. Click a marker for venture detail.</div>";
+  el.innerHTML =
+    "<div class='card-head'><h3>Our portfolio across the Himalayas — satellite view</h3><span class='hint'>"+L2SITES.length+" ventures across "+L2REGIONS.length+" regions · "+L2_GICOUNT+" GI-tagged · free Esri imagery</span>"+
+      "<button class='tbl-btn' style='margin-left:auto' data-toggle>⊞ table</button></div>"+
+    "<div class='viz pmap-wrap'><div class='pmap-svg'><div id='leafmap2' style='height:560px;overflow:hidden;background:var(--tint);border:1px solid var(--border)'><div class='leaf-loading'>Loading satellite imagery…</div></div></div>"+
+    "<div class='pmap-panel'>"+panel+"</div></div>"+
+    "<div class='tblwrap'>"+tableHTML(["Venture","Region","GI-tagged commodities","Sources (summary)"],
+      L2SITES.map(s=>[s.n, s.region, s.gis.length? s.gis.map(g=>g).join(", ") : "—", s.txt.replace(/<[^>]+>/g,"")]))+"</div>";
+  el.querySelector("[data-toggle]").onclick = () => {
+    el.classList.toggle("show-table");
+    el.querySelector("[data-toggle]").textContent = el.classList.contains("show-table") ? "◫ chart" : "⊞ table";
+  };
+  el.querySelectorAll("[data-l2r]").forEach(b=> b.onclick = ()=>{
+    if(!window.__leafMap2) return;
+    if(b.dataset.l2r==="all"){ window.__leafMap2.flyToBounds(L2SITES.map(s=>L2TOWNS[s.town]).filter(Boolean),{padding:[38,38],duration:.6}); return; }
+    const r = L2REGIONS[+b.dataset.l2r]; if(!r || !r.pts.length) return;
+    if(r.pts.length===1) window.__leafMap2.flyTo(r.pts[0], 8, {duration:.6});
+    else window.__leafMap2.flyToBounds(r.pts, {padding:[60,60], maxZoom:8, duration:.6});
+  });
+  if(document.getElementById("l3").classList.contains("active")){
+    ensureLeaflet().then(initL2Map).catch(()=>{
+      const lm = document.getElementById("leafmap2");
+      if(lm) lm.innerHTML = "<div style='display:grid;place-items:center;height:100%;padding:30px;text-align:center;color:var(--ink2);font-size:13px'>Satellite tiles can't load in this embedded preview (external requests are blocked).<br><br>Open the dashboard locally or on your own hosting (e.g. GitHub Pages) for the full satellite map. The table view has every venture and its GI-tagged commodities.</div>";
+    });
+  }
+}
+
+/* ===== Layer 2 · traceability satellite map (ventures → commodity clusters, on Esri imagery) ===== */
+const CTRACE_LL = (()=>{
+  const byGeo = {}, out = {};
+  COMMODITIES.forEach(c=> (byGeo[c.geo] = byGeo[c.geo]||[]).push(c));
+  Object.entries(byGeo).forEach(([geo,list])=>{
+    const base = GEO_LL[geo]; if(!base) return;
+    list.forEach((c,i)=>{
+      const spread = (i - (list.length-1)/2);
+      out[c.id] = [ base[0] + spread*0.28, base[1] + spread*0.52 ];
+    });
+  });
+  return out;
+})();
+const l2traceFitPts = () =>
+  COMMODITIES.map(c=>CTRACE_LL[c.id]).filter(Boolean)
+  .concat(SOURCING_V.map(k=>TOWN_LL[VTOWN[k]]).filter(Boolean));
+function initL2TraceMap(){
+  if(!window.L) return;
+  if(window.__leafMapT){ try{ window.__leafMapT.remove(); }catch(e){} window.__leafMapT = null; }
+  const el = document.getElementById("leafmapT");
+  if(!el) return;
+  const m = L.map("leafmapT", {zoomSnap:0.5, scrollWheelZoom:false});
+  window.__leafMapT = m;
+  m.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
+  const sat = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {maxZoom:18, attribution:"Imagery © Esri, Maxar, Earthstar Geographics"});
+  const ref = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", {maxZoom:18});
+  const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19, attribution:"© OpenStreetMap contributors"});
+  sat.addTo(m); ref.addTo(m);
+  const gLinks = L.layerGroup(), gClusters = L.layerGroup(), gVentures = L.layerGroup();
+  window.__ltMarkers = {};
+  /* sourcing relationship lines: venture town → commodity cluster */
+  COMMODITIES.forEach(c=>{
+    const cc = CTRACE_LL[c.id]; if(!cc) return;
+    c.ventures.forEach(vk=>{
+      const t = VTOWN[vk]; const vll = t && TOWN_LL[t]; if(!vll) return;
+      L.polyline([vll, cc], {color:"#8D1812", weight:1.4, opacity:.75, dashArray:"4 4"}).addTo(gLinks);
+    });
+  });
+  /* commodity sourcing clusters (circles, GI-marked) */
+  COMMODITIES.forEach(c=>{
+    const cc = CTRACE_LL[c.id]; if(!cc) return;
+    const gi = c.gi.has;
+    const vlist = c.ventures.map(k=>VENTURES[k] && VENTURES[k].name).filter(Boolean);
+    const pop = "<b>"+c.name+"</b>"+
+      "<br>"+(gi ? "<span class='gi-badge'>"+c.gi.label+"</span>" : "<span class='gi-none'>"+c.gi.label+"</span>")+
+      "<br><span style='color:var(--muted)'>"+c.clusters+"</span>"+
+      "<br><br>Producer share <b>"+c.farmerShare+"%</b> of final value"+
+      "<br>Sourced by: "+(vlist.length ? vlist.join(", ") : "cluster intelligence only")+
+      "<br><span style='color:var(--ink2)'>Evidence: "+c.evidence.replace("◌","(pending)")+"</span>";
+    const sel = (c.id === state.commodity);
+    const mk = L.circleMarker(cc, {radius: sel?12:9, color: sel?"#8D1812":"#FFFFFF", weight: sel?3:2,
+      fillColor: gi ? "#B07C33" : "#8D1812", fillOpacity:.9}).bindPopup(pop);
+    mk.on("click", ()=>pick(c.id));
+    mk.addTo(gClusters);
+    window.__ltMarkers["c:"+c.id] = {mk, pos:cc};
+  });
+  /* ventures (squares) at their home towns */
+  const vseen = {};
+  SOURCING_V.forEach(vk=>{
+    const t = VTOWN[vk], vll = t && TOWN_LL[t]; const v = VENTURES[vk]; if(!vll || !v) return;
+    const k = vseen[t] = (vseen[t]||0)+1;
+    const pos = [vll[0] + (k-1)*0.09, vll[1] + (k-1)*0.05];
+    const icon = L.divIcon({className:"", iconSize:[13,13], iconAnchor:[6,6],
+      html:"<div style='width:11px;height:11px;background:#14100D;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3)'></div>"});
+    const mk = L.marker(pos, {icon}).bindPopup("<b>"+v.name+"</b><br><span style='color:var(--muted)'>"+v.sector+" · "+t+"</span>");
+    mk.addTo(gVentures);
+    window.__ltMarkers["v:"+vk] = {mk, pos};
+  });
+  gLinks.addTo(m); gClusters.addTo(m); gVentures.addTo(m);
+  L.control.layers({"Satellite (Esri)":sat, "Streets (OSM)":osm},
+    {"Sourcing links":gLinks, "Commodity clusters":gClusters, "Ventures":gVentures}, {collapsed:false}).addTo(m);
+  const pts = l2traceFitPts();
+  m.fitBounds(pts, {padding:[38,38]});
+  setTimeout(()=>{ try{ m.invalidateSize(); m.fitBounds(pts,{padding:[38,38]}); }catch(e){} }, 80);
+}
+function renderL2Trace(){
+  const host = document.getElementById("leafmapT");
+  if(!host) return;
+  if(document.getElementById("l2").classList.contains("active")){
+    ensureLeaflet().then(initL2TraceMap).catch(()=>{
+      host.innerHTML = "<div style='display:grid;place-items:center;height:100%;padding:26px;text-align:center;color:var(--ink2);font-size:13px'>Satellite tiles can't load in this embedded preview (external requests are blocked).<br><br>Open the dashboard locally or on your own hosting for the full satellite map — the commodity record on the right and the evidence table below carry every detail.</div>";
+    });
+  }
+}
 function renderGeoMap(){
   const el = $("#geomap");
   const IND = {
@@ -1959,11 +2150,11 @@ function renderL2(){
   if(list.length){
     /* keep the selection inside the current view */
     if(!list.some(c=>c.id===state.commodity)) state.commodity = list[0].id;
-    renderTraceMap();
     pick(state.commodity);
+    renderL2Trace();
   } else {
     /* nothing matches — say so rather than opening an unrelated record */
-    renderTraceMap();
+    renderL2Trace();
     const where = state.geo==="all" ? "the portfolio" : GEOS[state.geo].name;
     const picked = [...state.prov];
     $("#ruler-title").textContent = "No commodity in view";
@@ -2162,8 +2353,8 @@ function renderArgument(){
 }
 
 function renderL3(){
+  renderL2Sat();
   renderDep();
-  renderPortfolioMap();
   const vs = Object.entries(VENTURES).filter(([,v])=>state.geo==="all"||v.geo===state.geo);
   $("#l3-overview").innerHTML = `
     <div class="card c4 tile">
@@ -2322,6 +2513,9 @@ document.querySelectorAll(".tab").forEach(t=> t.onclick = ()=>{
   state.layer = t.dataset.layer;
   document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected", x===t ? "true":"false"));
   document.querySelectorAll("section.layer").forEach(s=>s.classList.toggle("active", s.id===state.layer));
+  if(state.layer==="l2" && window.L){ if(window.__leafMapT){ setTimeout(()=>{ try{ window.__leafMapT.invalidateSize(); window.__leafMapT.fitBounds(l2traceFitPts(),{padding:[38,38]}); }catch(e){} },60); } else { renderL2Trace(); } }
+  if(state.layer==="l3" && window.L){ if(window.__leafMap2){ setTimeout(()=>{ try{ window.__leafMap2.invalidateSize(); const p=L2SITES.map(s=>L2TOWNS[s.town]).filter(Boolean); window.__leafMap2.fitBounds(p,{padding:[38,38]}); }catch(e){} },60); } else { renderL2Sat(); } }
+  if(state.layer==="l1" && window.__leafMap){ setTimeout(()=>{ try{ window.__leafMap.invalidateSize(); }catch(e){} },60); }
   window.scrollTo({top:0, behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
 });
 function renderAll(){ renderGeoChips(); renderL1(); renderL2(); renderL3(); }
