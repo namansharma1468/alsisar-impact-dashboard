@@ -1134,6 +1134,98 @@
   @media(max-width:560px){
     details.drawer>summary::after{content:"Tap to expand"}
     details.drawer[open]>summary::after{content:"Tap to collapse"}}
+  /* same affordance for the footer sources drawer */
+  details.srcs>summary::after{content:"Click to expand · more data inside";
+    order:1;margin-left:auto;flex:none;color:var(--invert-accent);font-weight:500;
+    font-size:var(--fs-m2);letter-spacing:var(--tr-m2)}
+  details.srcs[open]>summary::after{content:"Click to collapse";color:var(--invert-mut-2)}
+  details.srcs>summary .caret{order:2;margin-left:10px;color:var(--invert-accent)}
+  details.srcs[open]>summary .caret{color:var(--invert-mut-2)}
+  @media(max-width:560px){
+    details.srcs>summary::after{content:"Tap to expand"}
+    details.srcs[open]>summary::after{content:"Tap to collapse"}}
+
+  /* ---- photography — real ground from the field archive ----
+     Photos live in the narrative bands only (hero, rupee ruler,
+     coverage band, footer); never behind charts or tables. Each
+     carries a left-or-top scrim tuned so text contrast stays high.
+     Files ship in assets/img/ beside this HTML. */
+  .hero{background-image:
+      linear-gradient(97deg,#101010 0%,rgba(16,16,16,.95) 34%,rgba(16,16,16,.66) 56%,rgba(18,13,10,.30) 100%),
+      url("assets/img/hero-himalaya.jpg");
+    background-size:cover,cover;background-position:center,72% 32%;background-repeat:no-repeat}
+  :root[data-theme="dark"] .hero{background-image:
+      linear-gradient(97deg,#0F0E0D 0%,rgba(15,14,13,.95) 34%,rgba(15,14,13,.68) 56%,rgba(15,14,13,.32) 100%),
+      url("assets/img/hero-himalaya.jpg");
+    background-size:cover,cover;background-position:center,72% 32%;background-repeat:no-repeat}
+  .hero .ascii{display:none} /* the photograph is the ridge now */
+  .hero::after{opacity:.04}
+  .ruler-block{background-image:
+      linear-gradient(90deg,rgba(14,14,14,.87) 0%,rgba(14,14,14,.82) 42%,rgba(16,16,16,.55) 62%,rgba(16,16,16,.20) 100%),
+      url("assets/img/harvest-ladakh.jpg");
+    background-size:cover,cover;background-position:center,right 68%;background-repeat:no-repeat}
+  :root[data-theme="dark"] .ruler-block{background-image:
+      linear-gradient(90deg,rgba(20,20,20,.87) 0%,rgba(20,20,20,.82) 42%,rgba(22,22,22,.55) 62%,rgba(22,22,22,.20) 100%),
+      url("assets/img/harvest-ladakh.jpg");
+    background-size:cover,cover;background-position:center,right 68%;background-repeat:no-repeat}
+  /* the far-right captions sit over the brightest field — brighter ink + hard shadow */
+  .ruler-block .chain-lab,.ruler-block .ruler-ticks{color:var(--invert-fg-2);
+    text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 10px rgba(0,0,0,.55)}
+  .ruler-block .ruler-head .eyebrow{color:var(--invert-fg-2);
+    text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 10px rgba(0,0,0,.55)}
+  #pmap{background-image:
+      linear-gradient(168deg,rgba(13,13,13,.90) 0%,rgba(13,13,13,.92) 55%,rgba(10,13,11,.84) 100%),
+      url("assets/img/hills-sunset.jpg");
+    background-size:cover,cover;background-position:center,center 34%;background-repeat:no-repeat}
+  :root[data-theme="dark"] #pmap{background-image:
+      linear-gradient(168deg,rgba(16,16,16,.91) 0%,rgba(16,16,16,.93) 55%,rgba(12,15,12,.86) 100%),
+      url("assets/img/hills-sunset.jpg");
+    background-size:cover,cover;background-position:center,center 34%;background-repeat:no-repeat}
+  /* .card-head h3 paints ink — on this dark band the heading must carry the
+     inverse ink in BOTH themes (pre-existing light-theme bug, fixed here) */
+  #pmap .card-head h3{color:var(--invert-fg)}
+
+  /* ---- footprint film-strip — the states, seen from the ground ----
+     Two identical figure sets; the track slides -50% and loops
+     seamlessly. Pauses on hover; reduced-motion kills it to a row. */
+  .pmap-strip{position:relative;z-index:1;margin-top:28px;overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%);
+            mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%)}
+  .strip-track{display:flex;width:max-content;animation:stripflow 55s linear infinite}
+  .pmap-strip:hover .strip-track{animation-play-state:paused}
+  @keyframes stripflow{to{transform:translateX(-50%)}}
+  .strip-track figure{position:relative;flex:none;margin:0 14px 0 0}
+  .strip-track img{display:block;height:140px;width:auto;border-radius:var(--r-ctl);
+    box-shadow:0 0 0 1px rgba(255,255,255,.16);opacity:.94}
+  .strip-track figcaption{position:absolute;left:1px;right:1px;bottom:1px;padding:16px 10px 7px;
+    border-radius:0 0 var(--r-ctl) var(--r-ctl);white-space:nowrap;overflow:hidden;
+    font-family:var(--mono);font-size:var(--fs-m3);letter-spacing:var(--tr-m3);text-transform:uppercase;
+    color:#F5F1EA;background:linear-gradient(180deg,transparent,rgba(0,0,0,.74))}
+  @media(max-width:640px){.strip-track img{height:104px}}
+
+  /* ---- editorial photo rows — three frames, gallery captions ---- */
+  .photo-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:0 0 14px}
+  .photo-row figure{position:relative;margin:0;overflow:hidden;background:var(--surface);
+    box-shadow:0 0 0 1px var(--border);transition:box-shadow var(--t-3) var(--e-exp)}
+  .photo-row figure:hover{box-shadow:0 0 0 1px var(--line-glass-hi),var(--card-halo);z-index:1}
+  .photo-row img{display:block;width:100%;height:232px;object-fit:cover;
+    transition:transform var(--t-4) var(--e-exp)}
+  .photo-row figure:hover img{transform:scale(1.035)}
+  .photo-row figcaption{padding:10px 14px 11px;font-family:var(--mono);font-size:var(--fs-m2);
+    letter-spacing:var(--tr-m2);text-transform:uppercase;color:var(--muted);line-height:1.5}
+  .photo-row figcaption b{color:var(--ink);font-weight:500}
+  @media(max-width:860px){.photo-row{grid-template-columns:1fr 1fr}
+    .photo-row figure:last-child{grid-column:1/-1}.photo-row img{height:200px}}
+  @media(max-width:560px){.photo-row{grid-template-columns:1fr}
+    .photo-row figure:last-child{grid-column:auto}}
+  footer{background-image:
+      linear-gradient(180deg,rgba(13,13,13,.955) 0%,rgba(13,13,13,.97) 42%,#0D0D0D 100%),
+      url("assets/img/valley-road.jpg");
+    background-size:cover,cover;background-position:center;background-repeat:no-repeat}
+  @media(max-width:640px){
+    .hero{background-image:
+      linear-gradient(180deg,rgba(16,16,16,.92) 0%,rgba(16,16,16,.86) 100%),
+      url("assets/img/hero-himalaya.jpg")}}
 
   /* ---- uniform type safeguards ---- */
   /* the ASCII ridge is a drawing, not text — it needs true monospace to align */
@@ -1301,6 +1393,14 @@
     <p class="src" style="margin:10px 0 0">Pillars &amp; portfolio figures — alsisarimpact.org and alsisarimpact.in.</p>
 
     <div class="card" id="pmap" style="margin-bottom:14px"></div>
+    <div class="photo-row" aria-label="Photographs from the field">
+      <figure><img src="assets/img/row-school.jpg" alt="Schoolchildren in Ladakh" loading="lazy">
+        <figcaption><b>Ladakh</b> · the generation this platform reports for</figcaption></figure>
+      <figure><img src="assets/img/row-team-sikkim.jpg" alt="Field team below the snow range" loading="lazy">
+        <figcaption><b>Eastern Himalaya</b> · field team below the snowline</figcaption></figure>
+      <figure><img src="assets/img/row-monastery.jpg" alt="Monastery courtyard in Ladakh" loading="lazy">
+        <figcaption><b>Ladakh</b> · where the work meets custom</figcaption></figure>
+    </div>
     <div class="part-head"><span>Part A · Demographics, workforce &amp; migration</span></div>
     <div class="grid compact" id="l1-tiles"></div>
     <div class="grid" style="margin-top:14px">
@@ -1415,6 +1515,15 @@
       <div class="dep-r"><div id="cascade"></div></div>
     </div>
 
+    <div class="part-head"><span>Ventures on the ground</span></div>
+    <div class="photo-row" aria-label="Portfolio ventures at work">
+      <figure><img src="assets/img/row-fastbeetle.jpg" alt="FastBeetle founders with a box of Kashmir apples" loading="lazy">
+        <figcaption><b>Srinagar</b> · FastBeetle moves Kashmir produce to market</figcaption></figure>
+      <figure><img src="assets/img/row-garlic.jpg" alt="Producers holding garlic bundles" loading="lazy">
+        <figcaption><b>Northeast</b> · the producer collectives behind the commodities</figcaption></figure>
+      <figure><img src="assets/img/row-warehouse.jpg" alt="Venture founders in a product warehouse" loading="lazy">
+        <figcaption><b>Portfolio</b> · from processing to shelf</figcaption></figure>
+    </div>
     <div class="argu" id="argu"></div>
   </section>
 
@@ -1891,6 +2000,21 @@ function renderCoverage(){
       </div>
       <div class="cov-chips">${chips}</div>
     </div>
+    <div class="pmap-strip" aria-hidden="true"><div class="strip-track">${Array(2).fill(`
+      <figure><img src="assets/img/strip-leh.jpg" alt=""><figcaption>Leh · Ladakh</figcaption></figure>
+      <figure><img src="assets/img/strip-dal-lake.jpg" alt=""><figcaption>Dal Lake · Jammu &amp; Kashmir</figcaption></figure>
+      <figure><img src="assets/img/strip-barley.jpg" alt=""><figcaption>Barley harvest · Ladakh</figcaption></figure>
+      <figure><img src="assets/img/strip-ne-hills.jpg" alt=""><figcaption>Northeast hill country</figcaption></figure>
+      <figure><img src="assets/img/strip-stupa.jpg" alt=""><figcaption>Shanti Stupa · Leh</figcaption></figure>
+      <figure><img src="assets/img/strip-valley.jpg" alt=""><figcaption>Indus valley · Ladakh</figcaption></figure>
+      <figure><img src="assets/img/strip-ne-forest.jpg" alt=""><figcaption>Eastern Himalayan forest</figcaption></figure>
+      <figure><img src="assets/img/strip-wetland.jpg" alt=""><figcaption>Indus wetland · Ladakh</figcaption></figure>
+      <figure><img src="assets/img/strip-redgompa.jpg" alt=""><figcaption>Gompa · Ladakh</figcaption></figure>
+      <figure><img src="assets/img/strip-cardamom.jpg" alt=""><figcaption>Large cardamom · Sikkim</figcaption></figure>
+      <figure><img src="assets/img/strip-snowlake.jpg" alt=""><figcaption>High-altitude lake · Sikkim</figcaption></figure>
+      <figure><img src="assets/img/strip-waterfall.jpg" alt=""><figcaption>Meghalaya falls · Northeast</figcaption></figure>
+      <figure><img src="assets/img/strip-highdesert.jpg" alt=""><figcaption>Trans-Himalayan high desert</figcaption></figure>`).join("")}
+    </div></div>
 `;
   el.querySelectorAll("[data-cgeo]").forEach(b=> b.onclick = ()=>{
     state.geo = state.geo===b.dataset.cgeo ? "all" : b.dataset.cgeo;
