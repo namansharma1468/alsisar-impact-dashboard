@@ -1134,6 +1134,64 @@
   @media(max-width:560px){
     details.drawer>summary::after{content:"Tap to expand"}
     details.drawer[open]>summary::after{content:"Tap to collapse"}}
+  /* same affordance for the footer sources drawer */
+  details.srcs>summary::after{content:"Click to expand · more data inside";
+    order:1;margin-left:auto;flex:none;color:var(--invert-accent);font-weight:500;
+    font-size:var(--fs-m2);letter-spacing:var(--tr-m2)}
+  details.srcs[open]>summary::after{content:"Click to collapse";color:var(--invert-mut-2)}
+  details.srcs>summary .caret{order:2;margin-left:10px;color:var(--invert-accent)}
+  details.srcs[open]>summary .caret{color:var(--invert-mut-2)}
+  @media(max-width:560px){
+    details.srcs>summary::after{content:"Tap to expand"}
+    details.srcs[open]>summary::after{content:"Tap to collapse"}}
+
+  /* ---- photography — real ground from the field archive ----
+     Photos live in the narrative bands only (hero, rupee ruler,
+     coverage band, footer); never behind charts or tables. Each
+     carries a left-or-top scrim tuned so text contrast stays high.
+     Files ship in assets/img/ beside this HTML. */
+  .hero{background-image:
+      linear-gradient(97deg,#101010 0%,rgba(16,16,16,.95) 34%,rgba(16,16,16,.66) 56%,rgba(18,13,10,.30) 100%),
+      url("assets/img/hero-himalaya.jpg");
+    background-size:cover,cover;background-position:center,72% 32%;background-repeat:no-repeat}
+  :root[data-theme="dark"] .hero{background-image:
+      linear-gradient(97deg,#0F0E0D 0%,rgba(15,14,13,.95) 34%,rgba(15,14,13,.68) 56%,rgba(15,14,13,.32) 100%),
+      url("assets/img/hero-himalaya.jpg");
+    background-size:cover,cover;background-position:center,72% 32%;background-repeat:no-repeat}
+  .hero .ascii{display:none} /* the photograph is the ridge now */
+  .hero::after{opacity:.04}
+  .ruler-block{background-image:
+      linear-gradient(90deg,rgba(14,14,14,.87) 0%,rgba(14,14,14,.82) 42%,rgba(16,16,16,.55) 62%,rgba(16,16,16,.20) 100%),
+      url("assets/img/harvest-ladakh.jpg");
+    background-size:cover,cover;background-position:center,right 68%;background-repeat:no-repeat}
+  :root[data-theme="dark"] .ruler-block{background-image:
+      linear-gradient(90deg,rgba(20,20,20,.87) 0%,rgba(20,20,20,.82) 42%,rgba(22,22,22,.55) 62%,rgba(22,22,22,.20) 100%),
+      url("assets/img/harvest-ladakh.jpg");
+    background-size:cover,cover;background-position:center,right 68%;background-repeat:no-repeat}
+  /* the far-right captions sit over the brightest field — brighter ink + hard shadow */
+  .ruler-block .chain-lab,.ruler-block .ruler-ticks{color:var(--invert-fg-2);
+    text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 10px rgba(0,0,0,.55)}
+  .ruler-block .ruler-head .eyebrow{color:var(--invert-fg-2);
+    text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 10px rgba(0,0,0,.55)}
+  #pmap{background-image:
+      linear-gradient(168deg,rgba(13,13,13,.90) 0%,rgba(13,13,13,.92) 55%,rgba(10,13,11,.84) 100%),
+      url("assets/img/hills-sunset.jpg");
+    background-size:cover,cover;background-position:center,center 34%;background-repeat:no-repeat}
+  :root[data-theme="dark"] #pmap{background-image:
+      linear-gradient(168deg,rgba(16,16,16,.91) 0%,rgba(16,16,16,.93) 55%,rgba(12,15,12,.86) 100%),
+      url("assets/img/hills-sunset.jpg");
+    background-size:cover,cover;background-position:center,center 34%;background-repeat:no-repeat}
+  /* .card-head h3 paints ink — on this dark band the heading must carry the
+     inverse ink in BOTH themes (pre-existing light-theme bug, fixed here) */
+  #pmap .card-head h3{color:var(--invert-fg)}
+  footer{background-image:
+      linear-gradient(180deg,rgba(13,13,13,.955) 0%,rgba(13,13,13,.97) 42%,#0D0D0D 100%),
+      url("assets/img/valley-road.jpg");
+    background-size:cover,cover;background-position:center;background-repeat:no-repeat}
+  @media(max-width:640px){
+    .hero{background-image:
+      linear-gradient(180deg,rgba(16,16,16,.92) 0%,rgba(16,16,16,.86) 100%),
+      url("assets/img/hero-himalaya.jpg")}}
 
   /* ---- uniform type safeguards ---- */
   /* the ASCII ridge is a drawing, not text — it needs true monospace to align */
