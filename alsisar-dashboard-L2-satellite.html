@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <meta charset="utf-8">
 <title>Alsisar Impact — Impact Monitoring Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0E0B09">
+<meta name="theme-color" content="#FAF7F2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* ==================================================================
      UI SYSTEM — Alsisar Impact · warm-editorial instrument
@@ -40,7 +40,7 @@
     --brandgreen:#3D7749; --brandgreen-soft:rgba(61,119,73,.12); --brandgreen-lt:#A3D39D;
     --glacier:#7FA98C; --brandmap:#8D1812;
     /* inverse surfaces — masthead, value ruler, footprint, hero, footer */
-    --invert-bg:#14100D; --invert-2:#241E1A; --invert-line:#3A312A;
+    --invert-bg:#101010; --invert-2:#1E1E1E; --invert-line:#333333;
     --invert-fg:#F9F6F1; --invert-fg-2:#DDD4C4; --invert-mut:#A29485; --invert-mut-2:#8F8375;
     --invert-accent:#C17F6C;
     /* categorical series — validated order: madder→teal→clay→plum→gold→forest→indigo→sage */
@@ -50,9 +50,12 @@
     /* value chain: accent + receding warm neutrals */
     --vc1:#8D1812; --vc2:#4A423C; --vc3:#8A7F74; --vc4:#C9BCA9;
     --good:#3D7749; --warn:#B07C33; --serious:#C17F6C; --crit:#8D1812; --good-text:#2F5C39;
-    --disp:"Poppins",-apple-system,"Segoe UI",system-ui,sans-serif;
+    /* uniform type — one family site-wide; hierarchy carried by weight,
+       size, case and tracking. --mono kept as a *role* (labels, data
+       registers) but resolves to the same family with tabular figures. */
+    --disp:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
     --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
-    --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+    --mono:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
     /* chrome geometry */
     --mast-h:64px; --filter-h:41px;
     --r-micro:2px; --r-ctl:3px; --r-float:8px;
@@ -98,23 +101,23 @@
     color-scheme:light;
   }
   :root[data-theme="dark"]{
-    --plane:#0E0B09; --surface:#1A1512; --tint:#241D19;
+    --plane:#0A0A0A; --surface:#141414; --tint:#1D1D1D;
     --ink:#F9F6F1; --ink2:#DDD4C4; --muted:#A29485;
-    --grid:#2B2420; --baseline:#544539; --border:#38302A; --rule:#A29485;
-    --accent:#D2654F; --accent-ink:#14100D; --accent-soft:rgba(210,101,79,.15);
+    --grid:#242424; --baseline:#4E4E4E; --border:#323232; --rule:#A29485;
+    --accent:#C17F6C; --accent-ink:#000000; --accent-soft:rgba(193,127,108,.16);
     --highlight:#A3D39D; --highlight-soft:rgba(163,211,157,.14);
     --apricot:#D2A45C; --apricot-soft:rgba(210,164,92,.15);
     --brandgreen:#79B187; --brandgreen-soft:rgba(121,177,135,.15);
-    --glacier:#9CC4A8; --brandmap:#D2654F;
+    --glacier:#9CC4A8; --brandmap:#C17F6C;
     /* inverse bands sit ABOVE the dark plane — a hole-punch dark band reads as
        a gap, not an authoritative surface */
-    --invert-bg:#1C1512; --invert-2:#262019; --invert-line:#3E342C;
+    --invert-bg:#181818; --invert-2:#222222; --invert-line:#363636;
     --invert-mut:#A29485; --invert-mut-2:#8A7D6F; --invert-accent:#C17F6C;
     /* dark series — same slot order, re-stepped for the dark surface */
     --s1:#E05A48; --s2:#2F9E8C; --s3:#D5703C; --s4:#B15687; --s5:#C98500; --s6:#58A76C; --s7:#8886E8; --s8:#859E36;
     --seq1:#33201A; --seq2:#4A2B21; --seq3:#6B3A2B; --seq4:#8F4A34; --seq5:#B85B41; --seq6:#E06D50;
-    --vc1:#D2654F; --vc2:#7B6E62; --vc3:#4E4239; --vc4:#332B25;
-    --good:#79B187; --warn:#D2A45C; --serious:#C17F6C; --crit:#D2654F; --good-text:#A3D39D;
+    --vc1:#C17F6C; --vc2:#7B6E62; --vc3:#4E4239; --vc4:#332B25;
+    --good:#79B187; --warn:#D2A45C; --serious:#C17F6C; --crit:#C74836; --good-text:#A3D39D;
     --tr-m1:.17em;
     --rim:rgba(249,246,241,.14);
     --sh-1:0 1px 2px rgba(0,0,0,.55);
@@ -122,16 +125,16 @@
     --sh-3:0 4px 10px rgba(0,0,0,.50), 0 20px 48px -16px rgba(0,0,0,.72);
     --sh-mast:0 1px 0 rgba(0,0,0,.60), 0 16px 40px -26px rgba(0,0,0,.80);
     --glass-bar:color-mix(in srgb,var(--surface) 74%,transparent);
-    --plate:#1E1815; --plate-glass:color-mix(in srgb,#1E1815 80%,transparent);
-    --focus:#E58A72; --focus-invert:#A3D39D;
+    --plate:#1C1C1C; --plate-glass:color-mix(in srgb,#1C1C1C 80%,transparent);
+    --focus:#DA9C88; --focus-invert:#A3D39D;
     /* glass system — specular micro-borders and ember halos */
     --line-glass:rgba(255,255,255,.08); --line-glass-hi:rgba(255,255,255,.17);
     --spec:inset 0 1px 0 rgba(255,255,255,.05);
-    --card-halo:0 18px 40px -28px rgba(0,0,0,.60),0 0 34px -18px rgba(224,90,72,.22);
+    --card-halo:0 18px 40px -28px rgba(0,0,0,.60),0 0 34px -18px rgba(193,127,108,.22);
     --ok-soft:rgba(121,177,135,.14);      --ok-text:#A3D39D;
     --warn-soft:rgba(210,164,92,.14);     --warn-text:#E0BC84;
     --serious-soft:rgba(193,127,108,.16); --serious-text:#E0A594;
-    --crit-soft:rgba(210,101,79,.15);     --crit-text:#EFA894;
+    --crit-soft:rgba(199,72,54,.18);      --crit-text:#ECA091;
     --info-soft:rgba(78,66,57,.40);       --info-text:#A29485;
     color-scheme:dark;
   }
@@ -158,7 +161,7 @@
     outline:none;stroke:var(--focus);stroke-width:2.5px;paint-order:stroke}
   .flip:focus-visible{outline:2px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 1px var(--border)}
   ::selection{background:rgba(141,24,18,.15);color:var(--ink)}
-  :root[data-theme="dark"] ::selection{background:rgba(210,101,79,.30);color:#FFFFFF}
+  :root[data-theme="dark"] ::selection{background:rgba(193,127,108,.30);color:#FFFFFF}
   .mast ::selection,.hero ::selection,#pmap ::selection,.ruler-block ::selection,
   .pillar .fb ::selection,.hero-stat ::selection,footer ::selection{
     background:rgba(163,211,157,.28);color:var(--invert-fg)}
@@ -181,7 +184,7 @@
   .mast-inner{display:flex;align-items:center;gap:24px;flex-wrap:nowrap;min-height:var(--mast-h)}
   .brand{display:flex;align-items:center;gap:11px;padding-bottom:0;flex:none}
   .brand-logo{height:32px;width:auto;display:block;padding:4px 9px;border-radius:var(--r-micro);flex:none;
-    background:var(--sand) !important;border:1px solid rgba(20,16,13,.35) !important;box-shadow:0 1px 0 rgba(0,0,0,.35)}
+    background:#FFFFFF !important;border:1px solid rgba(0,0,0,.22) !important;box-shadow:0 1px 0 rgba(0,0,0,.35)}
   .brand .sub{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--invert-mut-2);white-space:nowrap}
   .brand .sub::before{content:"";display:inline-block;width:1px;height:10px;background:var(--invert-line);
     margin-right:11px;vertical-align:-1px}
@@ -398,8 +401,8 @@
   /* ---------- L2 · traceability console ---------- */
   .ruler-block{border:1px solid var(--invert-line);background:var(--invert-bg);color:var(--invert-fg);
     padding:24px 26px 22px;margin:0 0 24px;
-    background-image:linear-gradient(180deg,#1B1512 0%,var(--invert-bg) 62%)}
-  :root[data-theme="dark"] .ruler-block{background-image:linear-gradient(180deg,#241B15 0%,var(--invert-bg) 62%)}
+    background-image:linear-gradient(180deg,#1C1C1C 0%,var(--invert-bg) 62%)}
+  :root[data-theme="dark"] .ruler-block{background-image:linear-gradient(180deg,#202020 0%,var(--invert-bg) 62%)}
   .ruler-head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:12px}
   .ruler-head .eyebrow{color:var(--invert-mut);margin:0}
   .ruler{display:flex;height:56px;border:1px solid var(--invert-line);background:var(--invert-2);
@@ -584,9 +587,9 @@
 
   /* ---------- himalayan coverage ---------- */
   #pmap{position:relative;overflow:hidden;color:var(--invert-fg);padding:32px 32px 30px;
-    background:var(--invert-bg);background-image:linear-gradient(168deg,#1C1512 0%,var(--invert-bg) 58%);
+    background:var(--invert-bg);background-image:linear-gradient(168deg,#1B1B1B 0%,var(--invert-bg) 58%);
     box-shadow:0 0 0 1px var(--invert-line)}
-  :root[data-theme="dark"] #pmap{background-image:linear-gradient(168deg,#251C16 0%,var(--invert-bg) 58%)}
+  :root[data-theme="dark"] #pmap{background-image:linear-gradient(168deg,#1F1F1F 0%,var(--invert-bg) 58%)}
   #pmap .ridge-deco path:first-child{fill:var(--invert-2)}
   #pmap .ridge-deco path:last-child{stroke:var(--glacier);opacity:.6}
   #pmap::after{content:"";position:absolute;inset:0;pointer-events:none;
@@ -725,7 +728,7 @@
   #tip b{font-weight:600;color:var(--surface)} /* tip ground is inverted ink — surface is white on light, near-black on dark */
   footer{position:relative;margin-top:72px;margin-inline:calc(50% - 50vw);
     padding:50px max(28px,calc(50vw - 582px)) 48px;
-    background:var(--invert-bg);background-image:linear-gradient(180deg,#1B1512 0%,var(--invert-bg) 220px);
+    background:var(--invert-bg);background-image:linear-gradient(180deg,#1C1C1C 0%,var(--invert-bg) 220px);
     color:var(--invert-mut);font-size:13px;line-height:1.7}
   footer::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;
     background:linear-gradient(90deg,var(--madder) 0,var(--clay) 30%,rgba(163,211,157,.55) 66%,transparent 94%)}
@@ -757,12 +760,12 @@
     background-image:
       radial-gradient(120% 90% at 8% 0%,rgba(141,24,18,.30) 0%,rgba(141,24,18,0) 55%),
       radial-gradient(90% 120% at 100% 100%,rgba(61,119,73,.16) 0%,rgba(61,119,73,0) 60%),
-      linear-gradient(158deg,#2A1712 0%,#1A120E 46%,#14100D 100%);
+      linear-gradient(158deg,#241212 0%,#141111 46%,#101010 100%);
     box-shadow:0 0 0 1px var(--border)}
   :root[data-theme="dark"] .hero{background-image:
-    radial-gradient(120% 90% at 8% 0%,rgba(210,101,79,.24) 0%,rgba(210,101,79,0) 55%),
+    radial-gradient(120% 90% at 8% 0%,rgba(193,127,108,.22) 0%,rgba(193,127,108,0) 55%),
     radial-gradient(90% 120% at 100% 100%,rgba(121,177,135,.13) 0%,rgba(121,177,135,0) 60%),
-    linear-gradient(158deg,#2C1A14 0%,#221812 48%,#1C1512 100%)}
+    linear-gradient(158deg,#221616 0%,#191515 48%,#141414 100%)}
   .hero::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;z-index:2;
     background:linear-gradient(90deg,var(--accent) 0,var(--clay) 22%,rgba(163,211,157,.45) 58%,transparent 92%)}
   .hero::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.055;mix-blend-mode:overlay;
@@ -891,7 +894,8 @@
   .lnav button[aria-current="true"]::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--invert-accent)}
   @media(max-width:760px){.lnav{grid-template-columns:1fr}}
 
-  /* ---- what this layer contains ---- */
+  /* ---- what this layer contains — removed from view (markup kept) ---- */
+  .contains{display:none}
   .contains{border:1px solid var(--border);background:var(--surface);padding:18px 22px 20px;margin:0 0 24px}
   .contains h4{font-family:var(--mono);font-size:var(--fs-m1);letter-spacing:var(--tr-m1);text-transform:uppercase;
         color:var(--accent);margin:0 0 13px;font-weight:500}
@@ -1006,9 +1010,9 @@
   :root[data-theme="dark"] body{
     background-image:
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='.045' intercept='0'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E"),
-      radial-gradient(58% 42% at 10% -8%,rgba(210,101,79,.13) 0%,rgba(210,101,79,0) 62%),
+      radial-gradient(58% 42% at 10% -8%,rgba(193,127,108,.13) 0%,rgba(193,127,108,0) 62%),
       radial-gradient(42% 36% at 90% -6%,rgba(121,177,135,.07) 0%,rgba(121,177,135,0) 60%),
-      linear-gradient(180deg,#150E0B 0,var(--plane) 560px);
+      linear-gradient(180deg,#131313 0,var(--plane) 560px);
     background-repeat:repeat,no-repeat,no-repeat,no-repeat}
 
   /* ---- glass card system (dark) — film + specular + micro-border ---- */
@@ -1036,7 +1040,7 @@
   .grid>.geo-card.hl:hover{box-shadow:inset 3px 0 0 var(--accent),0 0 0 1px var(--line-glass-hi),var(--card-halo)}
   :root[data-theme="dark"] .flip:hover .fc{
     box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 45%,var(--line-glass)),var(--spec),
-    0 12px 30px -22px rgba(224,90,72,.50)}
+    0 12px 30px -22px rgba(193,127,108,.50)}
 
   /* ---- chips — tactile press, frosted active glow ---- */
   .chip{transition:background-color var(--t-2) var(--e-out),color var(--t-2) var(--e-out),
@@ -1046,33 +1050,33 @@
   :root[data-theme="dark"] .chip{border-color:var(--line-glass);background:color-mix(in srgb,var(--surface) 88%,transparent)}
   :root[data-theme="dark"] .chip:hover{border-color:var(--line-glass-hi);background:var(--tint)}
   :root[data-theme="dark"] .chip[aria-pressed="true"]{background:var(--ink);border-color:transparent;
-    box-shadow:0 0 0 3px var(--accent-soft),0 0 22px -6px rgba(224,90,72,.42),inset 0 1px 0 rgba(255,255,255,.30)}
+    box-shadow:0 0 0 3px var(--accent-soft),0 0 22px -6px rgba(193,127,108,.42),inset 0 1px 0 rgba(255,255,255,.30)}
 
   /* ---- chrome — specular edges, stronger active glow ---- */
   :root[data-theme="dark"] header.mast{border-bottom-color:rgba(255,255,255,.07);
     box-shadow:var(--sh-mast),inset 0 1px 0 rgba(255,255,255,.04)}
   :root[data-theme="dark"] .filterbar{border-bottom-color:rgba(255,255,255,.06);
     box-shadow:0 1px 0 rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.03)}
-  :root[data-theme="dark"] .tab[aria-selected="true"]::after{box-shadow:0 0 16px 0 rgba(224,90,72,.50)}
+  :root[data-theme="dark"] .tab[aria-selected="true"]::after{box-shadow:0 0 16px 0 rgba(193,127,108,.50)}
   :root[data-theme="dark"] .hero{box-shadow:0 0 0 1px var(--line-glass),inset 0 1px 0 rgba(255,255,255,.05)}
   :root[data-theme="dark"] .shock{border-color:var(--line-glass);background:color-mix(in srgb,var(--surface) 90%,transparent)}
   :root[data-theme="dark"] .shock:hover{border-color:var(--line-glass-hi);background:var(--tint)}
   :root[data-theme="dark"] .shock[aria-pressed="true"]{background:var(--ink);border-color:transparent;
-    box-shadow:inset 3px 0 0 var(--clay),0 0 24px -8px rgba(224,90,72,.35)}
+    box-shadow:inset 3px 0 0 var(--clay),0 0 24px -8px rgba(193,127,108,.35)}
   .leaflet-touch .leaflet-bar,.leaflet-bar{box-shadow:var(--sh-2),var(--spec) !important}
   .leaflet-touch .leaflet-control-layers,.leaflet-control-layers{box-shadow:var(--sh-3),var(--spec) !important}
   .leaflet-popup-content-wrapper{box-shadow:0 0 0 1px var(--rim),var(--sh-3),var(--spec) !important}
 
   /* ---- ember bloom — large light-on-dark numerals only, never body text ---- */
-  :root[data-theme="dark"] .hero h2 em{text-shadow:0 0 34px rgba(210,101,79,.42)}
-  :root[data-theme="dark"] .hero-mark b i{text-shadow:0 0 24px rgba(210,101,79,.40)}
+  :root[data-theme="dark"] .hero h2 em{text-shadow:0 0 34px rgba(193,127,108,.42)}
+  :root[data-theme="dark"] .hero-mark b i{text-shadow:0 0 24px rgba(193,127,108,.40)}
   :root[data-theme="dark"] .grid .tile:first-child .hero-num,
-  :root[data-theme="dark"] .grid .tile:first-child .t-value{text-shadow:0 0 30px rgba(224,90,72,.25)}
+  :root[data-theme="dark"] .grid .tile:first-child .t-value{text-shadow:0 0 30px rgba(193,127,108,.25)}
   :root[data-theme="dark"] .cov-num{text-shadow:0 0 44px rgba(193,127,108,.32)}
   :root[data-theme="dark"] .hero-stat b{text-shadow:0 0 26px rgba(193,127,108,.35)}
 
   /* ---- live pulse — reserved for the two "this is live" dots ---- */
-  @keyframes halo{0%{box-shadow:0 0 0 0 var(--halo-c,rgba(210,101,79,.40))}
+  @keyframes halo{0%{box-shadow:0 0 0 0 var(--halo-c,rgba(193,127,108,.40))}
     70%,100%{box-shadow:0 0 0 9px transparent}}
   .chip-ihr[aria-pressed="true"] .dot{--halo-c:color-mix(in srgb,var(--madder) 60%,transparent);
     animation:halo 2.4s var(--e-exp) infinite}
@@ -1097,6 +1101,47 @@
   ::-webkit-scrollbar-thumb{background-color:color-mix(in srgb,var(--muted) 38%,transparent);
     border:4px solid transparent;background-clip:padding-box;border-radius:999px}
   ::-webkit-scrollbar-thumb:hover{background-color:color-mix(in srgb,var(--muted) 60%,transparent)}
+
+  /* ---- masthead follows the theme: white glass bar in light, black in dark ---- */
+  :root:not([data-theme="dark"]) header.mast{color:var(--ink);
+    background:color-mix(in srgb,#FFFFFF 86%,transparent);
+    border-bottom:1px solid var(--border);
+    box-shadow:0 1px 0 rgba(20,16,13,.04),0 12px 28px -24px rgba(40,26,16,.30)}
+  :root:not([data-theme="dark"]) .brand-logo{box-shadow:none}
+  :root:not([data-theme="dark"]) .brand .sub{color:var(--muted)}
+  :root:not([data-theme="dark"]) .brand .sub::before{background:var(--border)}
+  :root:not([data-theme="dark"]) .tab{color:var(--muted)}
+  :root:not([data-theme="dark"]) .tab .t-eyebrow{color:color-mix(in srgb,var(--muted) 80%,transparent)}
+  :root:not([data-theme="dark"]) .tab:hover{color:var(--ink2)}
+  :root:not([data-theme="dark"]) .tab[aria-selected="true"]{color:var(--ink)}
+  :root:not([data-theme="dark"]) .tab[aria-selected="true"] .t-eyebrow{color:var(--accent)}
+  :root:not([data-theme="dark"]) .tab::after{background:var(--accent)}
+  :root:not([data-theme="dark"]) .tab[aria-selected="true"]::after{box-shadow:0 0 12px -1px rgba(141,24,18,.40)}
+  :root:not([data-theme="dark"]) .theme-btn{background:var(--surface);border-color:var(--border);color:var(--muted)}
+  :root:not([data-theme="dark"]) .theme-btn:hover{color:var(--ink);border-color:var(--baseline);background:var(--tint)}
+  :root:not([data-theme="dark"]) .mast :focus-visible{outline-color:var(--focus)}
+  :root:not([data-theme="dark"]) .mast ::selection{background:rgba(141,24,18,.15);color:var(--ink)}
+  @media(max-width:720px){
+    :root:not([data-theme="dark"]) .theme-btn{background:var(--surface);border-color:var(--border)}}
+
+  /* ---- drawer affordance — say out loud that more data is inside ---- */
+  details.drawer>summary::after{content:"Click to expand · more data inside";
+    order:1;margin-left:auto;flex:none;color:var(--accent);font-weight:500;
+    font-size:var(--fs-m2);letter-spacing:var(--tr-m2)}
+  details.drawer[open]>summary::after{content:"Click to collapse";color:var(--muted)}
+  details.drawer>summary .caret{order:2;margin-left:10px;color:var(--accent)}
+  details.drawer[open]>summary .caret{color:var(--muted)}
+  @media(max-width:560px){
+    details.drawer>summary::after{content:"Tap to expand"}
+    details.drawer[open]>summary::after{content:"Tap to collapse"}}
+
+  /* ---- uniform type safeguards ---- */
+  /* the ASCII ridge is a drawing, not text — it needs true monospace to align */
+  .ascii{font-family:ui-monospace,"SF Mono","Cascadia Mono",Consolas,monospace}
+  /* former mono data registers keep column-aligned figures in Inter */
+  .kv dd,.ruler-ticks,.chain-lab,.clu>span,.lay small,.tab .t-eyebrow,
+  .axis-t,.dlabel,.dlabel2,.map-sub,.src,.pm-note,.brand .sub{
+    font-variant-numeric:tabular-nums lining-nums}
 
   /* ---------- glass fallback ---------- */
   @supports not ((-webkit-backdrop-filter:blur(2px)) or (backdrop-filter:blur(2px))){
@@ -2094,7 +2139,7 @@ function initL2TraceMap(){
     const cc = CTRACE_LL[c.id]; if(!cc) return;
     c.ventures.forEach(vk=>{
       const t = VTOWN[vk]; const vll = t && TOWN_LL[t]; if(!vll) return;
-      L.polyline([vll, cc], {color:"#8D1812", weight:1.4, opacity:.75, dashArray:"4 4"}).addTo(gLinks);
+      L.polyline([vll, cc], {color:"#8D1812", weight:2.4, opacity:1, dashArray:"7 5"}).addTo(gLinks);
     });
   });
   /* commodity sourcing clusters (circles, GI-marked) */
