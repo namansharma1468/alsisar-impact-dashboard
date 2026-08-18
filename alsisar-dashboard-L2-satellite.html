@@ -794,6 +794,12 @@
   :root[data-theme="dark"] .hero h2{letter-spacing:-.031em}
   .hero h2 em{font-style:normal;color:var(--clay)}
   .hero p{color:var(--invert-fg-2);font-size:16px;line-height:1.72;margin:0;max-width:58ch}
+  .hero-line{margin-top:26px;padding-left:18px;max-width:58ch;border-left:2px solid var(--clay)}
+  .hero-line b{display:block;font-family:var(--disp);font-size:44px;font-weight:600;letter-spacing:-.035em;
+    color:var(--invert-fg);line-height:1;white-space:nowrap}
+  :root[data-theme="dark"] .hero-line b{font-weight:500}
+  .hero-line b i{font-style:normal;color:var(--clay)}
+  .hero-line p{font-size:15.5px;line-height:1.65;margin-top:12px}
   .hero-marks{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;margin-top:30px;padding-top:24px;border-top:0;
     position:relative;z-index:1;
     background-image:linear-gradient(90deg,rgba(221,212,196,.32),rgba(221,212,196,.10) 62%,transparent);
@@ -811,6 +817,7 @@
   .hero-mark span{display:block;font-family:var(--mono);font-size:9px;letter-spacing:var(--tr-m1);
     text-transform:uppercase;color:var(--invert-mut);margin-top:10px}
   @media(max-width:640px){.hero{padding:32px 22px 28px}
+    .hero-line b{font-size:38px}
     .hero-marks{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:22px}
     .hero-mark{padding:0 18px}.hero-mark:nth-child(odd){padding-left:0}
     .hero-mark:nth-child(odd)::before{display:none}
@@ -1398,11 +1405,14 @@
         <p class="eyebrow">Layer 1 · Regional overview</p>
         <h2>The Himalayas are not the periphery.<br><em>They are the source.</em></h2>
         <p>Part A reads demographics, workforce and migration. Part B reads land, agriculture and forest. Part C reads climate, water and risk. The Indian Himalayan Region spans 12 states &amp; UTs — Alsisar Impact works in 8 of them. The geography filter above scopes every layer of this platform.</p>
-        <p class="hero-dep">The Hindu Kush Himalaya is home to <b>240 million</b> people — and its ten river basins supply water to <b>1.9 billion</b>, a quarter of humanity. <a href="https://www.icimod.org/who-we-are/the-hindu-kush-himalaya/" target="_blank" rel="noopener">ICIMOD</a></p>
+        <div class="hero-line">
+          <div class="fig"><b><i>~</i>2 Billion</b></div>
+          <p>people depend directly or indirectly on the Himalayan river systems and ecosystem for freshwater, agriculture, and survival. <a href="https://www.icimod.org/who-we-are/the-hindu-kush-himalaya/" target="_blank" rel="noopener">ICIMOD</a></p>
+        </div>
       </div>
       <div class="hero-marks">
         <div class="hero-mark"><b>36<i>+</i></b><span>Ventures supported</span></div>
-        <div class="hero-mark"><b>26</b><span>enterprises focused on climate change solutions</span></div>
+        <div class="hero-mark"><b>24</b><span>Start-ups from the Himalayan Belt</span></div>
         <div class="hero-mark"><b>16</b><span>Founders from Indigenous Tribes and Castes</span></div>
         <div class="hero-mark"><b>90<i>%</i></b><span>sustainability rate for our portfolio enterprises</span></div>
       </div>
@@ -1648,8 +1658,8 @@
           <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a>
         </div>
         <div class="src-grid">
-          <div><h5>Demography</h5><p><a href="https://censusindia.gov.in/census.website/" target="_blank" rel="noopener">Census of India 2011</a> — population, density, literacy, workforce.</p></div>
-          <div><h5>Land &amp; climate</h5><p><a href="https://fsi.nic.in/forest-report-2021" target="_blank" rel="noopener">India State of Forest Report 2021</a>; <a href="https://mausam.imd.gov.in/" target="_blank" rel="noopener">IMD station normals</a> (indicative).</p></div>
+          <div><h5>Demography</h5><p><a href="https://censusindia.gov.in/census.website/" target="_blank" rel="noopener">Census of India 2011</a> — population, density, literacy, workforce. Workforce in agriculture = cultivators + agricultural labourers (main &amp; marginal) as a share of total workers, from the Primary Census Abstract. Ladakh is Leh &amp; Kargil districts, which were part of J&amp;K in 2011; J&amp;K figures exclude them.</p></div>
+          <div><h5>Land &amp; climate</h5><p><a href="https://fsi.nic.in/forest-report-2021" target="_blank" rel="noopener">India State of Forest Report 2021</a>; <a href="https://mausam.imd.gov.in/" target="_blank" rel="noopener">IMD station normals</a> (indicative). NDVI from <a href="https://neo.gsfc.nasa.gov/view.php?datasetId=MOD_NDVI_M" target="_blank" rel="noopener">NASA NEO</a> — MODIS/Terra monthly vegetation index, 0.1° grid, averaged 2019–2023 over each state polygon.</p></div>
           <div><h5>Registry</h5><p><a href="https://ipindia.gov.in/gi.htm" target="_blank" rel="noopener">GI Registry, GoI</a> — Raktsey Karpo apricot (Ladakh, 2022), Dalle Khursani (Sikkim 2021, extended to Darjeeling &amp; Kalimpong), Sikkim Large Cardamom.</p></div>
           <div><h5>Region definition</h5><p>Indian Himalayan Region = 12 states &amp; UTs per <a href="https://www.niti.gov.in/" target="_blank" rel="noopener">NITI Aayog</a>; Alsisar active in 8.</p></div>
           <div><h5>Portfolio &amp; brand</h5><p>Portfolio deck, <a href="https://www.alsisarimpact.org/" target="_blank" rel="noopener">alsisarimpact.org</a> and <a href="https://www.alsisarimpact.in/" target="_blank" rel="noopener">alsisarimpact.in</a>; venture logos from their own sites, monograms where no file exists.</p></div>
@@ -1707,59 +1717,59 @@ const BIOZONE = {
 
 const GEOS = {
   ladakh:{ name:"Ladakh", type:"Union Territory", color:"var(--s1)", slot:1,
-    pop:"274,289", popN:0.274, area:"59,146", lit:74.2, litEst:true, agri:38, agriEst:true,
+    pop:"274,289", popN:0.274, area:"59,146", lit:74.2, litEst:true, agri:27.2, agriEst:false,
     forest:2.0, forestEst:true, rainTotal:102, rainEst:false,
     rain:[12,9,11,7,7,4,15,20,12,7,4,8],
-    ndvi:[.06,.06,.08,.11,.16,.22,.27,.28,.22,.14,.09,.07],
+    ndvi:[.00,.00,.01,.02,.04,.08,.11,.12,.11,.08,.04,.03],
     hazards:[["Snow cover Nov–Apr","info"],["Cold-desert water stress","serious"],["Landslide / flash-flood risk: moderate","warn"]],
     note:"High-altitude cold desert; agro-pastoral livelihoods, seasonal out-migration to Leh town." },
   sikkim:{ name:"Sikkim", type:"State", color:"var(--s2)", slot:2,
-    pop:"610,577", popN:0.611, area:"7,096", lit:81.4, litEst:false, agri:49, agriEst:true,
+    pop:"610,577", popN:0.611, area:"7,096", lit:81.4, litEst:false, agri:46.5, agriEst:false,
     forest:47.1, forestEst:false, rainTotal:2680, rainEst:true,
     rain:[25,60,130,250,450,600,640,560,440,180,40,15],
-    ndvi:[.42,.44,.50,.58,.66,.72,.75,.74,.70,.62,.52,.45],
+    ndvi:[.34,.33,.32,.36,.42,.49,.55,.57,.55,.52,.45,.43],
     hazards:[["Landslide risk: high (monsoon)","serious"],["Glacial-lake outburst exposure","warn"],["India's first fully organic state (2016)","ok"]],
     note:"Eastern Himalaya biodiversity hotspot; fully organic farming state since 2016." },
   nagaland:{ name:"Nagaland", type:"State", color:"var(--s3)", slot:3,
-    pop:"1,978,502", popN:1.979, area:"16,579", lit:79.6, litEst:false, agri:61, agriEst:true,
+    pop:"1,978,502", popN:1.979, area:"16,579", lit:79.6, litEst:false, agri:61.7, agriEst:false,
     forest:73.9, forestEst:false, rainTotal:1800, rainEst:true,
     rain:[15,25,60,120,180,300,340,320,250,120,30,10],
-    ndvi:[.48,.50,.55,.62,.68,.72,.74,.73,.70,.64,.56,.50],
+    ndvi:[.74,.69,.65,.67,.75,.81,.84,.85,.86,.86,.84,.80],
     hazards:[["Forest-fire season Feb–Apr","warn"],["Jhum-fallow land-use transition","info"]],
     note:"Indigenous community land tenure; shifting (jhum) cultivation transitioning to settled agroforestry." },
   mizoram:{ name:"Mizoram", type:"State", color:"var(--s4)", slot:4,
-    pop:"1,097,206", popN:1.097, area:"21,081", lit:91.3, litEst:false, agri:55, agriEst:true,
+    pop:"1,097,206", popN:1.097, area:"21,081", lit:91.3, litEst:false, agri:55.8, agriEst:false,
     forest:84.5, forestEst:false, rainTotal:2350, rainEst:true,
     rain:[12,25,80,160,280,420,440,420,320,180,60,15],
-    ndvi:[.52,.54,.58,.64,.70,.74,.76,.75,.72,.66,.58,.54],
+    ndvi:[.81,.76,.70,.69,.73,.81,.85,.86,.87,.87,.87,.85],
     hazards:[["Highest forest cover in India (84.5%)","ok"],["Forest-fire season Mar–Apr","warn"],["Landslide risk: moderate","warn"]],
     note:"Highest literacy among portfolio geographies; bamboo-dominant landscapes, horticulture growth." },
   jk:{ name:"Jammu & Kashmir", type:"Union Territory", color:"var(--s5)", slot:5,
-    pop:"12,267,013", popN:12.267, area:"42,241", lit:67.2, litEst:true, agri:50, agriEst:true,
+    pop:"12,267,013", popN:12.267, area:"42,241", lit:67.2, litEst:true, agri:41.9, agriEst:false,
     forest:39.2, forestEst:true, rainTotal:710, rainEst:true,
     rain:[48,68,121,85,68,36,58,76,38,29,20,36],
-    ndvi:[.25,.28,.35,.45,.55,.62,.65,.63,.55,.45,.35,.28],
+    ndvi:[.23,.26,.31,.37,.42,.49,.60,.65,.61,.50,.37,.32],
     hazards:[["Snow cover Dec–Mar (valley & highlands)","info"],["Seismic zone IV–V","warn"],["Jhelum flood exposure (2014-type events)","serious"]],
     note:"Saffron, horticulture and handicraft economy; Srinagar is the centre of a fast-growing startup ecosystem." },
   uk:{ name:"Uttarakhand", type:"State", color:"var(--s6)", slot:6,
-    pop:"10,086,292", popN:10.086, area:"53,483", lit:78.8, litEst:false, agri:50, agriEst:true,
+    pop:"10,086,292", popN:10.086, area:"53,483", lit:78.8, litEst:false, agri:51.2, agriEst:false,
     forest:45.4, forestEst:false, rainTotal:1500, rainEst:true,
     rain:[40,50,45,30,55,180,420,400,190,40,12,20],
-    ndvi:[.40,.42,.46,.52,.58,.64,.70,.71,.66,.58,.48,.42],
+    ndvi:[.42,.41,.40,.39,.43,.50,.60,.65,.65,.59,.50,.47],
     hazards:[["Landslide & flash-flood risk: high","serious"],["Kedarnath-type flood history (2013, 2021)","warn"],["Documented out-migration — ~1,700 'ghost villages'","serious"]],
     note:"Kumaon & Garhwal hills; documented farm abandonment and out-migration — the exodus the portfolio model works against." },
   manipur:{ name:"Manipur", type:"State", color:"var(--s7)", slot:7,
-    pop:"2,855,794", popN:2.856, area:"22,327", lit:76.9, litEst:false, agri:52, agriEst:true,
+    pop:"2,855,794", popN:2.856, area:"22,327", lit:76.9, litEst:false, agri:52.8, agriEst:false,
     forest:74.3, forestEst:false, rainTotal:1470, rainEst:true,
     rain:[15,30,70,140,200,270,250,230,180,110,40,15],
-    ndvi:[.50,.52,.56,.62,.68,.72,.74,.73,.70,.64,.56,.51],
+    ndvi:[.74,.70,.66,.67,.72,.78,.82,.84,.85,.85,.83,.79],
     hazards:[["Imphal valley seasonal floods","warn"],["Jhum-fallow land-use transition","info"],["Ukhrul hills — indigenous horticulture belt","ok"]],
     note:"Hill districts like Ukhrul are emerging startup hubs built on indigenous produce ('Made in Ukhrul')." },
   assam:{ name:"Assam", type:"State", color:"var(--s8)", slot:8,
-    pop:"31,205,576", popN:31.206, area:"78,438", lit:72.2, litEst:false, agri:53, agriEst:true,
+    pop:"31,205,576", popN:31.206, area:"78,438", lit:72.2, litEst:false, agri:49.3, agriEst:false,
     forest:36.1, forestEst:false, rainTotal:2300, rainEst:true,
     rain:[15,25,70,180,330,420,410,360,260,120,25,10],
-    ndvi:[.45,.47,.52,.60,.66,.70,.72,.71,.68,.62,.52,.47],
+    ndvi:[.55,.52,.52,.57,.64,.69,.69,.73,.76,.75,.69,.61],
     hazards:[["Annual Brahmaputra floods & bank erosion","serious"],["Riverine transport corridors","info"],["Tea & citrus GI heritage","ok"]],
     note:"Brahmaputra valley gateway to the Northeast; annual floods shape livelihoods, logistics and cropping." }
 };
@@ -2757,8 +2767,8 @@ function renderL1(){
       <div class="t-value"><span class="cnum" data-v="${lit.toFixed(1)}" data-dec="1">${lit.toFixed(1)}</span><span class="unit">%</span></div>
       <div class="t-note">Census 2011${gs.some(g=>g.litEst)?" · partly indicative":""}</div></div>
     <div class="card c3 tile"><div class="t-label">Workforce in agriculture${gs.length>1?" (avg)":""}</div>
-      <div class="t-value">~<span class="cnum" data-v="${Math.round(agri)}">${Math.round(agri)}</span><span class="unit">%</span></div>
-      <div class="t-note">${estMark("indicative")} · share of workers</div></div>`;
+      <div class="t-value"><span class="cnum" data-v="${agri.toFixed(1)}" data-dec="1">${agri.toFixed(1)}</span><span class="unit">%</span></div>
+      <div class="t-note">Census 2011 · cultivators &amp; agri labourers</div></div>`;
   animateCounts($("#l1-tiles"));
 
   $("#l1-geocards").innerHTML = Object.entries(GEOS).map(([k,g])=>`
@@ -2777,7 +2787,7 @@ function renderL1(){
             <dt>Population</dt><dd>${g.pop}</dd>
             <dt>Density (/km²)</dt><dd>${fmt(dens(g))}</dd>
             <dt>Literacy</dt><dd>${g.litEst?estMark(g.lit+"%"):g.lit+"%"}</dd>
-            <dt>Workforce in agriculture</dt><dd>${estMark("~"+g.agri+"%")}</dd>
+            <dt>Workforce in agriculture</dt><dd>${g.agriEst?estMark("~"+g.agri+"%"):g.agri+"%"}</dd>
             <dt>Geographic area</dt><dd>${g.area} km²</dd>
           </dl>
           <span class="flip-cue"><svg viewBox="0 0 16 16"><path d="M14 10a6 6 0 0 1-11 2"/><path d="M3 15v-4h4"/></svg>Back</span>
@@ -2790,10 +2800,10 @@ function renderL1(){
     barChartSVG({data:lData, unit:"%", h:158, fmtV:v=>v.toFixed(1)}),
     ["Geography","Literacy (%)"], Object.values(GEOS).map(g=>[g.name, (g.litEst?"~":"")+g.lit]));
 
-  const aData = Object.entries(GEOS).map(([k,g])=>({l:SN[k]||g.name, v:g.agri, color: activeGeos().includes(k) ? g.color : "var(--grid)", tip:g.name+" · workforce share in agriculture (indicative)"}));
-  card("#ch-agri",`Workforce in agriculture & allied`, `${estMark("indicative")} · % of workers`,
-    barChartSVG({data:aData, unit:"%", h:158, fmtV:v=>v}),
-    ["Geography","Workforce in agri (%)"], Object.values(GEOS).map(g=>[g.name, "~"+g.agri]));
+  const aData = Object.entries(GEOS).map(([k,g])=>({l:SN[k]||g.name, v:g.agri, color: activeGeos().includes(k) ? g.color : "var(--grid)", tip:g.name+" · cultivators & agricultural labourers, Census 2011"+(g.agriEst?" (indicative)":"")}));
+  card("#ch-agri",`Workforce in agriculture & allied`, `% of total workers · Census 2011`,
+    barChartSVG({data:aData, unit:"%", h:158, fmtV:v=>v.toFixed(1)}),
+    ["Geography","Workforce in agri (%)"], Object.values(GEOS).map(g=>[g.name, (g.agriEst?"~":"")+g.agri]));
 
   const stData = Object.entries(GEOS).map(([k,g])=>({l:SN[k]||g.name, v:ST_SHARE[k].v,
     color: activeGeos().includes(k) ? g.color : "var(--grid)", tip:g.name+" · "+ST_SHARE[k].note}));
@@ -2886,7 +2896,7 @@ function renderL1(){
     ["Month",...Object.values(GEOS).map(g=>g.name+" (mm)")], MONTHS.map((m,i)=>[m,...Object.values(GEOS).map(g=>g.rain[i])]));
 
   const ndviSeries = Object.values(GEOS).map(g=>({name:g.name, color:g.color, values:g.ndvi}));
-  card("#ch-ndvi",`Vegetation index (NDVI)`, `${estMark("illustrative")} · seasonal profile`,
+  card("#ch-ndvi",`Vegetation index (NDVI)`, `MODIS/Terra · 2019–2023 monthly mean`,
     legendHTML(ndviSeries,true) + lineChartSVG({series:ndviSeries, labels:MONTHS, fmtV:v=>v.toFixed(2), endLabels:false}),
     ["Month",...Object.values(GEOS).map(g=>g.name)], MONTHS.map((m,i)=>[m,...Object.values(GEOS).map(g=>g.ndvi[i].toFixed(2))]));
 
@@ -3001,7 +3011,7 @@ function linkSources(text){
 const EVIDENCE = [
   ["Forest &amp; land cover","The land is being kept, not cleared","India State of Forest Report 2021 (ISFR)"],
   ["Rainfall &amp; climate","The exposure that drives the dependency matrix","IMD station normals · CHIRPS"],
-  ["Vegetation health","Crop vigour across the season","MODIS / Sentinel NDVI profile"],
+  ["Vegetation health","Crop vigour across the season","NASA NEO — MODIS/Terra monthly NDVI"],
   ["Hazard &amp; shock","Shock events set against business outcomes","State hazard records · NASA Landslide Catalog · MODIS / VIIRS"],
   ["Biodiversity","Farming without harming fragile land","Protected-area &amp; organic-certification status"],
   ["Demography &amp; workforce","Who is in the landscape, and on what livelihood","Census of India 2011"],
