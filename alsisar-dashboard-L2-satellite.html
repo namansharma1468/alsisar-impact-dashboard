@@ -264,6 +264,12 @@
   .layer-head p{color:var(--ink2);margin:0;font-size:16px;line-height:1.66;max-width:58ch}
   /* the eyebrow is a <p> too — restate its register or .layer-head p out-specifies it */
   .layer-head .eyebrow{font-size:var(--fs-m1);line-height:1.5;color:var(--muted);max-width:none;margin:0 0 12px}
+  #l2 .layer-head{max-width:980px;margin-top:34px;margin-bottom:22px;padding:26px 30px 28px;
+    border-left:4px solid var(--accent);background:var(--tint)}
+  #l2 .layer-head h2{max-width:760px;font-size:clamp(32px,4vw,48px)}
+  #l2 .layer-head>p:last-child{max-width:700px;padding-top:15px;border-top:1px solid var(--border);font-size:17px}
+  #l2 .contains{margin-bottom:28px}
+  @media(max-width:640px){#l2 .layer-head{padding:20px 18px 22px;margin-top:24px}#l2 .layer-head>p:last-child{font-size:15px}}
   .part-head{display:flex;align-items:center;gap:16px;margin:52px 0 16px}
   .part-head span{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:var(--fs-m2);
     letter-spacing:var(--tr-m1);text-transform:uppercase;color:var(--accent);font-weight:500;white-space:nowrap}
@@ -329,6 +335,14 @@
   .tile .t-value .unit{font-family:var(--body);font-size:15px;font-weight:500;color:var(--muted);
     margin-left:4px;letter-spacing:-.005em}
   .tile .t-note{font-size:12px;color:var(--muted);margin-top:auto;padding-top:11px;line-height:1.55;max-width:34ch}
+  .tile .metric-ring{display:block;width:42px;height:42px;margin-top:13px;border-radius:50%;
+    background:conic-gradient(var(--metric-color) calc(var(--metric-p) * 1%),var(--tint) 0);
+    position:relative}
+  .tile .metric-ring::after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--surface);
+    box-shadow:inset 0 0 0 1px var(--border)}
+  .tile .mini-bars{display:flex;align-items:flex-end;gap:4px;height:42px;margin-top:13px;padding:0 2px;
+    border-bottom:1px solid var(--baseline)}
+  .tile .mini-bars i{display:block;flex:1;min-width:5px;background:var(--metric-color);opacity:.82}
   .grid .tile{display:flex;flex-direction:column} /* notes share the row's bottom edge across mixed value sizes */
   .hero-num{font-family:var(--body);font-size:50px;font-weight:600;letter-spacing:-.034em;line-height:1;
     font-variant-numeric:tabular-nums lining}
@@ -430,12 +444,15 @@
       margin-left:calc((100% - min(100vw - 48px,1460px))/2)}}
   @media(max-width:1080px){.console{background-image:none}}
   @media(max-width:1080px){.console{grid-template-columns:1fr}}
+  @media(max-width:1080px){.console{background-image:none}}
+  @media(max-width:1080px){.console{grid-template-columns:1fr}}
   .rail{padding:22px 20px;border-right:1px solid var(--border);align-self:start;position:sticky;
     top:calc(var(--mast-h) + var(--filter-h) + 16px)}
   .panel{border-left:1px solid var(--border);min-width:0}
   .stage{align-self:start;position:sticky;top:calc(var(--mast-h) + var(--filter-h) + 16px)}
   @media(max-width:1080px){.rail,.stage{position:static}}
   @media(max-width:1080px){.rail{border-right:0;border-bottom:1px solid var(--border)}.panel{border-left:0;border-top:1px solid var(--border)}}
+  .stage{padding:22px;min-width:0}
   .rail h3{font-family:var(--mono);font-size:var(--fs-m1);letter-spacing:var(--tr-m1);text-transform:uppercase;
     color:var(--muted);font-weight:500;margin:0 0 13px}
   .rail hr{border:0;border-top:1px solid var(--border);margin:16px 0}
@@ -454,7 +471,6 @@
   /* never recolour the label on hover — the rail colour IS the layer encoding */
   .lay:hover{background:var(--tint)}
   .lay:hover .box{border-color:currentColor}
-  .stage{padding:22px;min-width:0}
   .stage .card{box-shadow:none;background:transparent;padding:20px 0 0;grid-column:auto}
   .stage .card+.card{border-top:1px solid var(--border);margin-top:16px}
   .stage .map-legend+.card{border-top:1px solid var(--border);margin-top:16px}
@@ -945,6 +961,58 @@
   .rmx-key i{width:14px;height:14px;border-radius:50%;display:inline-block}
   .rmx-key span:last-child i{width:9px;height:9px;box-shadow:inset 0 0 0 1px var(--baseline) !important}
   .rmx-wrap{overflow-x:auto}
+  .risk-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+  .risk-stat{padding:12px 14px;border:1px solid var(--border);background:var(--tint)}
+  .risk-stat b{display:block;font-family:var(--disp);font-size:25px;line-height:1;color:var(--ink)}
+  .risk-stat span{display:block;margin-top:6px;font-family:var(--mono);font-size:9px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted)}
+  .risk-stat.serious b{color:var(--crit)}
+  .risk-stat.warn b{color:var(--warn)}
+  .risk-stat.info b{color:var(--ink2)}
+  .risk-board{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .risk-column{border:1px solid var(--border);background:var(--surface);min-width:0}
+  .risk-column-head{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border);
+    font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+  .risk-column-head i{width:8px;height:8px;border-radius:50%;background:var(--baseline)}
+  .risk-column.serious .risk-column-head i{background:var(--crit)}
+  .risk-column.warn .risk-column-head i{background:var(--warn)}
+  .risk-column.info .risk-column-head i{background:var(--good)}
+  .risk-column-body{display:grid;gap:1px;background:var(--border)}
+  .risk-item{padding:10px 12px;background:var(--surface);font-size:11.5px;line-height:1.45;color:var(--ink2)}
+  .risk-item.off{opacity:.42}
+  .risk-item b{display:block;margin-bottom:3px;font-size:12px;color:var(--ink)}
+  .risk-item b i{display:inline-block;width:6px;height:6px;margin:0 6px 1px 0;border-radius:50%;background:var(--baseline)}
+  .risk-item.serious b i{background:var(--crit)}
+  .risk-item.warn b i{background:var(--warn)}
+  .risk-item.info b i,.risk-item.ok b i{background:var(--good)}
+  .risk-empty{padding:12px;font-size:11px;color:var(--muted);background:var(--surface)}
+  .risk-empty{font-size:12px;color:var(--muted);padding:3px 0}
+  .risk-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px}
+  .risk-table th{padding:9px 6px;border-bottom:1px solid var(--ink);font-family:var(--mono);font-size:8px;
+    letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:center;line-height:1.35}
+  .risk-table th:first-child{width:145px;text-align:left;padding-left:0}
+  .risk-table td{padding:10px 5px;border-bottom:1px solid var(--grid);text-align:center;vertical-align:middle}
+  .risk-table tr:last-child td{border-bottom:0}
+  .risk-table tr.off{opacity:.42}
+  .risk-table td:first-child{text-align:left;padding-left:0;font-weight:600;color:var(--ink)}
+  .risk-table td:first-child i{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:var(--r-micro)}
+  .risk-badge{display:inline-flex;align-items:center;justify-content:center;min-width:48px;min-height:24px;padding:3px 5px;
+    border:1px solid var(--border);font-family:var(--mono);font-size:8px;line-height:1.15;text-transform:uppercase}
+  .risk-badge.serious{background:var(--serious-soft);border-color:var(--crit);color:var(--crit)}
+  .risk-badge.warn{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
+  .risk-badge.info{background:var(--tint);border-color:var(--baseline);color:var(--ink2)}
+  .risk-badge.ok{background:var(--ok-soft);border-color:var(--good);color:var(--good-text)}
+  .risk-badge.none{min-width:24px;border-style:dashed;color:var(--muted);background:transparent}
+  .risk-table-wrap{overflow-x:auto}
+  .risk-legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;padding-top:11px;border-top:1px solid var(--grid);
+    font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .risk-legend span{display:inline-flex;align-items:center;gap:6px}
+  .risk-legend i{width:10px;height:10px;border:1px solid var(--baseline);background:var(--baseline)}
+  .risk-legend .serious{background:var(--crit);border-color:var(--crit)}
+  .risk-legend .warn{background:var(--warn);border-color:var(--warn)}
+  .risk-legend .info{background:var(--baseline);border-color:var(--baseline)}
+  .risk-legend .ok{background:var(--good);border-color:var(--good)}
+  @media(max-width:760px){.risk-summary{grid-template-columns:1fr 1fr}.risk-stat:last-child{grid-column:1/-1}}
 
   .pillars{margin:0 0 26px}
   .pillar{--fh:258px}
@@ -958,14 +1026,22 @@
                  margin:auto 0 0;padding-top:15px;line-height:1.18;border-top:1px solid var(--sand);
                  background:linear-gradient(90deg,var(--accent),var(--accent)) left top/56px 1px no-repeat}
   .pillar .ff .p-sub{font-size:12.5px;color:var(--muted);margin:8px 0 0;min-height:2.9em;line-height:1.45}
+  .pillar .ff .p-stat{margin:14px 0 0;font-family:var(--disp);font-size:30px;font-weight:600;
+    letter-spacing:-.032em;color:var(--accent);line-height:1}
+  .pillar .ff .p-stat i{font-style:normal;font-size:.5em;letter-spacing:.04em;color:var(--ink2)}
+  .pillar .ff .p-stat span{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--muted);margin-top:7px;font-weight:400;line-height:1.45}
   .pillar .fb{background:var(--invert-bg);color:var(--invert-fg-2)}
   .pillar .fb .bk-h{color:var(--invert-accent)}
   .pillar .fb p{color:var(--invert-fg-2);font-size:12px;line-height:1.6}
   .pillar .fb .p-stat{margin-top:auto;padding-top:8px;font-family:var(--disp);font-size:30px;font-weight:600;
                       letter-spacing:-.032em;color:var(--invert-fg);line-height:1}
   :root[data-theme="dark"] .pillar .fb .p-stat{font-weight:500}
+  .pillar .fb .p-stat i{font-style:normal;font-size:.5em;letter-spacing:.04em;color:var(--invert-accent)}
   .pillar .fb .p-stat span{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.12em;
                            text-transform:uppercase;color:var(--invert-mut);margin-top:7px;font-weight:400}
+  .pillar .fb .p-source{margin:8px 0 0;font-family:var(--mono);font-size:9px;line-height:1.45;color:var(--invert-mut)}
+  .pillar .fb .p-source a{color:var(--invert-accent);text-underline-offset:2px}
   .pillar .fb .flip-cue{color:var(--invert-mut)}
 
   /* ---------- compact data & sources ---------- */
@@ -1215,21 +1291,6 @@
     color:#F5F1EA;background:linear-gradient(180deg,transparent,rgba(0,0,0,.74))}
   @media(max-width:640px){.strip-track img{height:104px}}
 
-  /* ---- editorial photo rows — three frames, gallery captions ---- */
-  .photo-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:0 0 14px}
-  .photo-row figure{position:relative;margin:0;overflow:hidden;background:var(--surface);
-    box-shadow:0 0 0 1px var(--border);transition:box-shadow var(--t-3) var(--e-exp)}
-  .photo-row figure:hover{box-shadow:0 0 0 1px var(--line-glass-hi),var(--card-halo);z-index:1}
-  .photo-row img{display:block;width:100%;height:232px;object-fit:cover;
-    transition:transform var(--t-4) var(--e-exp)}
-  .photo-row figure:hover img{transform:scale(1.035)}
-  .photo-row figcaption{padding:10px 14px 11px;font-family:var(--mono);font-size:var(--fs-m2);
-    letter-spacing:var(--tr-m2);text-transform:uppercase;color:var(--muted);line-height:1.5}
-  .photo-row figcaption b{color:var(--ink);font-weight:500}
-  @media(max-width:860px){.photo-row{grid-template-columns:1fr 1fr}
-    .photo-row figure:last-child{grid-column:1/-1}.photo-row img{height:200px}}
-  @media(max-width:560px){.photo-row{grid-template-columns:1fr}
-    .photo-row figure:last-child{grid-column:auto}}
   footer{background-image:
       linear-gradient(180deg,rgba(13,13,13,.955) 0%,rgba(13,13,13,.97) 42%,#0D0D0D 100%),
       url("assets/img/valley-road.jpg");
@@ -1268,59 +1329,50 @@
     text-transform:uppercase;text-underline-offset:3px;text-decoration-style:dotted;text-decoration-thickness:1px}
   .hero-dep a:hover{color:var(--invert-accent)}
 
-  /* ---- biodiversity arc — light card, ridge profile, photo-on-hover ----
+    /* ---- biodiversity arc — light card, ridge profile ----
      Class colours are theme tokens; the card is a normal surface in both
-     themes. Hovering a state floats its field photograph in behind the
-     whole card under a surface-tinted scrim. */
-  #biozone{position:relative;overflow:hidden;
-    --bz-him:#256E38; --bz-indo:#0E9384; --bz-trans:#A6916B;
+      themes. */
+  #biozone{position:relative;overflow:hidden;border:1px solid var(--ink);border-top:4px solid var(--accent);
+    padding:22px 24px 20px;
+    --bz-him:var(--accent); --bz-indo:var(--brandgreen); --bz-trans:var(--baseline);
     --bz-ink:#5C554C; --bz-farink:#8A8378}
-  :root[data-theme="dark"] #biozone{--bz-him:#8FD6A0; --bz-indo:#54C2B4; --bz-trans:#DDD4C4;
+  :root[data-theme="dark"] #biozone{--bz-him:var(--invert-accent); --bz-indo:var(--sage); --bz-trans:var(--invert-mut);
     --bz-ink:#C9C2B6; --bz-farink:#8A8378}
   #biozone>*{position:relative;z-index:1}
-  #biozone .card-head h3,#biozone .card-head .hint,#biozone .bz-key,#biozone .src{
+  #biozone .card-head h3,#biozone .card-head .hint,#biozone .src{
     text-shadow:0 0 2px var(--surface),0 0 3px var(--surface),0 0 5px var(--surface),
       0 1px 8px var(--surface),0 0 14px var(--surface),0 0 22px var(--surface)}
-  #biozone .bz-photo{position:absolute;inset:0;z-index:0;pointer-events:none;
-    background-size:cover;background-position:center;
-    opacity:0;transform:scale(1.04);
-    transition:opacity 420ms var(--e-exp),transform 1400ms var(--e-exp)}
-  /* no scrim — the photograph shows at full strength; type carries its own halo */
-  #biozone .bz-photo.show{opacity:1;transform:none}
-  .bz-ridge{display:block;width:100%;height:130px;margin:2px 0 0}
+  #biozone .card-head{margin-bottom:12px;padding-bottom:13px;border-bottom:1px solid var(--ink)}
+  #biozone .card-head h3{font-size:19px;letter-spacing:-.02em}
+  #biozone .card-head .hint{color:var(--accent);font-weight:500}
+  .bz-ridge{display:block;width:100%;height:142px;margin:0 0 10px;padding:5px 8px;
+    border:1px solid var(--border);background:var(--tint)}
   .bz-compass{font-family:var(--mono);font-size:9px;letter-spacing:.16em;fill:var(--muted)}
-  .bzseg{transition:filter var(--t-3) var(--e-out)}
-  .bzseg.lit{filter:saturate(1.5) contrast(1.08)}
-  .bz-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:1px;margin-top:-1px}
+  .bz-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 14px}
+  .bz-line{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-height:72px;padding:11px 13px;
+    border:1px solid var(--border);background:var(--surface);font-size:12px}
+  .bz-line i{display:block;width:100%;height:4px;background:var(--ink2)}
+  .bz-line-him i{background:var(--bz-him)}
+  .bz-line-indo i{background:var(--bz-indo)}
+  .bz-line-trans i{background:var(--baseline)}
+  .bz-line b{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+  .bz-line span{color:var(--muted);line-height:1.45}
+  .bz-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:0}
   .bz{position:relative;display:flex;flex-direction:column;gap:5px;padding:13px 13px 12px;
     background:color-mix(in srgb,var(--surface) 90%,transparent);
-    box-shadow:0 0 0 1px var(--border);border-top:3px solid var(--baseline);
+    box-shadow:0 0 0 1px var(--border);border-top:3px solid var(--ink2);
     transition:opacity var(--t-2) var(--e-out),background-color var(--t-2) var(--e-out),
       box-shadow var(--t-2) var(--e-out)}
   .bz:hover{background:color-mix(in srgb,var(--tint) 88%,transparent);
     box-shadow:0 0 0 1px var(--baseline)}
-  .bz.bz-him{border-top-color:var(--bz-him)}
-  .bz.bz-indo{border-top-color:var(--bz-indo)}
-  .bz.bz-trans{border-top-color:var(--bz-trans);
-    background:color-mix(in srgb,var(--sand) 34%,var(--surface))}
-  .bz.off{opacity:.32}
   .bz-tag{font-family:var(--mono);font-size:var(--fs-m3);letter-spacing:var(--tr-m3);
     text-transform:uppercase;font-weight:500;line-height:1.4}
-  .bz-him .bz-tag{color:var(--bz-him)}
-  .bz-indo .bz-tag{color:var(--bz-indo)}
-  .bz-trans .bz-tag{color:var(--bz-trans)}
+  .bz-tag{color:var(--ink2)}
   .bz b{font-size:13.5px;font-weight:600;letter-spacing:-.01em;line-height:1.25;color:var(--ink)}
   .bz-zone{font-family:var(--mono);font-size:var(--fs-m3);letter-spacing:.05em;color:var(--ink2)}
   .bz-note{font-size:11px;line-height:1.5;color:var(--muted);margin-top:auto;padding-top:4px}
-  .bz-key{display:flex;flex-wrap:wrap;gap:7px 20px;margin-top:14px;padding-top:12px;
-    border-top:1px solid var(--grid);font-family:var(--mono);font-size:var(--fs-m2);
-    letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-  .bz-key span{display:inline-flex;align-items:center;gap:7px}
-  .bz-key i{width:10px;height:10px;border-radius:var(--r-micro)}
-  @media(max-width:1080px){.bz-grid{grid-template-columns:repeat(4,1fr)}.bz-ridge{height:100px}}
-  @media(max-width:640px){.bz-grid{grid-template-columns:repeat(2,1fr)}.bz-ridge{height:80px}}
-  @media(prefers-reduced-motion:reduce){#biozone .bz-photo{transform:none;transition:opacity 200ms linear}}
-
+  @media(max-width:1080px){#biozone{padding:20px}.bz-summary{grid-template-columns:1fr}.bz-line{min-height:0}.bz-ridge{height:110px}}
+  @media(max-width:640px){#biozone{padding:16px}.bz-grid{grid-template-columns:repeat(2,1fr)}.bz-ridge{height:86px;padding:3px}}
   /* ---- uniform type safeguards ---- */
   /* the ASCII ridge is a drawing, not text — it needs true monospace to align */
   .ascii{font-family:ui-monospace,"SF Mono","Cascadia Mono",Consolas,monospace}
@@ -1402,9 +1454,8 @@
     <div class="hero">
       <svg class="contour" viewBox="0 0 1220 380" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M-40 30 C 180 -4, 340 56, 560 12 S 940 60, 1300 18"/><path d="M-40 64 C 180 30, 340 90, 560 46 S 940 94, 1300 52"/><path d="M-40 98 C 180 64, 340 124, 560 80 S 940 128, 1300 86"/><path d="M-40 132 C 180 98, 340 158, 560 114 S 940 162, 1300 120"/><path d="M-40 166 C 180 132, 340 192, 560 148 S 940 196, 1300 154"/><path d="M-40 200 C 180 166, 340 226, 560 182 S 940 230, 1300 188"/><path d="M-40 234 C 180 200, 340 260, 560 216 S 940 264, 1300 222"/><path d="M-40 268 C 180 234, 340 294, 560 250 S 940 298, 1300 256"/><path d="M-40 302 C 180 268, 340 328, 560 284 S 940 332, 1300 290"/><path d="M-40 336 C 180 302, 340 362, 560 318 S 940 366, 1300 324"/><path d="M-40 370 C 180 336, 340 396, 560 352 S 940 400, 1300 358"/></svg>
       <div class="hero-in">
-        <p class="eyebrow">Layer 1 · Regional overview</p>
-        <h2>The Himalayas are not the periphery.<br><em>They are the source.</em></h2>
-        <p>Part A reads demographics, workforce and migration. Part B reads land, agriculture and forest. Part C reads climate, water and risk. The Indian Himalayan Region spans 12 states &amp; UTs — Alsisar Impact works in 8 of them. The geography filter above scopes every layer of this platform.</p>
+        <h2>Understanding the Himalayan Region through Data.</h2>
+        <p>A regional view of demographics, livelihoods, biodiversity, climate, natural resources and economic activity across the Himalayan and Northeast regions.</p>
         <div class="hero-line">
           <div class="fig"><b><i>~</i>2 Billion</b></div>
           <p>people depend directly or indirectly on the Himalayan river systems and ecosystem for freshwater, agriculture, and survival. <a href="https://www.icimod.org/who-we-are/the-hindu-kush-himalaya/" target="_blank" rel="noopener">ICIMOD</a></p>
@@ -1412,7 +1463,7 @@
       </div>
       <div class="hero-marks">
         <div class="hero-mark"><b>36<i>+</i></b><span>Ventures supported</span></div>
-        <div class="hero-mark"><b>24</b><span>Start-ups from the Himalayan Belt</span></div>
+        <div class="hero-mark"><b>23</b><span>Start-ups from the Himalayan Belt</span></div>
         <div class="hero-mark"><b>16</b><span>Founders from Indigenous Tribes and Castes</span></div>
         <div class="hero-mark"><b>90<i>%</i></b><span>sustainability rate for our portfolio enterprises</span></div>
       </div>
@@ -1422,16 +1473,15 @@
       <div class="card c3 flip pillar" role="button" tabindex="0" aria-pressed="false">
         <div class="fi">
           <div class="fc ff">
-            <span class="p-no">01</span>
             <svg class="p-ico" viewBox="0 0 52 46" aria-hidden="true"><path d="M19 33V19l7-8 7 8v14"/><path d="M12 33V24l7-5"/><path d="M33 19l7 5v9"/><path d="M8 33h36"/><circle cx="26" cy="24" r="2.6"/></svg>
-            <h4>Indigenous communities</h4>
-            <p class="p-sub">Leadership that already holds the answers</p>
+            <h4>Regional overview</h4>
+            <div class="p-stat">~240 <i>MILLION</i><span>PEOPLE LIVING IN THE HINDU KUSH HIMALAYA</span></div>
             <span class="flip-cue"><svg viewBox="0 0 16 16"><path d="M2 6a6 6 0 0 1 11-2"/><path d="M13 1v4H9"/></svg>More</span>
           </div>
           <div class="fc fb">
-            <p class="bk-h">Why it matters</p>
-            <p>The global economy is racing to invent sustainable solutions. Indigenous entrepreneurship has been holding them for generations. Alsisar backs founders from those communities directly, rather than routing capital around them.</p>
-            <div class="p-stat">18<span>Founders from indigenous communities</span></div>
+            <p class="bk-h">Regional scale</p>
+            <p>The Hindu Kush Himalaya stretches 3,500 km across eight countries, from Afghanistan to Myanmar, and supports the lives and livelihoods of around 240 million people living in its mountains and hills.</p>
+            <p class="p-source">Source: <a href="https://www.icimod.org/who-we-are/the-hindu-kush-himalaya/" target="_blank" rel="noopener">ICIMOD — The Hindu Kush Himalaya</a></p>
             <span class="flip-cue"><svg viewBox="0 0 16 16"><path d="M14 10a6 6 0 0 1-11 2"/><path d="M3 15v-4h4"/></svg>Back</span>
           </div>
         </div>
@@ -1439,16 +1489,15 @@
       <div class="card c3 flip pillar" role="button" tabindex="0" aria-pressed="false">
         <div class="fi">
           <div class="fc ff">
-            <span class="p-no">02</span>
             <svg class="p-ico" viewBox="0 0 52 46" aria-hidden="true"><path d="M8 34V16"/><path d="M17 34V10"/><path d="M26 34V21"/><path d="M35 34V6"/><path d="M6 39h38"/></svg>
-            <h4>Local capacity</h4>
-            <p class="p-sub">Systems, not one-off grants</p>
+            <h4>People &amp; climate</h4>
+            <div class="p-stat">4<span>GLOBAL BIODIVERSITY HOTSPOTS</span></div>
             <span class="flip-cue"><svg viewBox="0 0 16 16"><path d="M2 6a6 6 0 0 1 11-2"/><path d="M13 1v4H9"/></svg>More</span>
           </div>
           <div class="fc fb">
-            <p class="bk-h">How it works</p>
-            <p>Founders get the capabilities, systems and strategic support to build resilient, investment-ready enterprises — capacity building first, catalytic capital second, advocacy throughout.</p>
-            <div class="p-stat">7,000-8,500<i>+</i><span>Total Community Impact: Direct & Indirect Beneficiaries</span></div>
+            <p class="bk-h">Biodiversity</p>
+            <p>The HKH contains all or parts of four global biodiversity hotspots and has exceptionally high biological diversity. It also contains 330 Important Bird and Biodiversity Areas, making biodiversity a major regional asset.</p>
+            <p class="p-source">Source: <a href="https://lib.icimod.org/records/h8pwv-wdy26" target="_blank" rel="noopener">ICIMOD — HKH Assessment Key Findings</a></p>
             <span class="flip-cue"><svg viewBox="0 0 16 16"><path d="M14 10a6 6 0 0 1-11 2"/><path d="M3 15v-4h4"/></svg>Back</span>
           </div>
         </div>
@@ -1456,16 +1505,15 @@
       <div class="card c3 flip pillar" role="button" tabindex="0" aria-pressed="false">
         <div class="fi">
           <div class="fc ff">
-            <span class="p-no">03</span>
             <svg class="p-ico" viewBox="0 0 52 46" aria-hidden="true"><circle cx="26" cy="16" r="8"/><path d="M26 24v14"/><path d="M20 32h12"/><path d="M14 40l-6-6M8 40h6v-6"/></svg>
-            <h4>Gender equity</h4>
-            <p class="p-sub">Ownership, not just participation</p>
+            <h4>Commodity landscape</h4>
+            <div class="p-stat">3 <i>BILLION+</i><span>PEOPLE BENEFIT FROM FOOD PRODUCED IN HKH RIVER BASINS</span></div>
             <span class="flip-cue"><svg viewBox="0 0 16 16"><path d="M2 6a6 6 0 0 1 11-2"/><path d="M13 1v4H9"/></svg>More</span>
           </div>
           <div class="fc fb">
-            <p class="bk-h">The measure</p>
-            <p>Equity is tracked at leadership and worker level against IRIS+ standards — who owns the enterprise, who leads it, and on what terms the workforce is engaged.</p>
-            <div class="p-stat">10<span>Start-ups led and owned by women</span></div>
+            <p class="bk-h">Commodity &amp; food economy</p>
+            <p>The HKH's river basins support food production that benefits more than 3 billion people, linking mountain agriculture and natural resources to food systems far beyond the region itself.</p>
+            <p class="p-source">Source: <a href="https://lib.icimod.org/records/h8pwv-wdy26" target="_blank" rel="noopener">ICIMOD — Hindu Kush Himalaya Assessment</a></p>
             <span class="flip-cue"><svg viewBox="0 0 16 16"><path d="M14 10a6 6 0 0 1-11 2"/><path d="M3 15v-4h4"/></svg>Back</span>
           </div>
         </div>
@@ -1473,32 +1521,21 @@
       <div class="card c3 flip pillar" role="button" tabindex="0" aria-pressed="false">
         <div class="fi">
           <div class="fc ff">
-            <span class="p-no">04</span>
             <svg class="p-ico" viewBox="0 0 52 46" aria-hidden="true"><path d="M6 33c4-9 9-14 14-14s7 4 12 4 8-3 12-8"/><path d="M6 40h38"/><path d="M18 19l4-8 4 8"/><circle cx="38" cy="12" r="4"/></svg>
-            <h4>Climate resilience</h4>
-            <p class="p-sub">Built into the enterprise model</p>
+            <h4>Portfolio intelligence</h4>
+            <div class="p-stat">$12.05 <i>TRILLION</i><span>CLIMATE FINANCE REQUIRED BY 2050</span></div>
             <span class="flip-cue"><svg viewBox="0 0 16 16"><path d="M2 6a6 6 0 0 1 11-2"/><path d="M13 1v4H9"/></svg>More</span>
           </div>
           <div class="fc fb">
-            <p class="bk-h">In practice</p>
-            <p>Climate-conscious design is embedded in enterprises operating in fragile and underserved regions — so that a bad season shows up as a managed risk rather than a lost year.</p>
-            <div class="p-stat">26<span>Startups from the Himalayan belt</span></div>
+            <p class="bk-h">Capital &amp; climate</p>
+            <p>ICIMOD's 2025 climate-finance synthesis estimates that the HKH requires USD 12.065 trillion between 2020 and 2050, or about USD 768.68 billion annually, for climate mitigation and adaptation.</p>
+            <p class="p-source">Source: <a href="https://lib.icimod.org/records/m7771-n3p62" target="_blank" rel="noopener">ICIMOD — Climate Finance Synthesis Report, 2025</a></p>
             <span class="flip-cue"><svg viewBox="0 0 16 16"><path d="M14 10a6 6 0 0 1-11 2"/><path d="M3 15v-4h4"/></svg>Back</span>
           </div>
         </div>
       </div>
     </div>
-    <p class="src" style="margin:10px 0 0">Pillars &amp; portfolio figures — alsisarimpact.org and alsisarimpact.in.</p>
-
     <div class="card" id="pmap" style="margin-bottom:14px"></div>
-    <div class="photo-row" aria-label="Photographs from the field">
-      <figure><img src="assets/img/row-school.jpg" alt="Schoolchildren in Ladakh" loading="lazy">
-        <figcaption><b>Ladakh</b> · the generation this platform reports for</figcaption></figure>
-      <figure><img src="assets/img/row-team-sikkim.jpg" alt="Field team below the snow range" loading="lazy">
-        <figcaption><b>Eastern Himalaya</b> · field team below the snowline</figcaption></figure>
-      <figure><img src="assets/img/row-monastery.jpg" alt="Monastery courtyard in Ladakh" loading="lazy">
-        <figcaption><b>Ladakh</b> · where the work meets custom</figcaption></figure>
-    </div>
     <div class="part-head"><span>Part A · Demographics, workforce &amp; migration</span></div>
     <div class="grid compact" id="l1-tiles"></div>
     <div class="grid" style="margin-top:14px">
@@ -1509,10 +1546,6 @@
       <div class="card c6" id="ch-st"></div>
       <div class="card c6" id="ch-gsdp"></div>
     </div>
-    <details class="drawer" style="margin-top:14px">
-      <summary>State-by-state demographic cards <span class="cnt">8</span> <span class="caret">▾</span></summary>
-      <div class="grid" id="l1-geocards" style="margin-top:12px"></div>
-    </details>
     <div class="part-head"><span>Part B · Land, agriculture &amp; forest</span></div>
     <div class="grid compact" id="l1b-tiles"></div>
     <div class="card" id="geomap" style="margin-top:14px"></div>
@@ -1543,8 +1576,8 @@
     </div>
     <div class="layer-head">
       <p class="eyebrow">Layer 2 · Traceability &amp; commodity intelligence</p>
-      <h2>The land checks out. The money doesn't.</h2>
-      <p>Satellite layers confirm the land is intact. Surveys confirm the growers are paid. The registry confirms the product is genuinely Himalayan. And still, most of the value leaves the hills. Select a cluster on the map to open its commodity record.</p>
+      <h2>Unlocking the Value of Himalayan Products</h2>
+      <p>Explore what the Himalayan region produces, where it is produced, how it moves through value chains and how its markets are evolving.</p>
     </div>
 
     <div class="contains">
@@ -1692,12 +1725,13 @@ const ST_SHARE = {
   manipur:{v:35.1, note:"concentrated in the hill districts"},
   mizoram:{v:94.4, note:"Sixth Schedule councils in three districts"}
 };
-/* Share of national GSDP — RBI Handbook of Statistics on Indian States,
-   current-price GSDP, rounded. Ladakh has no separately published series. */
-const GSDP_SHARE = {
+/* Current-price GSDP — RBI Handbook of Statistics on Indian States,
+   FY 2022-23, rounded to two decimal lakh crore. Ladakh has no separately
+   published series. */
+const GSDP = {
   ladakh:{v:null, note:"not separately published"},
-  jk:{v:0.8}, uk:{v:1.2}, sikkim:{v:0.16}, assam:{v:1.9},
-  nagaland:{v:0.13}, manipur:{v:0.14}, mizoram:{v:0.12}
+  jk:{v:2.27}, uk:{v:2.93}, sikkim:{v:0.43}, assam:{v:4.55},
+  nagaland:{v:0.38}, manipur:{v:0.43}, mizoram:{v:0.43}
 };
 
 /* Biodiversity classification per geography. Hotspot membership is stated
@@ -2698,55 +2732,42 @@ function ringViz(pct, color, label, disp){
    Categories are derived from the hazard records already held against
    each geography — nothing here is invented. An empty cell means the
    dataset holds no record for that pair, not that the risk is zero. */
-const RISK_CATS = [
-  {k:"snow",   label:"Snow cover",         re:/snow/i},
-  {k:"water",  label:"Water availability", re:/water stress|water scarcity|cold-desert/i},
-  {k:"land",   label:"Landslide",          re:/landslide/i},
-  {k:"flood",  label:"Flood &amp; erosion",re:/flood|erosion|glacial-lake|outburst/i},
-  {k:"fire",   label:"Forest fire",        re:/fire/i},
-  {k:"use",    label:"Land-use change",    re:/land-use|jhum|fallow/i},
-  {k:"migr",   label:"Out-migration",      re:/migration|ghost village/i},
-  {k:"seis",   label:"Seismic",            re:/seismic/i}
-];
-const RANK = {ok:1, info:2, warn:3, serious:4};
-function riskCell(g, cat){
-  let best = null;
-  g.hazards.forEach(([txt, lv])=>{
-    if(cat.re.test(txt) && (!best || RANK[lv] > RANK[best[1]])) best = [txt, lv];
-  });
-  return best;
-}
 function renderRiskMatrix(){
   const el = $("#l1-risk"); if(!el) return;
   const act = activeGeos();
-  const head = `<th class="rmx-geo">Geography</th>` +
-    RISK_CATS.map(c=>`<th>${c.label}</th>`).join("");
-  const body = Object.entries(GEOS).map(([k,g])=>{
-    const on = act.includes(k);
-    const cells = RISK_CATS.map(c=>{
-      const hit = riskCell(g, c);
-      return hit
-        ? `<td><span class="rdot ${hit[1]}" data-tip="<b>${g.name}</b><br>${hit[0]}"></span></td>`
-        : `<td><span class="rdot none" data-tip="<b>${g.name}</b><br>No ${c.label.replace('&amp;','and').toLowerCase()} record in the dataset"></span></td>`;
+  const activeHazards = Object.entries(GEOS).filter(([k])=>act.includes(k)).flatMap(([,g])=>g.hazards);
+  const serious = activeHazards.filter(([,lv])=>lv==="serious").length;
+  const elevated = activeHazards.filter(([,lv])=>lv==="warn").length;
+  const recorded = activeHazards.length;
+  const riskHead = ["Snow / water","Landslide","Flood / erosion","Fire / land use","Migration / seismic"];
+  const riskMatch = [
+    /snow|water/i, /landslide/i, /flood|erosion|glacial-lake|outburst/i,
+    /fire|land-use|jhum|fallow/i, /migration|ghost village|seismic/i
+  ];
+  const riskLabel = {serious:"High", warn:"Elevated", info:"Info", ok:"Favourable"};
+  const riskRows = Object.entries(GEOS).map(([k,g])=>{
+    const cells = riskMatch.map((re,i)=>{
+      const hits = g.hazards.filter(([txt])=>re.test(txt));
+      const hit = hits.sort((a,b)=>({serious:4,warn:3,info:2,ok:1}[b[1]]-({serious:4,warn:3,info:2,ok:1}[a[1]])))[0];
+      return hit ? `<td><span class="risk-badge ${hit[1]}" data-tip="<b>${g.name}</b><br>${hit[0]}">${riskLabel[hit[1]]}</span></td>` : `<td><span class="risk-badge none" data-tip="<b>${g.name}</b><br>No recorded ${riskHead[i].toLowerCase()} signal">—</span></td>`;
     }).join("");
-    return `<tr class="${on?"":"off"}"><td class="rmx-geo"><i style="background:${g.color}"></i>${g.name}</td>${cells}</tr>`;
+    return `<tr class="${act.includes(k)?"":"off"}"><td><i style="background:${g.color}"></i>${g.name}</td>${cells}</tr>`;
   }).join("");
   el.innerHTML = `<div class="card-head"><h3>Climate, water &amp; risk signals</h3>
-      <span class="hint">by geography · derived from the hazard records behind each state card</span></div>
-    <div class="rmx-wrap"><table class="rmx"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>
-    <div class="rmx-key">
-      <span><i style="background:var(--crit)"></i>High</span>
-      <span><i style="background:var(--warn)"></i>Elevated</span>
-      <span><i style="background:var(--baseline)"></i>Present / seasonal</span>
-      <span><i style="background:var(--good)"></i>Favourable</span>
-      <span><i style="box-shadow:inset 0 0 0 1px var(--grid)"></i>No record held</span>
-    </div>`;
+      <span class="hint">severity by geography · derived from recorded hazard signals</span></div>
+    <div class="risk-summary">
+      <div class="risk-stat serious"><b>${serious}</b><span>High / serious signals</span></div>
+      <div class="risk-stat warn"><b>${elevated}</b><span>Elevated signals</span></div>
+      <div class="risk-stat info"><b>${recorded}</b><span>Total recorded signals</span></div>
+    </div>
+    <div class="risk-table-wrap"><table class="risk-table"><thead><tr><th>Geography</th>${riskHead.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${riskRows}</tbody></table></div>
+    <div class="risk-legend"><span><i class="serious"></i>High / serious</span><span><i class="warn"></i>Elevated</span><span><i class="info"></i>Informational</span><span><i class="ok"></i>Favourable</span><span>— No recorded signal</span></div>
+    <p class="src" style="margin-top:10px">Each cell shows the highest severity recorded for that topic and geography. A dash means no matching record is held, not that the risk is absent.</p>`;
 }
 
 function renderL1(){
   renderCoverage();
   const gs = activeGeos().map(k=>GEOS[k]);
-  const dens = g => Math.round(g.popN*1e6/parseInt(g.area.replace(/,/g,"")));
   const areaN = g => parseInt(g.area.replace(/,/g,""));
   const SN = {jk:"J&K", uk:"U'khand"};
   const hl = k => state.geo===k ? " hl" : "";
@@ -2759,84 +2780,68 @@ function renderL1(){
   $("#l1-tiles").innerHTML = `
     <div class="card c3 tile"><div class="t-label">Population covered</div>
       <div class="t-value"><span class="cnum" data-v="${pop.toFixed(2)}" data-dec="2">${pop.toFixed(2)}</span><span class="unit">M</span></div>
-      <div class="t-note">Census 2011 · ${gs.length} ${gs.length>1?"geographies":"geography"}</div></div>
+      <span class="metric-ring" aria-hidden="true" style="--metric-p:${Math.min(100,pop/20*100)};--metric-color:var(--accent)"></span>
+      <div class="t-note"><a href="https://censusindia.gov.in/census.website/" target="_blank" rel="noopener">Census 2011</a> · ${gs.length} ${gs.length>1?"geographies":"geography"}</div></div>
     <div class="card c3 tile"><div class="t-label">Population density</div>
       <div class="t-value"><span class="cnum" data-v="${Math.round(pop*1e6/areaSel)}" data-grp="1">${fmt(Math.round(pop*1e6/areaSel))}</span><span class="unit">/km²</span></div>
+      <span class="metric-ring" aria-hidden="true" style="--metric-p:${Math.min(100,pop*1e6/areaSel/500*100)};--metric-color:var(--apricot)"></span>
       <div class="t-note">people per km² of geographic area</div></div>
     <div class="card c3 tile"><div class="t-label">Literacy${gs.length>1?" (avg)":""}</div>
       <div class="t-value"><span class="cnum" data-v="${lit.toFixed(1)}" data-dec="1">${lit.toFixed(1)}</span><span class="unit">%</span></div>
-      <div class="t-note">Census 2011${gs.some(g=>g.litEst)?" · partly indicative":""}</div></div>
+      <span class="metric-ring" aria-hidden="true" style="--metric-p:${Math.min(100,lit)};--metric-color:var(--brandgreen)"></span>
+      <div class="t-note"><a href="https://censusindia.gov.in/census.website/" target="_blank" rel="noopener">Census 2011</a>${gs.some(g=>g.litEst)?" · partly indicative":""}</div></div>
     <div class="card c3 tile"><div class="t-label">Workforce in agriculture${gs.length>1?" (avg)":""}</div>
       <div class="t-value"><span class="cnum" data-v="${agri.toFixed(1)}" data-dec="1">${agri.toFixed(1)}</span><span class="unit">%</span></div>
-      <div class="t-note">Census 2011 · cultivators &amp; agri labourers</div></div>`;
+      <span class="metric-ring" aria-hidden="true" style="--metric-p:${Math.min(100,agri)};--metric-color:var(--clay)"></span>
+      <div class="t-note"><a href="https://censusindia.gov.in/census.website/" target="_blank" rel="noopener">Census 2011</a> · cultivators &amp; agri labourers</div></div>`;
   animateCounts($("#l1-tiles"));
 
-  $("#l1-geocards").innerHTML = Object.entries(GEOS).map(([k,g])=>`
-    <div class="card c3 flip geo-card${hl(k)}" role="button" tabindex="0" aria-pressed="false" style="--fh:212px">
-      <div class="fi">
-        <div class="fc ff">
-          <h4><span style="width:9px;height:9px;border-radius:3px;background:${g.color};display:inline-block"></span>${g.name}</h4>
-          <div class="g-type">${g.type}</div>
-          ${ringViz(g.lit, g.color, "Literacy · Census 2011", (g.litEst?"~":"")+g.lit+"%")}
-          <span class="flip-cue"><svg viewBox="0 0 16 16"><path d="M2 6a6 6 0 0 1 11-2"/><path d="M13 1v4H9"/></svg>Detail</span>
-        </div>
-        <div class="fc fb">
-          <p class="bk-h">Demographic record</p>
-          <h5>${g.name}</h5>
-          <dl class="kv">
-            <dt>Population</dt><dd>${g.pop}</dd>
-            <dt>Density (/km²)</dt><dd>${fmt(dens(g))}</dd>
-            <dt>Literacy</dt><dd>${g.litEst?estMark(g.lit+"%"):g.lit+"%"}</dd>
-            <dt>Workforce in agriculture</dt><dd>${g.agriEst?estMark("~"+g.agri+"%"):g.agri+"%"}</dd>
-            <dt>Geographic area</dt><dd>${g.area} km²</dd>
-          </dl>
-          <span class="flip-cue"><svg viewBox="0 0 16 16"><path d="M14 10a6 6 0 0 1-11 2"/><path d="M3 15v-4h4"/></svg>Back</span>
-        </div>
-      </div>
-    </div>`).join("");
-
   const lData = Object.entries(GEOS).map(([k,g])=>({l:SN[k]||g.name, v:g.lit, color: activeGeos().includes(k) ? g.color : "var(--grid)", tip:g.name+" · Census 2011"+(g.litEst?" (indicative)":"")}));
-  card("#ch-lit","Literacy by geography","% · Census 2011",
+  card("#ch-lit","Literacy by geography",`% · <a href="https://censusindia.gov.in/census.website/" target="_blank" rel="noopener">Census 2011</a>`,
     barChartSVG({data:lData, unit:"%", h:158, fmtV:v=>v.toFixed(1)}),
     ["Geography","Literacy (%)"], Object.values(GEOS).map(g=>[g.name, (g.litEst?"~":"")+g.lit]));
 
   const aData = Object.entries(GEOS).map(([k,g])=>({l:SN[k]||g.name, v:g.agri, color: activeGeos().includes(k) ? g.color : "var(--grid)", tip:g.name+" · cultivators & agricultural labourers, Census 2011"+(g.agriEst?" (indicative)":"")}));
-  card("#ch-agri",`Workforce in agriculture & allied`, `% of total workers · Census 2011`,
+  card("#ch-agri",`Workforce in agriculture & allied`, `% of total workers · <a href="https://censusindia.gov.in/census.website/" target="_blank" rel="noopener">Census 2011</a>`,
     barChartSVG({data:aData, unit:"%", h:158, fmtV:v=>v.toFixed(1)}),
     ["Geography","Workforce in agri (%)"], Object.values(GEOS).map(g=>[g.name, (g.agriEst?"~":"")+g.agri]));
 
   const stData = Object.entries(GEOS).map(([k,g])=>({l:SN[k]||g.name, v:ST_SHARE[k].v,
     color: activeGeos().includes(k) ? g.color : "var(--grid)", tip:g.name+" · "+ST_SHARE[k].note}));
-  card("#ch-st","Scheduled Tribe population share","% · Census of India 2011",
+  card("#ch-st","Indigenous population share",`% · official Scheduled Tribe classification · <a href="https://censusindia.gov.in/census.website/" target="_blank" rel="noopener">Census of India 2011</a>`,
     barChartSVG({data:stData, unit:"%", h:158, fmtV:v=>v.toFixed(1)}) +
-    `<p class="src" style="margin-top:8px">The Indigenous baseline behind the founder metric — <a href="https://censusindia.gov.in/census.website/" target="_blank" rel="noopener">Census 2011</a>; Ladakh derived from the Leh + Kargil district tables.</p>`,
-    ["Geography","ST share (%)","Note"], Object.entries(GEOS).map(([k,g])=>[g.name, ST_SHARE[k].v+"%", ST_SHARE[k].note]));
+    `<p class="src" style="margin-top:8px"><b>Definition:</b> percentage of the population recorded by the Census of India as belonging to a constitutionally notified Scheduled Tribe. <a href="https://censusindia.gov.in/census.website/" target="_blank" rel="noopener">Census 2011</a>; Ladakh derived from the Leh + Kargil district tables.</p>`,
+    ["Geography","Indigenous population share (%)","Note"], Object.entries(GEOS).map(([k,g])=>[g.name, ST_SHARE[k].v+"%", ST_SHARE[k].note]));
 
-  const gdpRows = Object.entries(GEOS).filter(([k])=>GSDP_SHARE[k].v!=null);
-  const gdpData = gdpRows.map(([k,g])=>({l:SN[k]||g.name, v:GSDP_SHARE[k].v,
-    color: activeGeos().includes(k) ? g.color : "var(--grid)", tip:g.name+" · share of all-India GSDP"}));
-  const gdpTotal = gdpRows.reduce((a,[k])=>a+GSDP_SHARE[k].v,0);
-  card("#ch-gsdp","Share of national GSDP","% · RBI Handbook of Statistics on Indian States",
-    `<div class="chain" style="margin:4px 0 6px" data-tip="<b>Contribution to India's GDP</b><br>These 8 geographies together ≈${gdpTotal.toFixed(1)}% of national GSDP">` +
-    `<i style="width:${gdpTotal}%;background:var(--accent)"></i>` +
-    `<i style="width:${100-gdpTotal}%;background:var(--vc4)"></i></div>` +
-    `<div class="chain-lab" style="margin-bottom:14px"><span>These 8 geographies · ≈${gdpTotal.toFixed(1)}%</span><span>Rest of India · ≈${(100-gdpTotal).toFixed(1)}%</span></div>` +
-    barChartSVG({data:gdpData, unit:"%", h:158, fmtV:v=>v.toFixed(2)}) +
-    `<p class="src" style="margin-top:8px">Together ≈${gdpTotal.toFixed(1)}% of national output — upstream of the water for a quarter of humanity. Ladakh's GSDP is not separately published. <a href="https://www.rbi.org.in/scripts/AnnualPublications.aspx?head=Handbook+of+Statistics+on+Indian+States" target="_blank" rel="noopener">RBI Handbook</a></p>`,
-    ["Geography","Share of national GSDP"], Object.entries(GEOS).map(([k,g])=>[g.name, GSDP_SHARE[k].v==null?"not separately published":GSDP_SHARE[k].v+"%"]));
+  const gdpRows = Object.entries(GEOS).filter(([k])=>GSDP[k].v!=null);
+  const gdpData = gdpRows.map(([k,g])=>({l:SN[k]||g.name, v:GSDP[k].v,
+    color: activeGeos().includes(k) ? g.color : "var(--grid)", tip:g.name+" · current-price GSDP, FY 2022-23"}));
+  card("#ch-gsdp","GSDP by geography",`₹ lakh crore · current prices, FY 2022-23 · <a href="https://www.rbi.org.in/scripts/AnnualPublications.aspx?head=Handbook+of+Statistics+on+Indian+States" target="_blank" rel="noopener">RBI Handbook of Statistics on Indian States</a>`,
+    barChartSVG({data:gdpData, unit:"", h:158, fmtV:v=>"₹"+v.toFixed(2)}) +
+    `<p class="src" style="margin-top:8px">Ladakh's GSDP is not separately published. <a href="https://www.rbi.org.in/scripts/AnnualPublications.aspx?head=Handbook+of+Statistics+on+Indian+States" target="_blank" rel="noopener">RBI Handbook</a></p>`,
+    ["Geography","GSDP (₹ lakh crore)"], Object.entries(GEOS).map(([k,g])=>[g.name, GSDP[k].v==null?"not separately published":"₹"+GSDP[k].v.toFixed(2)]));
 
   /* ---- Part B: geography ---- */
   const forest = gs.reduce((a,g)=>a+g.forest,0)/gs.length;
+  const miniBars = (values, color) => {
+    const maxValue = Math.max(...values, 1);
+    return `<span class="mini-bars" aria-hidden="true" style="--metric-color:${color}">${values.map(value=>`<i style="height:${Math.max(8,value/maxValue*100)}%"></i>`).join("")}</span>`;
+  };
   $("#l1b-tiles").innerHTML = `
     <div class="card c4 tile"><div class="t-label">Geographic area</div>
       <div class="t-value">${fmt(areaSel)}<span class="unit">km²</span></div>
+      ${miniBars(gs.map(g=>areaN(g)),"var(--accent)")}
       <div class="t-note">${gs.length>1?"total across "+gs.length+" geographies":gs[0].name}</div></div>
     <div class="card c4 tile"><div class="t-label">Forest cover${gs.length>1?" (avg)":""}</div>
       <div class="t-value">${forest.toFixed(1)}<span class="unit">%</span></div>
-      <div class="t-note">ISFR 2021 · % of geographic area</div></div>
-    <div class="card c4 tile"><div class="t-label">Peak vegetation (NDVI)</div>
-      <div class="t-value">${Math.max(...gs.map(g=>Math.max(...g.ndvi))).toFixed(2)}</div>
-      <div class="t-note">${estMark("illustrative")} · highest monthly value in selection</div></div>`;
+      ${miniBars(gs.map(g=>g.forest),"var(--brandgreen)")}
+      <div class="t-note"><a href="https://fsi.nic.in/forest-report-2021" target="_blank" rel="noopener">ISFR 2021</a> · % of geographic area</div></div>
+    <div class="card c4 tile"><div class="t-label">Annual rainfall normal</div>
+      <div class="t-value">${gs.length>1
+        ? `${fmt(Math.min(...gs.map(g=>g.rainTotal)))}–${fmt(Math.max(...gs.map(g=>g.rainTotal)))}`
+        : fmt(gs[0].rainTotal)}<span class="unit">mm</span></div>
+      ${miniBars(gs.map(g=>g.rainTotal),"var(--apricot)")}
+      <div class="t-note"><a href="https://mausam.imd.gov.in/" target="_blank" rel="noopener">IMD normals</a> · annual precipitation</div></div>`;
 
   const meanRain = gs.map(g=>g.rain).reduce((a,r)=>a.map((v,i)=>v+r[i]), new Array(12).fill(0));
   const wettest = meanRain.reduce((bi,v,i,arr)=>v>arr[bi]?i:bi, 0);
@@ -2846,7 +2851,7 @@ function renderL1(){
       <div class="t-value">${gs.length>1
         ? `${fmt(Math.min(...gs.map(g=>g.rainTotal)))}–${fmt(Math.max(...gs.map(g=>g.rainTotal)))}`
         : fmt(gs[0].rainTotal)}<span class="unit">mm</span></div>
-      <div class="t-note">IMD normals, ${estMark("indicative")}</div></div>
+      <div class="t-note"><a href="https://mausam.imd.gov.in/" target="_blank" rel="noopener">IMD normals</a>, ${estMark("indicative")}</div></div>
     <div class="card c3 tile"><div class="t-label">Wettest month</div>
       <div class="t-value" style="font-size:30px">${MONTHS_FULL[wettest]}</div>
       <div class="t-note">highest mean rainfall across the selection</div></div>
@@ -2886,34 +2891,24 @@ function renderL1(){
     </div>`).join("");
 
   const fData = Object.entries(GEOS).map(([k,g])=>({l:SN[k]||g.name, v:g.forest, color: activeGeos().includes(k) ? g.color : "var(--grid)", tip:g.name+" · ISFR 2021"+(g.forestEst?" (indicative)":"")}));
-  card("#ch-forest","Forest cover by geography","% of geographic area · ISFR 2021",
+  card("#ch-forest","Forest cover by geography",`% of geographic area · <a href="https://fsi.nic.in/forest-report-2021" target="_blank" rel="noopener">ISFR 2021</a>`,
     barChartSVG({data:fData, unit:"%", fmtV:v=>v.toFixed(1)}),
     ["Geography","Forest cover (%)"], Object.values(GEOS).map(g=>[g.name, (g.forestEst?"~":"")+g.forest.toFixed(1)]));
 
   const rainSeries = Object.values(GEOS).map(g=>({name:g.name, color:g.color, values:g.rain}));
-  card("#ch-rain","Monthly rainfall","mm · IMD normals (indicative)",
+  card("#ch-rain","Monthly rainfall",`mm · <a href="https://mausam.imd.gov.in/" target="_blank" rel="noopener">IMD normals</a> (indicative)`,
     legendHTML(rainSeries,true) + lineChartSVG({series:rainSeries, labels:MONTHS, fmtV:v=>Math.round(v), unit:" mm", endLabels:false}),
     ["Month",...Object.values(GEOS).map(g=>g.name+" (mm)")], MONTHS.map((m,i)=>[m,...Object.values(GEOS).map(g=>g.rain[i])]));
 
   const ndviSeries = Object.values(GEOS).map(g=>({name:g.name, color:g.color, values:g.ndvi}));
-  card("#ch-ndvi",`Vegetation index (NDVI)`, `MODIS/Terra · 2019–2023 monthly mean`,
+  card("#ch-ndvi",`Vegetation index (NDVI)`, `<a href="https://modis.gsfc.nasa.gov/" target="_blank" rel="noopener">MODIS/Terra</a> · 2019–2023 monthly mean`,
     legendHTML(ndviSeries,true) + lineChartSVG({series:ndviSeries, labels:MONTHS, fmtV:v=>v.toFixed(2), endLabels:false}),
     ["Month",...Object.values(GEOS).map(g=>g.name)], MONTHS.map((m,i)=>[m,...Object.values(GEOS).map(g=>g.ndvi[i].toFixed(2))]));
 
   /* ---- biodiversity classification — the arc, drawn ----
-     A ridge profile of the range west→east; segments fill in their class
-     colour (theme-aware). Hovering a state lights its stretch of the ridge
-     AND floats that state's field photograph in behind the card. */
-  const act = activeGeos();
+    A ridge profile of the range west→east; segments fill in their class
+    colour (theme-aware). */
   const BZ_ORDER = ["jk","ladakh","uk","sikkim","assam","nagaland","manipur","mizoram"];
-  const bzClass = z => !z.hot ? "trans" : (z.hot.startsWith("Himalaya") ? "him" : "indo");
-  /* field photographs per geography — from the foundation Drive archive */
-  const BZ_PHOTO = {
-    jk:"assets/img/bz-jk.jpg", ladakh:"assets/img/bz-ladakh.jpg",
-    uk:"assets/img/bz-uk.jpg", sikkim:"assets/img/bz-sikkim.jpg",
-    assam:"assets/img/bz-assam.jpg", nagaland:"assets/img/bz-nagaland.jpg",
-    manipur:"assets/img/bz-manipur.jpg", mizoram:"assets/img/bz-mizoram.jpg"
-  };
   /* one common range — a single continuous line-art massif spanning all
      eight geographies: a main ridge with nested contour lines beneath.
      One ink for one Himalaya; the tiles carry the classes. */
@@ -2930,8 +2925,6 @@ function renderL1(){
   const ridgeSVG = `<svg class="bz-ridge" viewBox="0 0 960 150" preserveAspectRatio="none" aria-hidden="true">` +
     [[110,190,60],[330,180,44],[520,200,96],[750,220,80]].map(pk=>
       `<path d="M${pk[0]-pk[1]},150 L${pk[0]},${pk[2]} L${pk[0]+pk[1]},150 Z" style="fill:var(--bz-farink)" opacity=".18"/>`).join("") +
-    `<circle cx="900" cy="34" r="26" style="fill:var(--madder)" opacity=".30"/>` +
-    `<circle cx="900" cy="34" r="12" style="fill:var(--madder)" opacity=".78"/>` +
     `<polygon points="${bzLine(BZ_PROFILE)} 960,150 0,150" style="fill:var(--bz-ink)" opacity=".07"/>` +
     `<polyline points="${bzLine(BZ_PROFILE)}" fill="none" style="stroke:var(--bz-ink)" stroke-width="1.6" opacity=".92" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>` +
     [.84,.68,.52,.36,.22].map((f,ix)=>
@@ -2939,34 +2932,29 @@ function renderL1(){
     `<text x="6" y="16" class="bz-compass">WEST</text>` +
     `<text x="954" y="16" text-anchor="end" class="bz-compass">EAST</text>` +
     `</svg>`;
+  const bzGroups = [
+    {cls:"him", label:"Himalaya hotspot", keys:["jk","uk","sikkim"]},
+    {cls:"indo", label:"Indo-Burma hotspot", keys:["assam","nagaland","manipur","mizoram"]},
+    {cls:"trans", label:"Trans-Himalaya · separate zone", keys:["ladakh"]}
+  ];
+  const bzSummary = `<div class="bz-summary">` + bzGroups.map(gr=>
+    `<div class="bz-line bz-line-${gr.cls}"><i aria-hidden="true"></i><b>${gr.label}</b><span>${gr.keys.map(k=>GEOS[k].name).join(" · ")}</span></div>`
+  ).join("") + `</div>`;
   const bzTiles = ridgeSVG +
+    bzSummary +
     `<div class="bz-grid">` +
     BZ_ORDER.map(k=>{
-      const g=GEOS[k], z=BIOZONE[k], cls=bzClass(z), on=act.includes(k);
-      return `<div class="bz bz-${cls}${on?"":" off"}" data-bzk="${k}">` +
+      const g=GEOS[k], z=BIOZONE[k];
+      return `<div class="bz">` +
         `<span class="bz-tag">${z.hot ? "&#10003; "+z.hot : "&#9675; not in a hotspot"}</span>` +
         `<b>${g.name}</b><span class="bz-zone">${z.zone}</span>` +
         `<span class="bz-note">${z.note}</span></div>`;
     }).join("") + `</div>` +
-    `<div class="bz-key"><span><i style="background:var(--bz-him)"></i>Himalaya hotspot</span>` +
-    `<span><i style="background:var(--bz-indo)"></i>Indo-Burma hotspot</span>` +
-    `<span><i style="background:var(--bz-trans)"></i>Trans-Himalaya — separate zone, not a hotspot</span></div>` +
     `<p class="src" style="margin-top:12px">Sources: <a href="https://wii.gov.in/" target="_blank" rel="noopener">Wildlife Institute of India biogeographic zones</a> · <a href="https://www.cepf.net/our-work/biodiversity-hotspots" target="_blank" rel="noopener">CEPF / Conservation International (hotspot boundaries)</a> · <a href="http://nbaindia.org/" target="_blank" rel="noopener">National Biodiversity Authority (Biodiversity Heritage Sites)</a> · <a href="https://www.ramsar.org/" target="_blank" rel="noopener">Ramsar (wetlands)</a></p>`;
-  card("#biozone","Biodiversity classification","global hotspot membership · WII biogeographic zone · hover a state for its field photograph",
+  card("#biozone","Biodiversity classification","global hotspot membership · WII biogeographic zone",
     bzTiles,
     ["Geography","Global hotspot","WII biogeographic zone","Note"],
     BZ_ORDER.map(k=>[GEOS[k].name, BIOZONE[k].hot||"— not in a hotspot", BIOZONE[k].zone, BIOZONE[k].note]));
-  /* photo layer sits behind everything in the card */
-  $("#biozone").insertAdjacentHTML("afterbegin",'<div class="bz-photo" aria-hidden="true"></div>');
-  const bzPhoto = $("#biozone .bz-photo");
-  Object.values(BZ_PHOTO).forEach(u=>{ const im=new Image(); im.src=u; }); /* pre-warm */
-  $("#biozone").querySelectorAll("[data-bzk]").forEach(t=>{
-    t.addEventListener("mouseenter",()=>{
-      bzPhoto.style.backgroundImage = 'url("'+BZ_PHOTO[t.dataset.bzk]+'")';
-      bzPhoto.classList.add("show");
-    });
-    t.addEventListener("mouseleave",()=> bzPhoto.classList.remove("show"));
-  });
 }
 
 /* ============================== LAYER 2 · TRACEABILITY CONSOLE ============================== */
@@ -2990,11 +2978,20 @@ const SRC_LINKS = {
   "GI Registry of India":"https://ipindia.gov.in/gi.htm",
   "GI Registry":"https://ipindia.gov.in/gi.htm",
   "Census of India 2011":"https://censusindia.gov.in/census.website/",
+  "Census 2011":"https://censusindia.gov.in/census.website/",
   "India State of Forest Report 2021 (ISFR)":"https://fsi.nic.in/forest-report-2021",
+  "ISFR 2021":"https://fsi.nic.in/forest-report-2021",
   "IMD station normals":"https://mausam.imd.gov.in/",
+  "IMD normals":"https://mausam.imd.gov.in/",
   "CHIRPS":"https://www.chc.ucsb.edu/data/chirps",
   "MODIS / Sentinel NDVI profile":"https://modis.gsfc.nasa.gov/",
+  "MODIS/Terra":"https://modis.gsfc.nasa.gov/",
   "MODIS / VIIRS":"https://firms.modaps.eosdis.nasa.gov/",
+  "RBI Handbook":"https://www.rbi.org.in/scripts/AnnualPublications.aspx?head=Handbook+of+Statistics+on+Indian+States",
+  "Wildlife Institute of India biogeographic zones":"https://wii.gov.in/",
+  "CEPF / Conservation International (hotspot boundaries)":"https://www.cepf.net/our-work/biodiversity-hotspots",
+  "National Biodiversity Authority (Biodiversity Heritage Sites)":"http://nbaindia.org/",
+  "Ramsar (wetlands)":"https://www.ramsar.org/",
   "NASA Landslide Catalog":"https://gpm.nasa.gov/landslides/",
   "DIHAR study":"https://www.drdo.gov.in/drdo/labs-and-establishments/defence-institute-high-altitude-research-dihar",
   "Sikkim organic certification":"https://sikkim.gov.in/",
@@ -3421,12 +3418,12 @@ function renderL3(){
     <div class="card c4 tile">
       <div class="t-label">Ventures supported to date</div>
       <div class="hero-num">36<span style="color:var(--accent)">+</span></div>
-      <div class="t-note">across 6 sectors · a decade of impact investing<br><span class="src">Source: alsisarimpact.org/impact</span></div>
+      <div class="t-note">across 6 sectors · a decade of impact investing<br><span class="src">Source: <a href="https://alsisarimpact.org/impact" target="_blank" rel="noopener">alsisarimpact.org/impact</a></span></div>
     </div>
     <div class="card c4 tile">
       <div class="t-label">Combined portfolio valuation</div>
       <div class="t-value">$10<span class="unit">M+</span></div>
-      <div class="t-note">flagship ventures, majority indigenous-women owned &amp; led<br><span class="src">Source: LinkedIn</span></div>
+      <div class="t-note">flagship ventures, majority indigenous-women owned &amp; led<br><span class="src">Source: <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a></span></div>
     </div>
     <div class="card c4 tile">
       <div class="t-label">Women &amp; farmers engaged (view)</div>
